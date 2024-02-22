@@ -1,7 +1,7 @@
 import json
 import subprocess
-import sys
 from argparse import ArgumentParser
+import os
 
 import semver
 
@@ -42,22 +42,31 @@ def main() -> None:
     )
 
     parser.add_argument(
-        '--hotfix-suffix',
-        dest='hotfix_suffix',
-        default='h',
+        '--only-increase-suffix',
+        dest='only_increase_suffix',
+        type=bool,
+        default=False,
+        help='Only increases the suffix increment if any change got detected'
+    )
+
+    parser.add_argument(
+        '--suffix',
+        dest='suffix',
         type=str,
-        help='The suffix that should be used for the hotfix number'
+        default='h',
+        help='The suffix that should be incremented'
     )
 
     args = parser.parse_args()
 
-    version, has_changes = get_next_version()
+    next_version, has_changes = get_next_version()
 
-    if not has_changes:
-        print(version)
-        sys.exit(0)
+    if has_changes and args.only_increase_suffix:
+        new_version = increment_hotfix(next_version, args.suffix)
+    else:
+        new_version = next_version
 
-    print(increment_hotfix(version, args.hotfix_suffix))
+    os.environ['GITHUB_OUTPUT'] += f'version={new_version}'
 
 
 if __name__ == '__main__':

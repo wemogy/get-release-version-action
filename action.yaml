@@ -13,7 +13,7 @@ inputs:
 outputs:
   version:
     description: 'The version to use'
-    value: ${{ steps.determine-version.outputs.num_squared }}
+    value: ${{ steps.determine-version.outputs.version }}
 runs:
   using: 'composite'
   steps:
@@ -34,5 +34,5 @@ runs:
 
     - name: Determine the version
       id: determine-version
-      run: python app.py/
+      run: python app.py --only-increase-suffix ${{ inputs.only-increase-suffix }} --suffix ${{ inputs.suffix }}
       shell: bash
