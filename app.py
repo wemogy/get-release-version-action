@@ -51,12 +51,41 @@ def get_next_version(get_next_version_path: str) -> tuple[str, bool]:
     return result['version'], result['hasNextVersion']
 
 
+def create_tag(version: str) -> None:
+    """
+    Create a new git tag for the given version and push it if a remote is configured.
+
+    :param version: The version that the tag should be named
+    """
+    # Create the tag
+    subprocess.run(
+        ('git', 'tag', version),
+        check=True
+    )
+
+    show_remote_process = subprocess.run(
+        ('git', 'remote', 'show'),
+        capture_output=True,
+        check=True,
+        text=True
+    )
+
+    if show_remote_process.stdout == '':
+        logger.info('No remote found, skipping pushing')
+        return
+
+    subprocess.run(
+        ('git', 'push'),
+        check=True
+    )
+
+
 def main() -> None:
     """Increment the hotfix version if needed."""
     setup_logging()
 
     parser = ArgumentParser(
-        description='Increment the hotfix version if needed',
+        description='Increment the hotfix version if needed.',
         allow_abbrev=False
     )
 
@@ -64,7 +93,7 @@ def main() -> None:
         '--suffix',
         dest='suffix',
         type=str,
-        help='The suffix that should be incremented'
+        help='The suffix that should be incremented.'
     )
 
     parser.add_argument(
@@ -72,7 +101,15 @@ def main() -> None:
         dest='only_increase_suffix',
         type=bool,
         default=False,
-        help='Only increases the suffix increment if any change got detected'
+        help='Only increases the suffix increment if any change got detected.'
+    )
+
+    parser.add_argument(
+        '--create-tag',
+        dest='create_tag',
+        type=bool,
+        default=False,
+        help='Create a Git Tag for the version and push it if a remote is configured.'
     )
 
     parser.add_argument(
@@ -100,6 +137,9 @@ def main() -> None:
         logger.info('No changes detected.')
         logger.info('Version stays the same.')
         new_version = next_version
+
+    if args.create_tag:
+        create_tag(new_version)
 
     os.environ['GITHUB_OUTPUT'] = f'version={new_version}'
     os.environ['GITHUB_OUTPUT'] += f'has-changes={has_changes}'
