@@ -40,7 +40,7 @@ def get_next_version() -> tuple[str, bool]:
     :return: A tuple of the next version and whether there are any new changes
     """
     process = subprocess.run(
-        ('./get-next-version', '--target', 'json'),
+        ('get-next-version', '--target', 'json'),
         capture_output=True,
         check=True,
         text=True
@@ -81,7 +81,7 @@ def main() -> None:
 
     if has_changes:
         logger.info('Changes detected.')
-        
+
         if args.only_increase_suffix: # Example case: Hotfix
             logger.info('Only the suffix will be incremented.')
             new_version = increment_hotfix(next_version, args.suffix)
