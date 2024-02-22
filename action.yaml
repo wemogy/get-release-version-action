@@ -1,9 +1,18 @@
 # action.yaml
 name: 'Get release version'
-description: 'A GitHub Action that takes an input and returns the square of the number'
+description: 'A GitHub Action to determine the next version by checking the commit history for Conventional Commits'
+inputs:
+  suffix:
+    description: 'The suffix to add to the version'
+    required: false
+    default: ""
+  only-increase-suffix:
+    description: 'Only increases the suffix increment, when any change got detected'
+    required: true
+    default: false
 outputs:
   version:
-    description: 'Square of the input'    
+    description: 'The versoon to use'
     value: ${{ steps.get-square.outputs.num_squared }}
 runs:
   using: 'composite'
