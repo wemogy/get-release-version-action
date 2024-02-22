@@ -12,8 +12,8 @@ inputs:
     default: false
 outputs:
   version:
-    description: 'The versoon to use'
-    value: ${{ steps.get-square.outputs.num_squared }}
+    description: 'The version to use'
+    value: ${{ steps.determine-version.outputs.num_squared }}
 runs:
   using: 'composite'
   steps:
@@ -24,7 +24,7 @@ runs:
     - name: Install Dependencies
       run: pip install -r requirements.txt
       shell: bash    
-    - name: Fetch the number's square
-      id: get-square
-      run: python app.py
+    - name: Determine the version
+      id: determine-version
+      run: python app.py/
       shell: bash
