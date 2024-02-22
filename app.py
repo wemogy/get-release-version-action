@@ -79,9 +79,18 @@ def main() -> None:
 
     next_version, has_changes = get_next_version()
 
-    if has_changes and args.only_increase_suffix:
-        new_version = increment_hotfix(next_version, args.suffix)
-    else:
+    if has_changes:
+        logger.info('Changes detected.')
+        
+        if args.only_increase_suffix: # Example case: Hotfix
+            logger.info('Only the suffix will be incremented.')
+            new_version = increment_hotfix(next_version, args.suffix)
+        else: # Example case: New Release
+            logger.info('Semantic Version will be incremented.')
+            new_version = next_version
+    else: # Example case: No change, that requires a semantic version increase
+        logger.info('No changes detected.')
+        logger.info('Version stays the same.')
         new_version = next_version
 
     os.environ['GITHUB_OUTPUT'] = f'version={new_version}'
