@@ -6,6 +6,10 @@ inputs:
     description: 'The suffix to add to the version'
     required: false
     default: ""
+  create-tag:
+    description: 'Create a Git Tag for the version'
+    required: false
+    default: false
   only-increase-suffix:
     description: 'Only increases the suffix increment, when any change got detected'
     required: true
@@ -37,5 +41,5 @@ runs:
 
     - name: Determine the version
       id: determine-version
-      run: python app.py --only-increase-suffix ${{ inputs.only-increase-suffix }} --suffix ${{ inputs.suffix }}
+      run: python app.py --only-increase-suffix ${{ inputs.only-increase-suffix }} --suffix ${{ inputs.suffix }} --create-tag ${{ inputs.create-tag }}
       shell: bash

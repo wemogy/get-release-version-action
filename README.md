@@ -27,6 +27,7 @@ A GitHub Action to determine the next version by checking the commit history for
 |-|-|
 | `suffix` | The suffix to append to the version (e.g. `hotfix`) |
 | `only-increase-suffix` | If set to `true`, even if changes got detected, only the suffix will be incremented |
+| `create-tag` | Create a Git Tag for the version. Will be pushed, if remote is available. |
 
 ## Outputs
 
