@@ -71,7 +71,6 @@ def main() -> None:
         '--suffix',
         dest='suffix',
         type=str,
-        default='h',
         help='The suffix that should be incremented'
     )
 
