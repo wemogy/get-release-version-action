@@ -40,7 +40,7 @@ def get_next_version() -> tuple[str, bool]:
     :return: A tuple of the next version and whether there are any new changes
     """
     process = subprocess.run(
-        ('get-next-version', '--target', 'json'),
+        ('./get-next-version', '--target', 'json'),
         capture_output=True,
         check=True,
         text=True
@@ -85,6 +85,7 @@ def main() -> None:
         new_version = next_version
 
     os.environ['GITHUB_OUTPUT'] = f'version={new_version}'
+    os.environ['GITHUB_OUTPUT'] += f'has-changes={has_changes}'
     logger.info('New version is %s', new_version)
 
 
