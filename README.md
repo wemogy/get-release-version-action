@@ -5,7 +5,13 @@ A GitHub Action to determine the next version by checking the commit history for
 ## Usage
 
 ```yaml
-- uses: wemogynext-version-action@v1
+- name: Clone repository
+  uses: actions/checkout@v4
+  with:
+    fetch-depth: 0
+    fetch-tags: true
+    ref: ${{ github.event.pull_request.head.sha }}
+- uses: wemogy/get-release-version-action@v1
   id: get-release-version
   with:
     suffix: ''
