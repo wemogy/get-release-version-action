@@ -1,0 +1,21 @@
+# action.yaml
+name: 'Get release version'
+description: 'A GitHub Action that takes an input and returns the square of the number'
+outputs:
+  version:
+    description: 'Square of the input'    
+    value: ${{ steps.get-square.outputs.num_squared }}
+runs:
+  using: 'composite'
+  steps:
+    - name: Install Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+    - name: Install Dependencies
+      run: pip install -r requirements.txt
+      shell: bash    
+    - name: Fetch the number's square
+      id: get-square
+      run: python app.py
+      shell: bash
