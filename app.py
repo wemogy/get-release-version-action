@@ -2,8 +2,24 @@ import json
 import subprocess
 from argparse import ArgumentParser
 import os
+import logging
+import logging.config
+from pathlib import Path
 
+import yaml
 import semver
+
+logger = logging.getLogger('wemogy.get-release-version-action')
+
+
+def setup_logging():
+    current_file_path = Path(__file__).resolve()
+    config_file = current_file_path.parent / 'logging.config.yaml'
+    with config_file.open('r') as config_stream:
+        config = yaml.load(config_stream, yaml.SafeLoader)
+
+    logging.config.dictConfig(config)
+    logging.getLogger().setLevel(logging.DEBUG)
 
 
 def increment_hotfix(version: str, hotfix_suffix: str) -> str:
@@ -36,6 +52,8 @@ def get_next_version() -> tuple[str, bool]:
 
 def main() -> None:
     """Increment the hotfix version if needed."""
+    setup_logging()
+
     parser = ArgumentParser(
         description='Increment the hotfix version if needed',
         allow_abbrev=False
@@ -66,7 +84,8 @@ def main() -> None:
     else:
         new_version = next_version
 
-    os.environ['GITHUB_OUTPUT'] += f'version={new_version}'
+    os.environ['GITHUB_OUTPUT'] = f'version={new_version}'
+    logger.info('New version is %s', new_version)
 
 
 if __name__ == '__main__':
