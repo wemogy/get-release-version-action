@@ -8,26 +8,23 @@ A GitHub Action to determine the next version by checking the commit history for
 - uses: wemogynext-version-action@v1
   id: get-release-version
   with:
-    token: ${{ secrets.GITHUB_TOKEN }}
+    suffix: ''
+    only-increase-suffix: 'false'
 
 - run: echo ${{ steps.get-release-version.outputs.version }}
+- run: echo ${{ steps.get-release-version.outputs.has-changes }}
 ```
 
 ## Inputs
 
 | Input | Description |
 |-|-|
-| `token` | **Required** A GitHub Access Token |
-| `repo` | The repository name (Default: current repository) |
-| `username` | The GitHub username (Default: current repository owner) |
-| `branch` | The release branch to check (Default: current branch) |
-| `projects` | The amount of projects in this repo (Single or Multi) (Default: Single) |
-| `prefix` | A prefix to all versions and release branches (Default: v) |
+| `suffix` | The suffix to append to the version (e.g. `hotfix`) |
+| `only-increase-suffix` | If set to `true`, even if changes got detected, only the suffix will be incremented |
 
 ## Outputs
 
 | Output | Description |
 |-|-|
-| `next-version` | The next semantic version for the next release without prefix |
-| `next-version-name` | The next semantic version for the next release with prefix |
-| `folder` | The name of the folder for the branch |
+| `version` | The version to use for the release |
+| `has-changes` | Determines, if changes got detected, which require a version change according to Conventional Commits. |
