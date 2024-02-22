@@ -5,11 +5,10 @@ A GitHub Action to determine if a version on a staging branch needs to be update
 ## Usage
 
 ```yaml
-- uses: wemogy/next-version-action@2.0.2
-  id: release-version
+- uses: wemogynext-version-action@v1
+  id: get-release-version
   with:
     token: ${{ secrets.GITHUB_TOKEN }}
-    projects: 'Single'
 
 - run: echo ${{ steps.release-version.outputs.next-version }}
 ```
