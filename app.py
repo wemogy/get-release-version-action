@@ -82,13 +82,13 @@ def main() -> None:
     if has_changes:
         logger.info('Changes detected.')
 
-        if args.only_increase_suffix: # Example case: Hotfix
+        if args.only_increase_suffix:  # Example case: Hotfix
             logger.info('Only the suffix will be incremented.')
             new_version = increment_hotfix(next_version, args.suffix)
-        else: # Example case: New Release
+        else:  # Example case: New Release
             logger.info('Semantic Version will be incremented.')
             new_version = next_version
-    else: # Example case: No change, that requires a semantic version increase
+    else:  # Example case: No change, that requires a semantic version increase
         logger.info('No changes detected.')
         logger.info('Version stays the same.')
         new_version = next_version
