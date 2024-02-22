@@ -14,6 +14,9 @@ outputs:
   version:
     description: 'The version to use'
     value: ${{ steps.determine-version.outputs.version }}
+  has-changes:
+    description: 'Determines, if changes got detected, which require a version change according to Conventional Commits.'
+    value: ${{ steps.determine-version.outputs.has-changes }}
 runs:
   using: 'composite'
   steps:
