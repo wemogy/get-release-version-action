@@ -1,6 +1,6 @@
 # ![wemogy logo](https://wemogyimages.blob.core.windows.net/logos/wemogy-github-tiny.png) Get Release Version (GitHub Action)
 
-A GitHub Action to determine if a version on a staging branch needs to be updated after a merge. It does this, by checking the commit history for [Conventional Commits](https://www.conventionalcommits.org/). If a change got detected, the version prefix will be increased.
+A GitHub Action to determine the next version by checking the commit history for [Conventional Commits](https://www.conventionalcommits.org/).
 
 ## Usage
 
