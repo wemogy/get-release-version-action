@@ -29,7 +29,7 @@ runs:
     - name: Download get-next-version
       shell: bash
       run: |
-        wget -O /usr/bin/get-next-version https://github.com/thenativeweb/get-next-version/releases/download/2.6.1/get-next-version-darwin-amd64
+        wget -O /usr/bin/get-next-version https://github.com/thenativeweb/get-next-version/releases/download/2.6.1/get-next-version-linux-amd64
         chmod +x /usr/bin/get-next-version
 
     - name: Determine the version
