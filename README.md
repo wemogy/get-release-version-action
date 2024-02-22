@@ -10,7 +10,7 @@ A GitHub Action to determine the next version by checking the commit history for
   with:
     token: ${{ secrets.GITHUB_TOKEN }}
 
-- run: echo ${{ steps.release-version.outputs.next-version }}
+- run: echo ${{ steps.get-release-version.outputs.version }}
 ```
 
 ## Inputs
