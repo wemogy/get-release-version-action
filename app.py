@@ -33,14 +33,15 @@ def increment_hotfix(version: str, hotfix_suffix: str) -> str:
     return semver.bump_prerelease(version, hotfix_suffix)
 
 
-def get_next_version() -> tuple[str, bool]:
+def get_next_version(get_next_version_path: str) -> tuple[str, bool]:
     """
     Determine the next version and if there are any changes from the last version.
 
+    :param get_next_version_path: The path to the get-next-version executable
     :return: A tuple of the next version and whether there are any new changes
     """
     process = subprocess.run(
-        ('get-next-version', '--target', 'json'),
+        (get_next_version_path, '--target', 'json'),
         capture_output=True,
         check=True,
         text=True
@@ -60,6 +61,13 @@ def main() -> None:
     )
 
     parser.add_argument(
+        '--suffix',
+        dest='suffix',
+        type=str,
+        help='The suffix that should be incremented'
+    )
+
+    parser.add_argument(
         '--only-increase-suffix',
         dest='only_increase_suffix',
         type=bool,
@@ -68,15 +76,16 @@ def main() -> None:
     )
 
     parser.add_argument(
-        '--suffix',
-        dest='suffix',
+        '--get-next-version-path',
+        dest='get_next_version_path',
         type=str,
-        help='The suffix that should be incremented'
+        default='get-next-version',
+        help='Only increases the suffix increment if any change got detected'
     )
 
     args = parser.parse_args()
 
-    next_version, has_changes = get_next_version()
+    next_version, has_changes = get_next_version(args.get_next_version_path)
 
     if has_changes:
         logger.info('Changes detected.')
