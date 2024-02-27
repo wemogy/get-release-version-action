@@ -134,9 +134,9 @@ def main() -> None:
     next_version, has_changes = get_next_version(args.get_next_version_path)
 
     if has_changes:
-        logger.info('Changes detected.')
+        logger.info('Changes detected, next version is %s', next_version)
 
-        if  args.only_increase_suffix:  # Example case: Hotfix
+        if args.only_increase_suffix:  # Example case: Hotfix
             logger.info('Only the suffix will be incremented.')
             new_version = increment_hotfix(next_version, args.suffix)
         else:  # Example case: New Release
@@ -147,8 +147,8 @@ def main() -> None:
         logger.info('Version stays the same.')
         new_version = next_version
 
-    # log the create_tag flag
-    if args.create_tag:
+    # log the create_tag flag, if it is set to true and has_changes is true
+    if args.create_tag and has_changes:
         create_tag(new_version)
 
     set_output('version', new_version)
