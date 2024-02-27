@@ -37,6 +37,7 @@ runs:
       shell: bash
       run: |
         wget -O ./get-next-version https://github.com/thenativeweb/get-next-version/releases/download/2.6.1/get-next-version-linux-amd64
+        chmod +x ./get-next-version
 
     - name: Determine the version
       id: determine-version
