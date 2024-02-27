@@ -134,6 +134,9 @@ def main() -> None:
     if has_changes:
         logger.info('Changes detected.')
 
+        # log the only_increase_suffix flag
+        logger.info('Only Increase Suffix: %s', args.only_increase_suffix)
+
         if args.only_increase_suffix:  # Example case: Hotfix
             logger.info('Only the suffix will be incremented.')
             new_version = increment_hotfix(next_version, args.suffix)
