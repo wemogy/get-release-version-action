@@ -9,11 +9,11 @@ inputs:
   create-tag:
     description: "Create a Git Tag for the version"
     required: false
-    default: false
+    default: "false"
   only-increase-suffix:
     description: "Only increases the suffix increment, when any change got detected"
     required: true
-    default: false
+    default: "false"
 outputs:
   version:
     description: "The version to use"
