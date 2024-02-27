@@ -1,33 +1,33 @@
 # action.yaml
-name: 'Get release version'
-description: 'A GitHub Action to determine the next version by checking the commit history for Conventional Commits'
+name: "Get release version"
+description: "A GitHub Action to determine the next version by checking the commit history for Conventional Commits"
 inputs:
   suffix:
-    description: 'The suffix to add to the version'
+    description: "The suffix to add to the version"
     required: false
     default: ""
   create-tag:
-    description: 'Create a Git Tag for the version'
+    description: "Create a Git Tag for the version"
     required: false
     default: false
   only-increase-suffix:
-    description: 'Only increases the suffix increment, when any change got detected'
+    description: "Only increases the suffix increment, when any change got detected"
     required: true
     default: false
 outputs:
   version:
-    description: 'The version to use'
+    description: "The version to use"
     value: ${{ steps.determine-version.outputs.version }}
   has-changes:
-    description: 'Determines, if changes got detected, which require a version change according to Conventional Commits.'
+    description: "Determines, if changes got detected, which require a version change according to Conventional Commits."
     value: ${{ steps.determine-version.outputs.has-changes }}
 runs:
-  using: 'composite'
+  using: "composite"
   steps:
     - name: Install Python
       uses: actions/setup-python@v4
       with:
-        python-version: '3.10'
+        python-version: "3.10"
 
     - name: Install Dependencies
       run: pip install -r requirements.txt
@@ -37,7 +37,6 @@ runs:
       shell: bash
       run: |
         wget -O /usr/bin/get-next-version https://github.com/thenativeweb/get-next-version/releases/download/2.6.1/get-next-version-linux-amd64
-        chmod +x /usr/bin/get-next-version
 
     - name: Determine the version
       id: determine-version
