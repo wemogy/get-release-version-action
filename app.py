@@ -40,12 +40,16 @@ def get_next_version(get_next_version_path: str) -> tuple[str, bool]:
     :param get_next_version_path: The path to the get-next-version executable
     :return: A tuple of the next version and whether there are any new changes
     """
-    process = subprocess.run(
-        (get_next_version_path, '--target', 'json'),
-        capture_output=True,
-        check=True,
-        text=True
-    )
+    try:
+        process = subprocess.run(
+            (get_next_version_path, '--target', 'json'),
+            capture_output=True,
+            check=True,
+            text=True
+        )
+    except subprocess.CalledProcessError as e:
+        logging.error(f"Subprocess failed with error code: {e.returncode}")
+        logging.error(f"Error message: {e.output}")
 
     result = json.loads(process.stdout)
     return result['version'], result['hasNextVersion']
