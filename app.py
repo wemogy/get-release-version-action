@@ -153,7 +153,7 @@ def main() -> None:
 
     set_output('version', new_version)
     set_output('has-changes', str(has_changes).lower())
-    logger.info('New version is %s', new_version)
+    logger.info('Version is %s', new_version)
 
 
 if __name__ == '__main__':
