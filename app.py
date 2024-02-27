@@ -50,8 +50,8 @@ def get_next_version(get_next_version_path: str) -> tuple[str, bool]:
         result = json.loads(process.stdout)
         return result['version'], result['hasNextVersion']
     except subprocess.CalledProcessError as e:
-        print(f"Subprocess failed with error code: {e.returncode}")
-        print(f"Error message: {e.output}")
+        logging.error(f"Subprocess failed with error code: {e.returncode}")
+        logging.error(f"Error message: {e.output}")
         raise e
 
 
