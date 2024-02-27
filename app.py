@@ -116,7 +116,7 @@ def main() -> None:
         '--get-next-version-path',
         dest='get_next_version_path',
         type=str,
-        default='get-next-version',
+        default='./get-next-version',
         help='Only increases the suffix increment if any change got detected'
     )
 
