@@ -11,6 +11,9 @@ import semver
 
 logger = logging.getLogger('wemogy.get-release-version-action')
 
+def set_output(name, value):
+    with open(os.environ['GITHUB_OUTPUT'], 'a') as fh:
+        print(f'{name}={value}', file=fh)
 
 def setup_logging():
     current_file_path = Path(__file__).resolve()
@@ -145,8 +148,8 @@ def main() -> None:
     if args.create_tag:
         create_tag(new_version)
 
-    os.environ['GITHUB_OUTPUT'] = f'version={new_version}'
-    os.environ['GITHUB_OUTPUT'] += f'has-changes={has_changes}'
+    set_output('version', new_version)
+    set_output('has-changes', has_changes)
     logger.info('New version is %s', new_version)
 
 
