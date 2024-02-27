@@ -106,16 +106,16 @@ def main() -> None:
     parser.add_argument(
         '--only-increase-suffix',
         dest='only_increase_suffix',
-        type=bool,
-        default=False,
+        type=str,
+        default='False',
         help='Only increases the suffix increment if any change got detected.'
     )
 
     parser.add_argument(
         '--create-tag',
         dest='create_tag',
-        type=bool,
-        default=False,
+        type=str,
+        default='False',
         help='Create a Git Tag for the version and push it if a remote is configured.'
     )
 
@@ -128,13 +128,15 @@ def main() -> None:
     )
 
     args = parser.parse_args()
+    only_increase_suffix = args.only_increase_suffix.lower() == 'true'
+    create_tag = args.create_tag.lower() == 'true'
 
     next_version, has_changes = get_next_version(args.get_next_version_path)
 
     if has_changes:
         logger.info('Changes detected.')
 
-        if args.only_increase_suffix:  # Example case: Hotfix
+        if only_increase_suffix:  # Example case: Hotfix
             logger.info('Only the suffix will be incremented.')
             new_version = increment_hotfix(next_version, args.suffix)
         else:  # Example case: New Release
@@ -145,7 +147,8 @@ def main() -> None:
         logger.info('Version stays the same.')
         new_version = next_version
 
-    if args.create_tag:
+    # log the create_tag flag
+    if create_tag:
         create_tag(new_version)
 
     set_output('version', new_version)
