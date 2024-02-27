@@ -47,12 +47,12 @@ def get_next_version(get_next_version_path: str) -> tuple[str, bool]:
             check=True,
             text=True
         )
+        result = json.loads(process.stdout)
+        return result['version'], result['hasNextVersion']
     except subprocess.CalledProcessError as e:
         logging.error(f"Subprocess failed with error code: {e.returncode}")
         logging.error(f"Error message: {e.output}")
-
-    result = json.loads(process.stdout)
-    return result['version'], result['hasNextVersion']
+        raise e
 
 
 def create_tag(version: str) -> None:
