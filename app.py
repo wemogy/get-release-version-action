@@ -148,6 +148,8 @@ def main() -> None:
         logger.info('Version stays the same.')
         new_version = next_version
 
+    # log the create_tag flag
+    logger.info('Create Tag: %s', args.create_tag)
     if args.create_tag:
         create_tag(new_version)
 
