@@ -16,5 +16,7 @@ jobs:
       - name: Run
         id: get-release-version
         uses: ./
-      - run: echo ${{ steps.get-release-version.outputs.version }}
-      - run: echo ${{ steps.get-release-version.outputs.has-changes }}
+      - name: Show the next version
+        run: |
+          echo ${{ steps.get-release-version.outputs.version }}
+          echo ${{ steps.get-release-version.outputs.has-changes }}
