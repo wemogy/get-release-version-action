@@ -25,6 +25,7 @@ jobs:
       # Create GitHub Release
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v1
+        if: ${{ steps.get-release-version.outputs.has-changes }}
         with:
           tag_name: ${{ steps.get-release-version.outputs.version }}
           name: Version ${{ steps.get-release-version.outputs.version }}
