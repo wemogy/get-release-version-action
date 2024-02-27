@@ -128,15 +128,15 @@ def main() -> None:
     )
 
     args = parser.parse_args()
-    only_increase_suffix = args.only_increase_suffix.lower() == 'true'
-    create_tag = args.create_tag.lower() == 'true'
+    args.only_increase_suffix = args.only_increase_suffix.lower() == 'true'
+    args.create_tag = args.create_tag.lower() == 'true'
 
     next_version, has_changes = get_next_version(args.get_next_version_path)
 
     if has_changes:
         logger.info('Changes detected.')
 
-        if only_increase_suffix:  # Example case: Hotfix
+        if  args.only_increase_suffix:  # Example case: Hotfix
             logger.info('Only the suffix will be incremented.')
             new_version = increment_hotfix(next_version, args.suffix)
         else:  # Example case: New Release
@@ -148,7 +148,7 @@ def main() -> None:
         new_version = next_version
 
     # log the create_tag flag
-    if create_tag:
+    if args.create_tag:
         create_tag(new_version)
 
     set_output('version', new_version)
