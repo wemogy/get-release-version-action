@@ -133,6 +133,14 @@ def main() -> None:
 
     next_version, has_changes = get_next_version(args.get_next_version_path)
 
+    process = subprocess.run(
+        ('semantic-release', 'version', '--print'),
+        capture_output=True,
+        check=True,
+        text=True
+    )
+    logger.info('Current version from semantic-release is %s', process.stdout.strip())
+
     if has_changes:
         logger.info('Changes detected, next version is %s', next_version)
 
