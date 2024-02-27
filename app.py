@@ -149,7 +149,7 @@ def main() -> None:
         create_tag(new_version)
 
     set_output('version', new_version)
-    set_output('has-changes', has_changes)
+    set_output('has-changes', str(has_changes).lower())
     logger.info('New version is %s', new_version)
 
 
