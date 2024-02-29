@@ -1,3 +1,4 @@
+#! /bin/bash
 # Arg1: Test case name, Arg 2: Expected; Arg 3: Actual
 function assert-equal() {
   if [[ $3 != "$2" ]]; then
