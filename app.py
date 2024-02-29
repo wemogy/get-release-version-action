@@ -27,6 +27,30 @@ def setup_logging():
     logging.getLogger().setLevel(logging.DEBUG)
 
 
+def run_command(*command: str | bytes | os.PathLike[str] | os.PathLike[bytes]) -> str:
+    """
+    Run the given command and return the output if the command was successful,
+    else log the output and raise an exception.
+
+    :param command: The command to run
+    :return: The command's output if the command exited successful
+    :throws subprocess.CalledProcessError: If the command did not exit successful.
+    """
+    try:
+        process = subprocess.run(
+            command,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT,
+            check=True,
+            text=True
+        )
+    except subprocess.CalledProcessError as e:
+        logging.error(f"Process {command[0]} failed with error code: {e.returncode}")
+        logging.error(f"Error message: {e.output}")
+        raise e
+    return process.stdout
+
+
 def increment_hotfix(version: str, hotfix_suffix: str) -> str:
     """
     Increment the hotfix version (-h.) or append -h.1, if the suffix does not exist.
@@ -45,19 +69,9 @@ def get_next_version(get_next_version_path: str) -> tuple[str, bool]:
     :param get_next_version_path: The path to the get-next-version executable
     :return: A tuple of the next version and whether there are any new changes
     """
-    try:
-        process = subprocess.run(
-            (get_next_version_path, '--target', 'json'),
-            capture_output=True,
-            check=True,
-            text=True
-        )
-        result = json.loads(process.stdout)
-        return result['version'], result['hasNextVersion']
-    except subprocess.CalledProcessError as e:
-        logging.error(f"Subprocess failed with error code: {e.returncode}")
-        logging.error(f"Error message: {e.output}")
-        raise e
+    output = run_command(get_next_version_path, '--target', 'json')
+    result = json.loads(output)
+    return result['version'], result['hasNextVersion']
 
 
 def create_tag(version: str) -> None:
@@ -67,26 +81,15 @@ def create_tag(version: str) -> None:
     :param version: The version that the tag should be named
     """
     # Create the tag
-    subprocess.run(
-        ('git', 'tag', version),
-        check=True
-    )
+    run_command('git', 'tag', version)
 
-    show_remote_process = subprocess.run(
-        ('git', 'remote', 'show'),
-        capture_output=True,
-        check=True,
-        text=True
-    )
+    git_remote = run_command('git', 'remote', 'show')
 
-    if show_remote_process.stdout == '':
+    if git_remote == '':
         logger.info('No remote found, skipping pushing')
         return
 
-    subprocess.run(
-        ('git', 'push'),
-        check=True
-    )
+    run_command('git', 'push'),
 
 
 def main() -> None:
@@ -135,13 +138,8 @@ def main() -> None:
 
     next_version, has_changes = get_next_version(args.get_next_version_path)
 
-    process = subprocess.run(
-        ('semantic-release', 'version', '--print'),
-        capture_output=True,
-        check=True,
-        text=True
-    )
-    logger.info('Current version from semantic-release is %s', process.stdout.strip())
+    current_version = run_command('semantic-release', 'version', '--print', '--noop')
+    logger.info('Current version from semantic-release is %s', current_version)
 
     if has_changes:
         logger.info('Changes detected, next version is %s', next_version)
