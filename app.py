@@ -1,19 +1,21 @@
 import json
-import subprocess
-from argparse import ArgumentParser
-import os
 import logging
 import logging.config
+import os
+import subprocess
+from argparse import ArgumentParser
 from pathlib import Path
 
-import yaml
 import semver
+import yaml
 
 logger = logging.getLogger('wemogy.get-release-version-action')
+
 
 def set_output(name, value):
     with open(os.environ['GITHUB_OUTPUT'], 'a') as fh:
         print(f'{name}={value}', file=fh)
+
 
 def setup_logging():
     current_file_path = Path(__file__).resolve()
