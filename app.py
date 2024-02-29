@@ -1,10 +1,12 @@
-import json
 import logging
 import logging.config
 import os
 import subprocess
 from argparse import ArgumentParser
 from pathlib import Path
+import re
+from typing import Any
+import git
 
 import semver
 import yaml
@@ -12,14 +14,25 @@ import yaml
 logger = logging.getLogger('wemogy.get-release-version-action')
 
 
-def set_output(name, value):
+def set_output(name: str, value: Any) -> None:
+    """
+    Set the key-value-pair as a GitHub actions output
+
+    :param name: The name of the output
+    :param value: The value of the output
+    """
+    if not os.environ.get('GITHUB_OUTPUT'):
+        logger.info('GITHUB_OUTPUT not in environment, skipping GitHub actions output')
+        return
+
     with open(os.environ['GITHUB_OUTPUT'], 'a') as fh:
         print(f'{name}={value}', file=fh)
 
 
-def setup_logging():
-    current_file_path = Path(__file__).resolve()
-    config_file = current_file_path.parent / 'logging.config.yaml'
+def setup_logging() -> None:
+    """Setup logging"""
+    config_file = Path(__file__).resolve().parent / 'logging.config.yaml'
+
     with config_file.open('r') as config_stream:
         config = yaml.load(config_stream, yaml.SafeLoader)
 
@@ -45,10 +58,59 @@ def run_command(*command: str | bytes | os.PathLike[str] | os.PathLike[bytes]) -
             text=True
         )
     except subprocess.CalledProcessError as e:
-        logging.error(f"Process {command[0]} failed with error code: {e.returncode}")
-        logging.error(f"Error message: {e.output}")
+        logger.error(
+            'Process %s exited unsuccessful with exit code %s:\n%s',
+            ' '.join([str(x) for x in command]), e.returncode, e.stdout
+        )
         raise e
+
+    logger.debug(
+        'Process %s exited successful with exit code %s:\n%s',
+        ' '.join([str(x) for x in command]), process.returncode, process.stdout
+    )
     return process.stdout
+
+
+def get_current_version() -> str:
+    """
+    Get the current version (= the latest git tag).
+    If there are no tags, return 0.0.0
+
+    :return: The current version
+    """
+    repo = git.Repo(os.getcwd())
+
+    if len(repo.tags) == 0:
+        return '0.0.0'
+
+    return repo.tags[-1].name
+
+
+def get_next_version() -> str:
+    """
+    Determine the next version.
+
+    :return: The next version
+    """
+    output = run_command(
+        'semantic-release',
+        '-vv',  # Enable debug output
+        '--config', Path(__file__).resolve().parent / 'semantic-release.config.json',
+        'version',
+        '--print',  # Print the version to the command line
+        '--skip-build',  # Don't build the app (done in a separate action)
+        '--no-commit',  # Don't commit build artifacts or other changes by semantic-release
+                        # (because there shouldn't be any)
+        '--no-tag',  # Don't create a git tag
+                     # (we create it manually because semantic-releases tag feature doesn't work for some reason)
+        '--no-changelog',  # Don't update the changelog file
+        '--no-push',  # Don't push any changes (because there shouldn't be any)
+        '--no-vcs-release',  # Don't create a GitHub release (done in a separate action)
+    )
+
+    version_pattern = re.compile(r'^\d+\.\d+\.\d+$', re.MULTILINE)
+    next_version = version_pattern.search(output).group()
+    return next_version
 
 
 def increment_hotfix(version: str, hotfix_suffix: str) -> str:
@@ -60,18 +122,6 @@ def increment_hotfix(version: str, hotfix_suffix: str) -> str:
     :return: The new version
     """
     return semver.bump_prerelease(version, hotfix_suffix)
-
-
-def get_next_version(get_next_version_path: str) -> tuple[str, bool]:
-    """
-    Determine the next version and if there are any changes from the last version.
-
-    :param get_next_version_path: The path to the get-next-version executable
-    :return: A tuple of the next version and whether there are any new changes
-    """
-    output = run_command(get_next_version_path, '--target', 'json')
-    result = json.loads(output)
-    return result['version'], result['hasNextVersion']
 
 
 def create_tag(version: str) -> None:
@@ -89,13 +139,14 @@ def create_tag(version: str) -> None:
         logger.info('No remote found, skipping pushing')
         return
 
-    run_command('git', 'push'),
+    run_command('git', 'push')
 
 
 def main() -> None:
     """Increment the hotfix version if needed."""
     setup_logging()
 
+    # region argparse
     parser = ArgumentParser(
         description='Increment the hotfix version if needed.',
         allow_abbrev=False
@@ -124,38 +175,36 @@ def main() -> None:
         help='Create a Git Tag for the version and push it if a remote is configured.'
     )
 
-    parser.add_argument(
-        '--get-next-version-path',
-        dest='get_next_version_path',
-        type=str,
-        default='./get-next-version',
-        help='Only increases the suffix increment if any change got detected'
-    )
-
     args = parser.parse_args()
     args.only_increase_suffix = args.only_increase_suffix.lower() == 'true'
     args.create_tag = args.create_tag.lower() == 'true'
+    # endregion
 
-    next_version, has_changes = get_next_version(args.get_next_version_path)
+    current_version = get_current_version()
+    next_version = get_next_version()
+    has_changes = next_version != current_version
 
-    current_version = run_command('semantic-release', 'version', '--print', '--noop')
-    logger.info('Current version from semantic-release is %s', current_version)
+    logger.debug(
+        'current_version=%s, next_version=%s, has_changes=%s',
+        current_version, next_version, has_changes
+    )
 
     if has_changes:
         logger.info('Changes detected, next version is %s', next_version)
 
-        if args.only_increase_suffix:  # Example case: Hotfix
+        if args.only_increase_suffix:
+            # Example case: Hotfix
             logger.info('Only the suffix will be incremented.')
-            new_version = increment_hotfix(next_version, args.suffix)
-        else:  # Example case: New Release
+            new_version = increment_hotfix(current_version, args.suffix)
+        else:
+            # Example case: New Release
             logger.info('Semantic Version will be incremented.')
             new_version = next_version
-    else:  # Example case: No change, that requires a semantic version increase
-        logger.info('No changes detected.')
-        logger.info('Version stays the same.')
+    else:
+        # Example case: No change that requires a semantic version increase
+        logger.info('No changes detected, version stays the same.')
         new_version = next_version
 
-    # log the create_tag flag, if it is set to true and has_changes is true
     if args.create_tag and has_changes:
         create_tag(new_version)
 
