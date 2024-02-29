@@ -139,7 +139,7 @@ def create_tag(version: str) -> None:
         logger.info('No remote found, skipping pushing')
         return
 
-    run_command('git', 'push')
+    run_command('git', 'push', 'origin', version)
 
 
 def main() -> None:
