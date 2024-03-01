@@ -37,3 +37,9 @@ runs:
       id: determine-version
       run: python app.py --only-increase-suffix ${{ inputs.only-increase-suffix }} --suffix ${{ inputs.suffix }} --create-tag ${{ inputs.create-tag }}
       shell: bash
+
+    - uses: actions/upload-artifact@v4
+      name: Upload debug log
+      with:
+        name: debug.log
+        path: app.log
