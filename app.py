@@ -1,13 +1,13 @@
 import logging
 import logging.config
 import os
+import re
 import subprocess
 from argparse import ArgumentParser
 from pathlib import Path
-import re
 from typing import Any
-import git
 
+import git
 import semver
 import yaml
 
