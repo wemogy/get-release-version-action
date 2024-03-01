@@ -25,11 +25,11 @@ function assert-success() {
   fi
 }
 
+source .test.env
 source .venv/bin/activate
 
-git clone https://github.com/[USERNAME]/get-release-version-test.git test
+git clone "$TEST_REPOSITORY_URL" test
 cd test || exit 1
-export GH_TOKEN=[GH_TOKEN]
 
 # 1. No changes; expected: 0.0.0, no changes
 touch test.1
@@ -96,4 +96,3 @@ cd ..
 rm -drf test
 
 deactivate
-export GH_TOKEN=""

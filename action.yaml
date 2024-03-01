@@ -33,13 +33,13 @@ runs:
       run: pip install -r requirements.txt
       shell: bash
 
-    - name: Download get-next-version
-      shell: bash
-      run: |
-        wget -O ./get-next-version https://github.com/thenativeweb/get-next-version/releases/download/2.6.1/get-next-version-linux-amd64
-        chmod +x ./get-next-version
-
     - name: Determine the version
       id: determine-version
       run: python app.py --only-increase-suffix ${{ inputs.only-increase-suffix }} --suffix ${{ inputs.suffix }} --create-tag ${{ inputs.create-tag }}
       shell: bash
+
+    - uses: actions/upload-artifact@v4
+      name: Upload debug log
+      with:
+        name: debug.log
+        path: app.log
