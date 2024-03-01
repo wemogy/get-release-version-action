@@ -46,3 +46,4 @@ A GitHub Action to determine the next version by checking the commit history for
 6. After the test, delete the GitHub repository.
    The test needs a fresh repository because it uses tags to determine the next version and creates a new tag for the new version,
    so if the repository already has tags, the output version is not the one expected in the test script.
+
