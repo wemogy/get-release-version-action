@@ -39,6 +39,7 @@ runs:
       shell: bash
 
     - uses: actions/upload-artifact@v4
+      if: ${{ always() }}
       name: Upload debug log
       with:
         name: debug.log
