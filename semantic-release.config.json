@@ -1,5 +1,11 @@
 {
     "semantic_release": {
-        "tag_format": "{version}"
+        "tag_format": "{version}",
+        "branches": {
+            "all": {
+                "match": ".*",
+                "prerelease": false
+            }
+        }
     }
 }
