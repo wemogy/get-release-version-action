@@ -22,7 +22,7 @@ jobs:
         run: git fetch --tags origin
 
       - name: Show git log
-        run: git --no-pager log
+        run: git --no-pager tag -l
 
       - name: Run
         id: get-release-version
