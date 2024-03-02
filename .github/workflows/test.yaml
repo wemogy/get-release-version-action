@@ -19,7 +19,7 @@ jobs:
       # That's why we need to use a workaround and fetch the tags manually
       # See: https://github.com/actions/checkout/pull/579#issuecomment-1615799806
       - name: Fetch tags
-        run: git fetch --tags
+        run: git fetch --tags origin
 
       - name: Show git log
         run: git --no-pager log
