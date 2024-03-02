@@ -1,4 +1,3 @@
-# .github/workflows/test_action.yaml
 name: Test Action
 on:
   workflow_dispatch:
@@ -14,6 +13,13 @@ jobs:
         with:
           fetch-depth: 0
           fetch-tags: true
+
+      # actions/checkout is broken and for some reason, the fetch-tags option doesn't work
+      # See: https://github.com/actions/checkout/issues/1471
+      # That's why we need to use a workaround and fetch the tags manually
+      # See: https://github.com/actions/checkout/pull/579#issuecomment-1615799806
+      - name: Fetch tags
+        run: git fetch --depth=0 --tags
 
       - name: Show git log
         run: git --no-pager log
