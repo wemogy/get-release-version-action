@@ -10,14 +10,18 @@ jobs:
     name: Test the action
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
+          fetch-tags: true
+
       - name: Show git log
         run: git --no-pager log
+
       - name: Run
         id: get-release-version
         uses: ./
+
       - name: Show the next version
         run: |
           echo ${{ steps.get-release-version.outputs.version }}
