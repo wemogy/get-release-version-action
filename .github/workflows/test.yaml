@@ -19,10 +19,9 @@ jobs:
 
       - name: Show git log
         run: |
-          git fetch --prune --unshallow --tags
-          echo $(git describe --tags)
-          echo $(git --no-pager tag -l)
-          echo $(git log --tags)
+          git describe --tags
+          git tag -l
+          git --no-pager log --tags
 
       - name: Run
         id: get-release-version
