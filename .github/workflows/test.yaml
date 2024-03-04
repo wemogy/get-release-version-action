@@ -19,8 +19,8 @@ jobs:
 
       - name: Show git log
         run: |
-          echo $(git describe tag)
-          echo $(git tag -l)
+          echo $(git describe --tags)
+          echo $(git --no-pager tag -l)
           echo $(git log --tags)
 
       - name: Run
