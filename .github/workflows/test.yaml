@@ -10,19 +10,15 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-          fetch-tags: true
 
-      # actions/checkout is broken and for some reason, the fetch-tags option doesn't work
-      # See: https://github.com/actions/checkout/issues/1471
-      # That's why we need to use a workaround and fetch the tags manually
-      # See: https://github.com/actions/checkout/pull/579#issuecomment-1615799806
+      # [X] https://github.com/actions/checkout/issues/1471
+      # [X] https://github.com/actions/checkout/pull/579#issuecomment-1615799806
+      # [ ] https://github.com/actions/checkout/issues/206
       - name: Fetch tags
-        run: git fetch --tags origin
+        run: git fetch --prune --unshallow --tags
 
       - name: Show git log
-        run: git --no-pager tag -l
+        run: git --no-pager log
 
       - name: Run
         id: get-release-version
