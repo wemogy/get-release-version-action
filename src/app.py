@@ -50,7 +50,6 @@ def set_output(name: str, value: Any) -> None:
         logger.info('GITHUB_OUTPUT not in environment, skipping GitHub actions output')
         return
 
-    logger.info('Setting GitHub actions output %s=%s', name, value)
     with open(os.environ['GITHUB_OUTPUT'], 'a') as fh:
         # write new line
         print(f'{name}={value}', file=fh)
@@ -263,18 +262,16 @@ def main() -> None:
     if args.create_tag and has_changes:
         create_tag(new_version)
 
-    print_github_output()
-
     # clear the output to ensure that it is empty
     clear_output()
 
     set_output('version', new_version)
     set_output('version-name', f'{args.prefix}{new_version}')
     set_output('has-changes', str(has_changes).lower())
-    logger.info('Version is %s', new_version)
 
     print_github_output()
 
+    logger.info('Version is %s', new_version)
 
 if __name__ == '__main__':
     main()
