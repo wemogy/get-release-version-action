@@ -37,6 +37,9 @@ def set_output(name: str, value: Any) -> None:
 
     logger.info('Setting GitHub actions output %s=%s', name, value)
     with open(os.environ['GITHUB_OUTPUT'], 'a') as fh:
+        # prepend line-break if file is not ending with one
+        if fh.tell() != 0:
+            fh.write('\n')
         print(f'{name}={value}', file=fh)
 
 
