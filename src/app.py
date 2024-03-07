@@ -149,7 +149,6 @@ def get_next_version(prefix: str) -> str:
 
     version_pattern = re.compile(r'^\d+\.\d+\.\d+$', re.MULTILINE)
     next_version = version_pattern.search(output).group()
-    next_version = prefix + next_version
     return next_version
 
 
