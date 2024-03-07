@@ -193,6 +193,11 @@ def main() -> None:
     next_version = get_next_version()
     has_changes = next_version != current_version
 
+    # Log all commits and tags
+    gitlog = run_command('git', 'log', '--oneline', '--decorate')
+
+    logger.info('Commits and tags:\n%s', gitlog)
+
     logger.debug(
         'current_version=%s, next_version=%s, has_changes=%s',
         current_version, next_version, has_changes
