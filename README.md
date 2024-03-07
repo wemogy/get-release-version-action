@@ -36,6 +36,20 @@ A GitHub Action to determine the next version by checking the commit history for
 | `version`     | The version to use for the release.                                                                    |
 | `has-changes` | Determines, if changes got detected, which require a version change according to Conventional Commits. |
 
+## Docker
+
+Build:
+
+```bash
+docker build -t get-release-version-action:local -f Dockerfile .
+```
+
+Run:
+
+```bash
+docker run get-release-version-action:local
+```
+
 ## Testing
 
 1. Create a GitHub repository with a default branch (eg. by creating a README.md).
