@@ -25,9 +25,9 @@ jobs:
 
       - name: Show the next version
         run: |
-          echo ${{ steps.get-release-version.outputs.version }}
-          echo ${{ steps.get-release-version.outputs.version-name }}
-          echo ${{ steps.get-release-version.outputs.has-changes }}
+          echo "Version: ${{ steps.get-release-version.outputs.version }}"
+          echo "Version name: ${{ steps.get-release-version.outputs.version-name }}"
+          echo "Has changes: ${{ steps.get-release-version.outputs.has-changes }}"
 
       # Create GitHub Release
       - name: Create GitHub Release
