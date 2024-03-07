@@ -14,8 +14,8 @@ A GitHub Action to determine the next version by checking the commit history for
 - uses: wemogy/get-release-version-action@v1
   id: get-release-version
   with:
-    suffix: ''
-    only-increase-suffix: 'false'
+    suffix: ""
+    only-increase-suffix: "false"
 
 - run: echo ${{ steps.get-release-version.outputs.version }}
 - run: echo ${{ steps.get-release-version.outputs.has-changes }}
@@ -24,7 +24,7 @@ A GitHub Action to determine the next version by checking the commit history for
 ## Inputs
 
 | Input                  | Description                                                                          |
-|------------------------|--------------------------------------------------------------------------------------|
+| ---------------------- | ------------------------------------------------------------------------------------ |
 | `suffix`               | The suffix to append to the version (e.g. `hotfix`).                                 |
 | `only-increase-suffix` | If set to `true`, even if changes got detected, only the suffix will be incremented. |
 | `create-tag`           | Create a Git Tag for the version. Will be pushed, if remote is available.            |
@@ -32,7 +32,7 @@ A GitHub Action to determine the next version by checking the commit history for
 ## Outputs
 
 | Output        | Description                                                                                            |
-|---------------|--------------------------------------------------------------------------------------------------------|
+| ------------- | ------------------------------------------------------------------------------------------------------ |
 | `version`     | The version to use for the release.                                                                    |
 | `has-changes` | Determines, if changes got detected, which require a version change according to Conventional Commits. |
 
