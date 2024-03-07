@@ -253,14 +253,16 @@ def main() -> None:
         logger.info('No changes detected, version stays the same.')
         new_version = next_version
 
+    new_version_tag = f'{args.prefix}{new_version}'
+
     if args.create_tag and has_changes:
-        create_tag(new_version)
+        create_tag(new_version_tag)
 
     # clear the output to ensure that it is empty
     clear_output()
 
     set_output('version', new_version)
-    set_output('version-name', f'{args.prefix}{new_version}')
+    set_output('version-name', new_version_tag)
     set_output('has-changes', str(has_changes).lower())
 
     print_github_output()
