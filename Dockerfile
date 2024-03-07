@@ -9,6 +9,8 @@ RUN pip install -r /action/requirements.txt
 # Install git if not installed
 RUN which git || ((apt-get -yq update && apt-get -yq install git && rm -rf /var/lib/apt/lists/*) || (apk update --no-cache && apk add --no-cache git))
 
+# Silence all safe.directory warnings
+RUN git config --global --add safe.directory '*'
+
 # running the action
 ENTRYPOINT ["python", "/action/app.py"]
-
