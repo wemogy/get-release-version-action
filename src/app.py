@@ -107,12 +107,25 @@ def get_current_version() -> str:
     return repo.tags[-1].name
 
 
-def get_next_version() -> str:
+def get_next_version(prefix: str) -> str:
     """
     Determine the next version.
 
     :return: The next version
     """
+
+    config_path = Path(__file__).resolve().parent / 'semantic-release.config.json'
+
+    # replace {{PREFIX}} with the actual prefix
+    with open(config_path, 'r') as file:
+        config = file.read()
+        config = config.replace('{{PREFIX}}', prefix)
+
+    with open(config_path, 'w') as file:
+        file.write(config)
+
+    logger.info('semantic-release config:\n%s', config)
+
     output = run_command(
         'semantic-release',
         '-vv',  # Enable debug output
@@ -213,7 +226,7 @@ def main() -> None:
     # endregion
 
     current_version = get_current_version()
-    next_version = get_next_version()
+    next_version = get_next_version(args.prefix)
     has_changes = next_version != current_version
 
     # Log all commits and tags
