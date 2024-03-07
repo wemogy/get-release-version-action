@@ -13,6 +13,16 @@ import yaml
 
 logger = logging.getLogger('wemogy.get-release-version-action')
 
+def print_github_output():
+    file_path = os.environ['GITHUB_OUTPUT']
+    try:
+        with open(file_path, 'r') as file:
+            content = file.read()
+            logger.info(f"Content of file '{file_path}':\n{content}")
+    except FileNotFoundError:
+        logger.error(f"File '{file_path}' not found.")
+    except Exception as e:
+        logger.error(f"An error occurred: {e}")
 
 def set_output(name: str, value: Any) -> None:
     """
@@ -224,10 +234,14 @@ def main() -> None:
     if args.create_tag and has_changes:
         create_tag(new_version)
 
+    print_github_output()
+
     set_output('version', new_version)
     set_output('version-name', f'{args.prefix}{new_version}')
     set_output('has-changes', str(has_changes).lower())
     logger.info('Version is %s', new_version)
+
+    print_github_output()
 
 
 if __name__ == '__main__':
