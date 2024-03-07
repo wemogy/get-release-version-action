@@ -97,7 +97,7 @@ def run_command(*command: str | bytes | os.PathLike[str] | os.PathLike[bytes]) -
     return process.stdout
 
 
-def get_current_version() -> str:
+def get_current_version_tag() -> str:
     """
     Get the current version (= the latest git tag).
     If there are no tags, return 0.0.0
@@ -228,14 +228,10 @@ def main() -> None:
     args.create_tag = args.create_tag.lower() == 'true'
     # endregion
 
-    current_version = get_current_version()
+    current_version_tag = get_current_version_tag()
+    current_version = current_version_tag[len(args.prefix):] # remove the prefix
     next_version = get_next_version(args.prefix)
     has_changes = next_version != current_version
-
-    # Log all commits and tags
-    gitlog = run_command('git', 'log', '--oneline', '--decorate')
-
-    logger.info('Commits and tags:\n%s', gitlog)
 
     logger.debug(
         'current_version=%s, next_version=%s, has_changes=%s',
