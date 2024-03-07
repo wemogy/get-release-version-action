@@ -129,8 +129,6 @@ def get_next_version(prefix: str) -> str:
     with open(config_path, 'w') as file:
         file.write(config)
 
-    logger.info('semantic-release config:\n%s', config)
-
     output = run_command(
         'semantic-release',
         '-vv',  # Enable debug output
@@ -146,6 +144,8 @@ def get_next_version(prefix: str) -> str:
         '--no-push',  # Don't push any changes (because there shouldn't be any)
         '--no-vcs-release',  # Don't create a GitHub release (done in a separate action)
     )
+
+    logger.info('semantic-release output:\n%s', output)
 
     version_pattern = re.compile(r'^\d+\.\d+\.\d+$', re.MULTILINE)
     next_version = version_pattern.search(output).group()
