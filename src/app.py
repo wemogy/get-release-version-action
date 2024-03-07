@@ -159,6 +159,7 @@ def create_tag(version: str) -> None:
 
 
 def main() -> None:
+    print_github_output()
     """Increment the hotfix version if needed."""
     setup_logging()
 
