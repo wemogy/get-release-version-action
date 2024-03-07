@@ -178,6 +178,8 @@ def create_tag(version: str) -> None:
 
     run_command('git', 'push', 'origin', version)
 
+    logger.info('Pushed tag %s to remote', version)
+
 
 def main() -> None:
     """Increment the hotfix version if needed."""
