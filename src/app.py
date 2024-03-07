@@ -129,8 +129,6 @@ def get_next_version(prefix: str) -> str:
     with open(config_path, 'w') as file:
         file.write(config)
 
-    logger.info('semantic-release config:\n%s', config)
-
     output = run_command(
         'semantic-release',
         '-vv',  # Enable debug output
@@ -149,7 +147,6 @@ def get_next_version(prefix: str) -> str:
 
     version_pattern = re.compile(r'^\d+\.\d+\.\d+$', re.MULTILINE)
     next_version = version_pattern.search(output).group()
-    next_version = prefix + next_version
     return next_version
 
 
@@ -180,6 +177,8 @@ def create_tag(version: str) -> None:
         return
 
     run_command('git', 'push', 'origin', version)
+
+    logger.info('Pushed tag %s to remote', version)
 
 
 def main() -> None:
