@@ -9,5 +9,5 @@ RUN pip install -r requirements.txt
 ENV GIT_PYTHON_REFRESH=quiet
 
 # running the action
-CMD ["python", "app.py"]
+ENTRYPOINT ["python", "app.py"]
 
