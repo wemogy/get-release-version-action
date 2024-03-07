@@ -25,6 +25,7 @@ def set_output(name: str, value: Any) -> None:
         logger.info('GITHUB_OUTPUT not in environment, skipping GitHub actions output')
         return
 
+    logger.info('Setting GitHub actions output %s=%s', name, value)
     with open(os.environ['GITHUB_OUTPUT'], 'a') as fh:
         print(f'{name}={value}', file=fh)
 
@@ -153,6 +154,14 @@ def main() -> None:
     )
 
     parser.add_argument(
+        '--prefix',
+        dest='prefix',
+        type=str,
+        default='v',
+        help='The prefix that should be prepended to the version.'
+    )
+
+    parser.add_argument(
         '--suffix',
         dest='suffix',
         type=str,
@@ -209,6 +218,7 @@ def main() -> None:
         create_tag(new_version)
 
     set_output('version', new_version)
+    set_output('version-name', f'{args.prefix}{new_version}')
     set_output('has-changes', str(has_changes).lower())
     logger.info('Version is %s', new_version)
 

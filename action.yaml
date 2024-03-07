@@ -2,6 +2,10 @@
 name: "Get release version"
 description: "A GitHub Action to determine the next version by checking the commit history for Conventional Commits"
 inputs:
+  prefix:
+    description: "The prefix that should be prepended to the version"
+    required: false
+    default: "v"
   suffix:
     description: "The suffix to add to the version"
     required: false
@@ -29,3 +33,5 @@ runs:
     - ${{ inputs.suffix }}
     - --create-tag
     - ${{ inputs.create-tag }}
+    - --prefix
+    - ${{ inputs.prefix }}
