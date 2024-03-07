@@ -36,7 +36,7 @@ def set_output(name: str, value: Any) -> None:
         return
 
     logger.info('Setting GitHub actions output %s=%s', name, value)
-    with open(os.environ['GITHUB_OUTPUT'], 'a') as fh:
+    with open(os.environ['GITHUB_OUTPUT'], 'w') as fh:
         # remove line which starts with name=
         fh.seek(0)
         lines = fh.readlines()
