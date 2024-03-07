@@ -12,5 +12,5 @@ RUN which git || ((apt-get -yq update && apt-get -yq install git && rm -rf /var/
 # Silence all safe.directory warnings
 RUN git config --global --add safe.directory $PWD
 
-# running the action
-ENTRYPOINT ["python", "/action/app.py"]
+# Set the entrypoint
+ENTRYPOINT [/action/entrypoint.sh]
