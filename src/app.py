@@ -167,6 +167,8 @@ def create_tag(version: str) -> None:
 
     :param version: The version that the tag should be named
     """
+    logger.info('Creating tag %s', version)
+
     # Create the tag
     run_command('git', 'tag', version)
 
