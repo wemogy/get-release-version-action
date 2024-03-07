@@ -26,6 +26,7 @@ jobs:
       - name: Show the next version
         run: |
           echo ${{ steps.get-release-version.outputs.version }}
+          echo ${{ steps.get-release-version.outputs.version-name }}
           echo ${{ steps.get-release-version.outputs.has-changes }}
 
       # Create GitHub Release
@@ -33,7 +34,7 @@ jobs:
         uses: softprops/action-gh-release@v1
         if: steps.get-release-version.outputs.has-changes == 'true'
         with:
-          tag_name: ${{ steps.get-release-version.outputs.version }}
+          tag_name: ${{ steps.get-release-version.outputs.version-name }}
           name: Version ${{ steps.get-release-version.outputs.version }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -13,6 +13,31 @@ import yaml
 
 logger = logging.getLogger('wemogy.get-release-version-action')
 
+def print_github_output():
+    file_path = os.environ['GITHUB_OUTPUT']
+    try:
+        with open(file_path, 'r') as file:
+            content = file.read()
+            logger.info(f"Content of file '{file_path}':\n{content}")
+    except FileNotFoundError:
+        logger.error(f"File '{file_path}' not found.")
+    except Exception as e:
+        logger.error(f"An error occurred: {e}")
+
+def clear_output() -> None:
+    """
+    Clear the GitHub actions output file
+    """
+    if not os.environ.get('GITHUB_OUTPUT'):
+        logging.info('GITHUB_OUTPUT not in environment, skipping GitHub actions output')
+        return
+
+    output_file_path = os.environ['GITHUB_OUTPUT']
+    logging.info('Clearing GitHub actions output file: %s', output_file_path)
+    
+    # Open the file in write mode to clear its contents
+    with open(output_file_path, 'w') as fh:
+        fh.truncate(0)
 
 def set_output(name: str, value: Any) -> None:
     """
@@ -25,8 +50,8 @@ def set_output(name: str, value: Any) -> None:
         logger.info('GITHUB_OUTPUT not in environment, skipping GitHub actions output')
         return
 
-    logger.info('Setting GitHub actions output %s=%s', name, value)
     with open(os.environ['GITHUB_OUTPUT'], 'a') as fh:
+        # write new line
         print(f'{name}={value}', file=fh)
 
 
@@ -87,12 +112,25 @@ def get_current_version() -> str:
     return repo.tags[-1].name
 
 
-def get_next_version() -> str:
+def get_next_version(prefix: str) -> str:
     """
     Determine the next version.
 
     :return: The next version
     """
+
+    config_path = Path(__file__).resolve().parent / 'semantic-release.config.json'
+
+    # replace {{PREFIX}} with the actual prefix
+    with open(config_path, 'r') as file:
+        config = file.read()
+        config = config.replace('{{PREFIX}}', prefix)
+
+    with open(config_path, 'w') as file:
+        file.write(config)
+
+    logger.info('semantic-release config:\n%s', config)
+
     output = run_command(
         'semantic-release',
         '-vv',  # Enable debug output
@@ -192,7 +230,7 @@ def main() -> None:
     # endregion
 
     current_version = get_current_version()
-    next_version = get_next_version()
+    next_version = get_next_version(args.prefix)
     has_changes = next_version != current_version
 
     # Log all commits and tags
@@ -224,11 +262,16 @@ def main() -> None:
     if args.create_tag and has_changes:
         create_tag(new_version)
 
+    # clear the output to ensure that it is empty
+    clear_output()
+
     set_output('version', new_version)
     set_output('version-name', f'{args.prefix}{new_version}')
     set_output('has-changes', str(has_changes).lower())
-    logger.info('Version is %s', new_version)
 
+    print_github_output()
+
+    logger.info('Version is %s', new_version)
 
 if __name__ == '__main__':
     main()
