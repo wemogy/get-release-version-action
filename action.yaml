@@ -17,30 +17,15 @@ inputs:
 outputs:
   version:
     description: "The version to use"
-    value: ${{ steps.determine-version.outputs.version }}
   has-changes:
     description: "Determines, if changes got detected, which require a version change according to Conventional Commits."
-    value: ${{ steps.determine-version.outputs.has-changes }}
 runs:
-  using: "composite"
-  steps:
-    - name: Install Python
-      uses: actions/setup-python@v5
-      with:
-        python-version: "3.12"
-
-    - name: Install Dependencies
-      run: pip install -r requirements.txt
-      shell: bash
-
-    - name: Determine the version
-      id: determine-version
-      run: python app.py --only-increase-suffix ${{ inputs.only-increase-suffix }} --suffix ${{ inputs.suffix }} --create-tag ${{ inputs.create-tag }}
-      shell: bash
-
-    - uses: actions/upload-artifact@v4
-      if: ${{ always() }}
-      name: Upload debug log
-      with:
-        name: debug.log
-        path: app.log
+  using: "docker"
+  image: "Dockerfile"
+  args:
+    - --only-increase-suffix
+    - ${{ inputs.only-increase-suffix }}
+    - --suffix
+    - ${{ inputs.suffix }}
+    - --create-tag
+    - ${{ inputs.create-tag }}
