@@ -7,7 +7,7 @@ COPY ["src", "/action"]
 RUN pip install -r /action/requirements.txt
 
 # Install git
-RUN apk update --no-cache && apk add --no-cache git
+RUN apt-get -yq update && apt-get -yq install git && rm -rf /var/lib/apt/lists/*
 
 RUN chmod +x /action/entrypoint.sh
 
