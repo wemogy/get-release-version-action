@@ -10,12 +10,14 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       # [X] https://github.com/actions/checkout/issues/1471
       # [X] https://github.com/actions/checkout/pull/579#issuecomment-1615799806
       # [ ] https://github.com/actions/checkout/issues/206
-      - name: Fetch tags
-        run: git fetch --prune --unshallow --tags
+      #- name: Fetch tags
+      #  run: git fetch --prune --unshallow --tags
 
       - name: Show git log
         run: |
