@@ -13,4 +13,4 @@ RUN which git || ((apt-get -yq update && apt-get -yq install git && rm -rf /var/
 RUN git config --global --add safe.directory $PWD
 
 # Set the entrypoint
-ENTRYPOINT [/action/entrypoint.sh]
+CMD ["/action/entrypoint.sh"]
