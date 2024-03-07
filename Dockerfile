@@ -7,7 +7,7 @@ COPY ["src", "/action"]
 RUN pip install -r /action/requirements.txt
 
 # Print which git
-RUN which git
+RUN echo "which git: $(which git)"
 
 # Install git
 RUN apt-get -yq update && apt-get -yq install git && rm -rf /var/lib/apt/lists/*
