@@ -37,9 +37,16 @@ def set_output(name: str, value: Any) -> None:
 
     logger.info('Setting GitHub actions output %s=%s', name, value)
     with open(os.environ['GITHUB_OUTPUT'], 'a') as fh:
-        # prepend line-break if file is not ending with one
-        if fh.tell() != 0:
-            fh.write('\n')
+        # remove line which starts with name=
+        fh.seek(0)
+        lines = fh.readlines()
+        fh.seek(0)
+        fh.truncate()
+        for line in lines:
+            if not line.startswith(f'{name}='):
+                fh.write(line)
+
+        # write new line
         print(f'{name}={value}', file=fh)
 
 
