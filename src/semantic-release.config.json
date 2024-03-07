@@ -1,6 +1,6 @@
 {
     "semantic_release": {
-        "tag_format": "{version}",
+        "tag_format": "v{version}",
         "branches": {
             "all": {
                 "match": ".*",
