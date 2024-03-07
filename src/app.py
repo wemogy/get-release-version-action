@@ -147,10 +147,9 @@ def get_next_version(prefix: str) -> str:
         '--no-vcs-release',  # Don't create a GitHub release (done in a separate action)
     )
 
-    logger.info('semantic-release version output:\n%s', output)
-
     version_pattern = re.compile(r'^\d+\.\d+\.\d+$', re.MULTILINE)
     next_version = version_pattern.search(output).group()
+    next_version = prefix + next_version
     return next_version
 
 
