@@ -13,23 +13,11 @@ jobs:
         with:
           fetch-depth: 0
 
-      # [X] https://github.com/actions/checkout/issues/1471
-      # [X] https://github.com/actions/checkout/pull/579#issuecomment-1615799806
-      # [ ] https://github.com/actions/checkout/issues/206
-      #- name: Fetch tags
-      #  run: git fetch --prune --unshallow --tags
-
-      - name: Show git log
-        run: |
-          git describe --tags
-          git tag -l
-          git --no-pager log --tags
-
       - name: Run
         id: get-release-version
         uses: ./
 
       - name: Show the next version
         run: |
-          echo ${{ steps.get-release-version.outputs.version }}
+          echo "Version: ${{ steps.get-release-version.outputs.version }}"
           echo ${{ steps.get-release-version.outputs.has-changes }}
