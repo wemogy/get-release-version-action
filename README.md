@@ -9,6 +9,7 @@ A GitHub Action to determine the next version by checking the commit history for
   uses: actions/checkout@v4
   with:
     fetch-depth: 0
+
 - uses: wemogy/get-release-version-action@v1
   id: get-release-version
   with:
@@ -58,3 +59,12 @@ docker run get-release-version-action:local
 6. After the test, delete the GitHub repository.
    The test needs a fresh repository because it uses tags to determine the next version and creates a new tag for the new version,
    so if the repository already has tags, the output version is not the one expected in the test script.
+
+## FAQ
+
+### The version stopped incrementing and keeps the same - what's wrong?
+
+If the version number is not incrementing, please check the following points:
+
+- The commit messages **must** follow the [Conventional Commits](https://www.conventionalcommits.org/) specification
+- Cleanup the tags in the repository - that means that you need to go to the `All tags` overview and delete all tags which have **not** the `Verified` badge
