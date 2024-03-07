@@ -24,6 +24,21 @@ def print_github_output():
     except Exception as e:
         logger.error(f"An error occurred: {e}")
 
+def clear_output() -> None:
+    """
+    Clear the GitHub actions output file
+    """
+    if not os.environ.get('GITHUB_OUTPUT'):
+        logging.info('GITHUB_OUTPUT not in environment, skipping GitHub actions output')
+        return
+
+    output_file_path = os.environ['GITHUB_OUTPUT']
+    logging.info('Clearing GitHub actions output file: %s', output_file_path)
+    
+    # Open the file in write mode to clear its contents
+    with open(output_file_path, 'w') as fh:
+        fh.truncate(0)
+
 def set_output(name: str, value: Any) -> None:
     """
     Set the key-value-pair as a GitHub actions output
@@ -38,7 +53,7 @@ def set_output(name: str, value: Any) -> None:
     logger.info('Setting GitHub actions output %s=%s', name, value)
     with open(os.environ['GITHUB_OUTPUT'], 'a') as fh:
         # write new line
-        print(f'\n{name}={value}', file=fh)
+        print(f'{name}={value}', file=fh)
 
 
 def setup_logging() -> None:
@@ -173,7 +188,6 @@ def main() -> None:
     """Increment the hotfix version if needed."""
     setup_logging()
 
-    print_github_output()
     # region argparse
     parser = ArgumentParser(
         description='Increment the hotfix version if needed.',
@@ -250,6 +264,9 @@ def main() -> None:
         create_tag(new_version)
 
     print_github_output()
+
+    # clear the output to ensure that it is empty
+    clear_output()
 
     set_output('version', new_version)
     set_output('version-name', f'{args.prefix}{new_version}')
