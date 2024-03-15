@@ -115,44 +115,36 @@ def get_current_version_tag() -> str:
     return repo.tags[-1].name
 
 
-def get_next_version(prefix: str) -> str:
+def get_new_commits(repo: git.Repo) -> list[git.Commit]:
+    """
+    Get all commits newer than the current_version tag
+    """
+    MAX_COMMITS = 50
+    commit_offset = 0
+    current_tag = repo.tags[-1]
+    new_commits: list[git.Commit] = []
+
+    while True:
+        commits = repo.iter_commits(max_count=MAX_COMMITS, skip=commit_offset)
+
+        for commit in commits:
+            if commit == current_tag.commit:
+                logger.debug('Commit %s is current version %s (%s)', commit.hexsha, current_tag.name, current_tag.commit.hexsha)
+                break
+
+
+def get_next_version(current_version: str, prefix: str) -> str:
     """
     Determine the next version.
 
     :return: The next version
     """
+    # 1. Add all commits to list until commit with current_version_tag reached
+    repo = git.Repo(os.getcwd())
+    new_commits = get_new_commits(repo)
 
-    config_path = Path(__file__).resolve().parent / 'semantic-release.config.json'
-
-    # replace {{PREFIX}} with the actual prefix
-    with open(config_path, 'r') as file:
-        config = file.read()
-        config = config.replace('{{PREFIX}}', prefix)
-
-    with open(config_path, 'w') as file:
-        file.write(config)
-
-    output = run_command(
-        'semantic-release',
-        '-vv',  # Enable debug output
-        '--config', Path(__file__).resolve().parent / 'semantic-release.config.json',
-        'version',
-        '--print',  # Print the version to the command line
-        '--skip-build',  # Don't build the app (done in a separate action)
-        '--no-commit',  # Don't commit build artifacts or other changes by semantic-release
-                        # (because there shouldn't be any)
-        '--no-tag',  # Don't create a git tag
-                     # (we create it manually because semantic-releases tag feature doesn't work for some reason)
-        '--no-changelog',  # Don't update the changelog file
-        '--no-push',  # Don't push any changes (because there shouldn't be any)
-        '--no-vcs-release',  # Don't create a GitHub release (done in a separate action)
-    )
-
-    logger.info('Semantic Release output:\n%s', output)
-
-    version_pattern = re.compile(r'^\d+\.\d+\.\d+$', re.MULTILINE)
-    next_version = version_pattern.search(output).group()
-    return next_version
+    # 2. Apply conventional commits to list
+    # 3. Check if list contains major (=> bump major), minor or patch
 
 
 def increment_hotfix(version: str, hotfix_suffix: str) -> str:
@@ -235,13 +227,9 @@ def main() -> None:
     # endregion
 
     current_version_tag = get_current_version_tag()
-    current_version = current_version_tag[len(args.prefix):]  # remove the prefix
+    current_version = current_version_tag.removeprefix(args.prefix)
 
-    # 1. Add all commits to list until commit with current_version_tag reached
-    # 2. Apply conventional commits to list
-    # 3. Check if list contains major (=> bump major), minor or patch
-
-    next_version = get_next_version(args.prefix)
+    next_version = get_next_version(current_version, args.prefix)
     has_changes = next_version != current_version
 
     logger.debug(
