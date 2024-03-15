@@ -1,3 +1,7 @@
+"""
+A GitHub Action to determine the next version by checking the commit history
+for Conventional Commits with support for hotfix changes.
+"""
 import logging
 import logging.config
 import os
@@ -247,12 +251,16 @@ def get_new_version(prefix: str, suffix: str, only_increase_suffix: bool) -> tup
 
 
 def main() -> None:
-    """Increment the hotfix version if needed."""
+    """
+    A GitHub Action to determine the next version by checking the commit history
+    for Conventional Commits with support for hotfix changes.
+    """
     setup_logging()
 
     # region argparse
     parser = ArgumentParser(
-        description='Increment the hotfix version if needed.',
+        description='A GitHub Action to determine the next version by checking the commit history for Conventional '
+                    'Commits with support for hotfix changes.',
         allow_abbrev=False
     )
 
@@ -268,7 +276,8 @@ def main() -> None:
         '--suffix',
         dest='suffix',
         type=str,
-        help='The suffix that should be incremented.'
+        default='hotfix',
+        help='The suffix that should be incremented / appended to the version.'
     )
 
     parser.add_argument(
@@ -276,7 +285,7 @@ def main() -> None:
         dest='only_increase_suffix',
         type=str,
         default='False',
-        help='Only increases the suffix increment if any change got detected.'
+        help='Increment the suffix if any changes got detected.'
     )
 
     parser.add_argument(
