@@ -13,6 +13,7 @@ import yaml
 
 logger = logging.getLogger('wemogy.get-release-version-action')
 
+
 def print_github_output():
     file_path = os.environ['GITHUB_OUTPUT']
     try:
@@ -24,6 +25,7 @@ def print_github_output():
     except Exception as e:
         logger.error(f"An error occurred: {e}")
 
+
 def clear_output() -> None:
     """
     Clear the GitHub actions output file
@@ -34,10 +36,11 @@ def clear_output() -> None:
 
     output_file_path = os.environ['GITHUB_OUTPUT']
     logging.info('Clearing GitHub actions output file: %s', output_file_path)
-    
+
     # Open the file in write mode to clear its contents
     with open(output_file_path, 'w') as fh:
         fh.truncate(0)
+
 
 def set_output(name: str, value: Any) -> None:
     """
@@ -233,6 +236,7 @@ def main() -> None:
 
     current_version_tag = get_current_version_tag()
     current_version = current_version_tag[len(args.prefix):] # remove the prefix
+    current_version = current_version_tag[len(args.prefix):]  # remove the prefix
 
     # 1. Add all commits to list until commit with current_version_tag reached
     # 2. Apply conventional commits to list
@@ -277,6 +281,7 @@ def main() -> None:
     print_github_output()
 
     logger.info('Version is %s', new_version)
+
 
 if __name__ == '__main__':
     main()
