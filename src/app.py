@@ -235,7 +235,6 @@ def main() -> None:
     # endregion
 
     current_version_tag = get_current_version_tag()
-    current_version = current_version_tag[len(args.prefix):] # remove the prefix
     current_version = current_version_tag[len(args.prefix):]  # remove the prefix
 
     # 1. Add all commits to list until commit with current_version_tag reached
