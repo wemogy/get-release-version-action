@@ -233,6 +233,11 @@ def main() -> None:
 
     current_version_tag = get_current_version_tag()
     current_version = current_version_tag[len(args.prefix):] # remove the prefix
+
+    # 1. Add all commits to list until commit with current_version_tag reached
+    # 2. Apply conventional commits to list
+    # 3. Check if list contains major (=> bump major), minor or patch
+
     next_version = get_next_version(args.prefix)
     has_changes = next_version != current_version
 
