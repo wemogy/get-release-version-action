@@ -230,7 +230,7 @@ def get_new_version(prefix: str, suffix: str, only_increase_suffix: bool) -> tup
 
     next_version, has_changes = get_next_version(repo, current_version_tag, current_version)
 
-    logger.debug(
+    logger.info(
         'current_version=%s, next_version=%s, has_changes=%s',
         current_version, next_version, has_changes
     )
