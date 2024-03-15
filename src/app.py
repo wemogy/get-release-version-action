@@ -242,7 +242,7 @@ def main() -> None:
     )
 
     if has_changes:
-        logger.info('Changes detected, next version is %s', next_version)
+        logger.info('Changes detected, next version is %s (was %s)', next_version, current_version)
 
         if args.only_increase_suffix:
             # Example case: Hotfix
