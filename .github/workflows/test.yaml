@@ -16,6 +16,8 @@ jobs:
       - name: Run
         id: get-release-version
         uses: ./
+        with:
+          create-tag: "false"
 
       - name: Show the next version
         run: |

@@ -301,9 +301,6 @@ def main() -> None:
     args.create_tag = args.create_tag.lower() == 'true'
     # endregion
 
-    # log args.create_tag 
-    logger.info('args.create_tag=%s', args.create_tag)
-
     new_version, has_changes = get_new_version(args.prefix, args.suffix, args.only_increase_suffix)
 
     new_version_tag_name = f'{args.prefix}{new_version}'
