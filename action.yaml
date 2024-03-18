@@ -7,22 +7,24 @@ inputs:
     required: false
     default: "v"
   suffix:
-    description: "The suffix to add to the version"
+    description: "The suffix that should be incremented / appended to the version"
     required: false
     default: "hotfix"
-  create-tag:
-    description: "Create a Git Tag for the version"
+  only-increase-suffix:
+    description: "Increment the suffix if any changes got detected"
     required: false
     default: "false"
-  only-increase-suffix:
-    description: "Only increases the suffix increment, when any change got detected"
-    required: true
-    default: "false"
+  create-tag:
+    description: "Create a Git Tag for the version and push it if a remote is configured"
+    required: false
+    default: "true"
 outputs:
   version:
-    description: "The version to use"
+    description: "The next version, without the prefix"
+  version-name:
+    description: "The next version, with the prefix"
   has-changes:
-    description: "Determines, if changes got detected, which require a version change according to Conventional Commits."
+    description: "If any relevant changes got detected"
 runs:
   using: "docker"
   image: "Dockerfile"

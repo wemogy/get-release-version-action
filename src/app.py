@@ -1,7 +1,10 @@
+"""
+A GitHub Action to determine the next version by checking the commit history
+for Conventional Commits with support for hotfix changes.
+"""
 import logging
 import logging.config
 import os
-import re
 import subprocess
 from argparse import ArgumentParser
 from pathlib import Path
@@ -10,49 +13,54 @@ from typing import Any
 import git
 import semver
 import yaml
+from semantic_release import LevelBump, ParseError
+from semantic_release.commit_parser import AngularCommitParser, AngularParserOptions
 
 logger = logging.getLogger('wemogy.get-release-version-action')
 
-def print_github_output():
-    file_path = os.environ['GITHUB_OUTPUT']
-    try:
-        with open(file_path, 'r') as file:
-            content = file.read()
-            logger.info(f"Content of file '{file_path}':\n{content}")
-    except FileNotFoundError:
-        logger.error(f"File '{file_path}' not found.")
-    except Exception as e:
-        logger.error(f"An error occurred: {e}")
 
-def clear_output() -> None:
-    """
-    Clear the GitHub actions output file
-    """
-    if not os.environ.get('GITHUB_OUTPUT'):
-        logging.info('GITHUB_OUTPUT not in environment, skipping GitHub actions output')
-        return
+def print_github_actions_output() -> None:
+    """Print the contents of the GITHUB_OUTPUT file."""
+    file_path = os.getenv('GITHUB_OUTPUT')
 
-    output_file_path = os.environ['GITHUB_OUTPUT']
-    logging.info('Clearing GitHub actions output file: %s', output_file_path)
-    
-    # Open the file in write mode to clear its contents
-    with open(output_file_path, 'w') as fh:
-        fh.truncate(0)
-
-def set_output(name: str, value: Any) -> None:
-    """
-    Set the key-value-pair as a GitHub actions output
-
-    :param name: The name of the output
-    :param value: The value of the output
-    """
-    if not os.environ.get('GITHUB_OUTPUT'):
+    if not file_path:
         logger.info('GITHUB_OUTPUT not in environment, skipping GitHub actions output')
         return
 
-    with open(os.environ['GITHUB_OUTPUT'], 'a') as fh:
-        # write new line
-        print(f'{name}={value}', file=fh)
+    # noinspection PyBroadException
+    try:
+        with open(file_path, 'r') as fh:
+            content = fh.read()
+            logger.debug('Content of GITHUB_OUTPUT file "%s":\n%s', file_path, content)
+    except Exception:
+        # Catching every exception since this function is not necessary for the script to run
+        logger.exception('An error occurred')
+
+
+def clear_github_output() -> None:
+    """Clear the GITHUB_OUTPUT file."""
+    file_path = os.getenv('GITHUB_OUTPUT')
+
+    if not file_path:
+        logger.info('GITHUB_OUTPUT not in environment, skipping GitHub actions output')
+        return
+
+    logging.info('Clearing GITHUB_OUTPUT file "%s"', file_path)
+
+    with open(file_path, 'w') as fh:
+        fh.write('')
+
+
+def set_github_output(name: str, value: Any) -> None:
+    """Set the key-value-pair as a GitHub actions output"""
+    file_path = os.getenv('GITHUB_OUTPUT')
+
+    if not file_path:
+        logger.info('GITHUB_OUTPUT not in environment, skipping GitHub actions output')
+        return
+
+    with open(file_path, 'a') as fh:
+        fh.write(f'{name}={value}')
 
 
 def setup_logging() -> None:
@@ -97,78 +105,103 @@ def run_command(*command: str | bytes | os.PathLike[str] | os.PathLike[bytes]) -
     return process.stdout
 
 
-def get_current_version_tag() -> str:
+def get_current_version_tag(repo: git.Repo) -> git.TagReference | None:
     """
     Get the current version (= the latest git tag).
-    If there are no tags, return 0.0.0
-
-    :return: The current version
+    If there are no tags, return None.
     """
-    repo = git.Repo(os.getcwd())
-
-    if len(repo.tags) == 0:
-        return '0.0.0'
-
-    return repo.tags[-1].name
+    try:
+        return repo.tags[-1]
+    except IndexError:
+        return None
 
 
-def get_next_version(prefix: str) -> str:
-    """
-    Determine the next version.
+def get_new_commits(repo: git.Repo, starting_tag: git.TagReference | None) -> list[git.Commit]:
+    """Get all commits newer than the current_version tag."""
+    max_commits = 50
+    commit_offset = 0
+    reached_starting_tag = False
+    new_commits: list[git.Commit] = []
 
-    :return: The next version
-    """
+    while not reached_starting_tag:
+        commits = repo.iter_commits(max_count=max_commits, skip=commit_offset)
+        i = 0
 
-    config_path = Path(__file__).resolve().parent / 'semantic-release.config.json'
+        for commit in commits:
+            i += 1
 
-    # replace {{PREFIX}} with the actual prefix
-    with open(config_path, 'r') as file:
-        config = file.read()
-        config = config.replace('{{PREFIX}}', prefix)
+            if starting_tag is None:
+                logger.debug('Commit %s was found', commit.hexsha)
+                new_commits.append(commit)
+                continue
 
-    with open(config_path, 'w') as file:
-        file.write(config)
+            if commit == starting_tag.commit:
+                logger.debug(
+                    'Commit %s is current version %s (%s)',
+                    commit.hexsha, starting_tag.name, starting_tag.commit.hexsha
+                )
+                reached_starting_tag = True
+                break
 
-    output = run_command(
-        'semantic-release',
-        '-vv',  # Enable debug output
-        '--config', Path(__file__).resolve().parent / 'semantic-release.config.json',
-        'version',
-        '--print',  # Print the version to the command line
-        '--skip-build',  # Don't build the app (done in a separate action)
-        '--no-commit',  # Don't commit build artifacts or other changes by semantic-release
-                        # (because there shouldn't be any)
-        '--no-tag',  # Don't create a git tag
-                     # (we create it manually because semantic-releases tag feature doesn't work for some reason)
-        '--no-changelog',  # Don't update the changelog file
-        '--no-push',  # Don't push any changes (because there shouldn't be any)
-        '--no-vcs-release',  # Don't create a GitHub release (done in a separate action)
-    )
+            logger.debug(
+                'Commit %s is newer than current version %s (%s)',
+                commit.hexsha, starting_tag.name, starting_tag.commit.hexsha
+            )
+            new_commits.append(commit)
 
-    logger.info('Semantic Release output:\n%s', output)
+        commit_offset += max_commits
 
-    version_pattern = re.compile(r'^\d+\.\d+\.\d+$', re.MULTILINE)
-    next_version = version_pattern.search(output).group()
-    return next_version
+        if i < max_commits:
+            logger.debug('Reached end of commit history')
+            break
+
+    return new_commits
 
 
-def increment_hotfix(version: str, hotfix_suffix: str) -> str:
-    """
-    Increment the hotfix version (-h.) or append -h.1, if the suffix does not exist.
+def get_next_version(repo: git.Repo, current_version_tag: git.TagReference | None,
+                     current_version: str) -> tuple[str, bool]:
+    """Determine the next version."""
+    # 1. Add all commits to list until commit with current_version_tag reached
+    new_commits = get_new_commits(repo, current_version_tag)
 
-    :param version: The old version
-    :param hotfix_suffix: The suffix that should be used for the hotfix number
-    :return: The new version
-    """
-    return semver.bump_prerelease(version, hotfix_suffix)
+    # 2. Apply conventional commits to list
+    commit_parser = AngularCommitParser(AngularParserOptions())
+    parsing_results = [commit_parser.parse(commit) for commit in new_commits]
+
+    # 3. Check if list contains major (=> bump major), minor or patch
+    # Reduce the parsing results to an integer: 0 = chore / unknown, 1 = patch, 2 = minor, 3 = major
+    commit_bumps = [
+        0 if isinstance(result, ParseError) else
+        3 if result.bump == LevelBump.MAJOR else
+        2 if result.bump == LevelBump.MINOR else
+        1 if result.bump == LevelBump.PATCH else
+        0
+        for result in parsing_results
+    ]
+
+    # The maximum of the numbers in commit_bumps is the version we need to bump
+    version_to_bump = max(commit_bumps) if len(commit_bumps) > 0 else 0
+
+    # 4. Bump the version
+    current_version_obj = semver.Version.parse(current_version)
+
+    if version_to_bump == 1:
+        return str(current_version_obj.bump_patch()), True
+    if version_to_bump == 2:
+        return str(current_version_obj.bump_minor()), True
+    if version_to_bump == 3:
+        return str(current_version_obj.bump_major()), True
+
+    return current_version, False
+
+
+def increment_suffix(version: str, suffix: str) -> str:
+    """Increment the version suffix (-{suffix}.) or append -{suffix}.1, if the suffix does not exist."""
+    return str(semver.Version.parse(version).bump_prerelease(suffix))
 
 
 def create_tag(version: str) -> None:
-    """
-    Create a new git tag for the given version and push it if a remote is configured.
-
-    :param version: The version that the tag should be named
-    """
+    """Create a new git tag for the given version and push it if a remote is configured."""
     logger.info('Creating tag %s', version)
 
     # Create the tag
@@ -185,13 +218,49 @@ def create_tag(version: str) -> None:
     logger.info('Pushed tag %s to remote', version)
 
 
+def get_new_version(prefix: str, suffix: str, only_increase_suffix: bool) -> tuple[str, bool]:
+    """Get the new version, involving the only_increase_suffix flag."""
+    repo = git.Repo(os.getcwd())
+    current_version_tag = get_current_version_tag(repo)
+
+    if current_version_tag is None:
+        current_version = '0.0.0'
+    else:
+        current_version = current_version_tag.name.removeprefix(prefix)
+
+    next_version, has_changes = get_next_version(repo, current_version_tag, current_version)
+
+    logger.info(
+        'current_version=%s, next_version=%s, has_changes=%s',
+        current_version, next_version, has_changes
+    )
+
+    # Example case: No change that requires a semantic version increase
+    if not has_changes:
+        logger.info('No changes detected, version stays the same.')
+        return next_version, has_changes
+
+    # Example case: Hotfix
+    if only_increase_suffix:
+        logger.info('Only the suffix will be incremented.')
+        return increment_suffix(current_version, suffix), has_changes
+
+    # Example case: New Release
+    logger.info('Semantic Version will be incremented.')
+    return next_version, has_changes
+
+
 def main() -> None:
-    """Increment the hotfix version if needed."""
+    """
+    A GitHub Action to determine the next version by checking the commit history
+    for Conventional Commits with support for hotfix changes.
+    """
     setup_logging()
 
     # region argparse
     parser = ArgumentParser(
-        description='Increment the hotfix version if needed.',
+        description='A GitHub Action to determine the next version by checking the commit history for Conventional '
+                    'Commits with support for hotfix changes.',
         allow_abbrev=False
     )
 
@@ -207,7 +276,8 @@ def main() -> None:
         '--suffix',
         dest='suffix',
         type=str,
-        help='The suffix that should be incremented.'
+        default='hotfix',
+        help='The suffix that should be incremented / appended to the version.'
     )
 
     parser.add_argument(
@@ -215,7 +285,7 @@ def main() -> None:
         dest='only_increase_suffix',
         type=str,
         default='False',
-        help='Only increases the suffix increment if any change got detected.'
+        help='Increment the suffix if any changes got detected.'
     )
 
     parser.add_argument(
@@ -231,47 +301,24 @@ def main() -> None:
     args.create_tag = args.create_tag.lower() == 'true'
     # endregion
 
-    current_version_tag = get_current_version_tag()
-    current_version = current_version_tag[len(args.prefix):] # remove the prefix
-    next_version = get_next_version(args.prefix)
-    has_changes = next_version != current_version
+    new_version, has_changes = get_new_version(args.prefix, args.suffix, args.only_increase_suffix)
 
-    logger.debug(
-        'current_version=%s, next_version=%s, has_changes=%s',
-        current_version, next_version, has_changes
-    )
-
-    if has_changes:
-        logger.info('Changes detected, next version is %s (was %s)', next_version, current_version)
-
-        if args.only_increase_suffix:
-            # Example case: Hotfix
-            logger.info('Only the suffix will be incremented.')
-            new_version = increment_hotfix(current_version, args.suffix)
-        else:
-            # Example case: New Release
-            logger.info('Semantic Version will be incremented.')
-            new_version = next_version
-    else:
-        # Example case: No change that requires a semantic version increase
-        logger.info('No changes detected, version stays the same.')
-        new_version = next_version
-
-    new_version_tag = f'{args.prefix}{new_version}'
+    new_version_tag_name = f'{args.prefix}{new_version}'
 
     if args.create_tag and has_changes:
-        create_tag(new_version_tag)
+        create_tag(new_version_tag_name)
 
     # clear the output to ensure that it is empty
-    clear_output()
+    clear_github_output()
 
-    set_output('version', new_version)
-    set_output('version-name', new_version_tag)
-    set_output('has-changes', str(has_changes).lower())
+    set_github_output('version', new_version)
+    set_github_output('version-name', new_version_tag_name)
+    set_github_output('has-changes', str(has_changes).lower())
 
-    print_github_output()
+    print_github_actions_output()
 
     logger.info('Version is %s', new_version)
+
 
 if __name__ == '__main__':
     main()
