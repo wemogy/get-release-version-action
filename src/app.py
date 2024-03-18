@@ -60,7 +60,7 @@ def set_github_output(name: str, value: Any) -> None:
         return
 
     with open(file_path, 'a') as fh:
-        fh.write(f'{name}={value}')
+        fh.write(f'{name}={value}\n')
 
 
 def setup_logging() -> None:
