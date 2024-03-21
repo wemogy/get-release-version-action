@@ -105,13 +105,17 @@ def run_command(*command: str | bytes | os.PathLike[str] | os.PathLike[bytes]) -
     return process.stdout
 
 
-def get_current_version_tag(repo: git.Repo) -> git.TagReference | None:
+def get_current_version_tag(repo: git.Repo, prefix: str) -> git.TagReference | None:
     """
     Get the current version (= the latest git tag).
     If there are no tags, return None.
     """
     try:
-        return repo.tags[-1]
+        # Reverse the list of tags to start with the most recent one
+        for tag in reversed(repo.tags):
+            # Check if the tag name starts with the specified prefix
+            if tag.name.startswith(prefix):
+                return tag
     except IndexError:
         return None
 
@@ -221,7 +225,7 @@ def create_tag(version: str) -> None:
 def get_new_version(prefix: str, suffix: str, only_increase_suffix: bool) -> tuple[str, bool]:
     """Get the new version, involving the only_increase_suffix flag."""
     repo = git.Repo(os.getcwd())
-    current_version_tag = get_current_version_tag(repo)
+    current_version_tag = get_current_version_tag(repo, prefix)
 
     if current_version_tag is None:
         current_version = '0.0.0'
