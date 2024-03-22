@@ -21,6 +21,8 @@ for [Conventional Commits](https://www.conventionalcommits.org/) with support fo
 
 - run: echo ${{ steps.get-release-version.outputs.version }}
 - run: echo ${{ steps.get-release-version.outputs.version-name }}
+- run: echo ${{ steps.get-release-version.outputs.previous-version }}
+- run: echo ${{ steps.get-release-version.outputs.previous-version-name }}
 - run: echo ${{ steps.get-release-version.outputs.has-changes }}
 ```
 
