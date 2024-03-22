@@ -111,7 +111,7 @@ def get_current_version_tag(repo: git.Repo, prefix: str) -> git.TagReference | N
     If there are no tags, return None.
     """
     # Reverse the list of tags to start with the most recent one
-    for tag in reversed(repo.tags):
+    for tag in sorted(repo.tags, key=lambda t: t.commit.committed_datetime, reverse=True):
         # Check if the tag name starts with the specified prefix
         if tag.name.startswith(prefix):
             logger.debug('Found tag %s (%s)', tag.name, tag.commit.hexsha)
