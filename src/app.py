@@ -117,7 +117,7 @@ def run_command(*command: str | bytes | os.PathLike[str] | os.PathLike[bytes]) -
     return process.stdout
 
 
-def get_current_version_tag(repo: git.Repo, prefix: str, suffix: str) -> git.TagReference | None:
+def get_current_version_tag(repo: git.Repo, prefix: str, suffix: str | None) -> git.TagReference | None:
     """
     Get the current version (= the latest git tag).
     If there are no tags, return None.
@@ -125,7 +125,7 @@ def get_current_version_tag(repo: git.Repo, prefix: str, suffix: str) -> git.Tag
     # Reverse the list of tags to start with the most recent one
     for tag in sorted(repo.tags, key=lambda t: t.commit.committed_datetime, reverse=True):
         # Check if the tag name starts with the specified prefix
-        if tag.name.startswith(prefix) and suffix in tag.name:
+        if tag.name.startswith(prefix) and (suffix is None or suffix in tag.name):
             logger.debug('Found tag %s (%s)', tag.name, tag.commit.hexsha)
             return tag
 
