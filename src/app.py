@@ -24,7 +24,7 @@ def print_github_actions_output() -> None:
     file_path = os.getenv('GITHUB_OUTPUT')
 
     if not file_path:
-        logger.info('GITHUB_OUTPUT not in environment, skipping GitHub actions output')
+        logger.warning('GITHUB_OUTPUT not in environment, skipping GitHub actions output')
         return
 
     # noinspection PyBroadException
@@ -32,9 +32,9 @@ def print_github_actions_output() -> None:
         with open(file_path, 'r') as fh:
             content = fh.read()
             logger.debug('Content of GITHUB_OUTPUT file "%s":\n%s', file_path, content)
-    except Exception:
+    except Exception as exc:
         # Catching every exception since this function is not necessary for the script to run
-        logger.exception('An error occurred')
+        logger.warning('An exception was ignored while trying to get contents of GITHUB_OUTPUT file', exc_info=True)
 
 
 def clear_github_output() -> None:
@@ -42,7 +42,7 @@ def clear_github_output() -> None:
     file_path = os.getenv('GITHUB_OUTPUT')
 
     if not file_path:
-        logger.info('GITHUB_OUTPUT not in environment, skipping GitHub actions output')
+        logger.warning('GITHUB_OUTPUT not in environment, skipping GitHub actions output')
         return
 
     logging.info('Clearing GITHUB_OUTPUT file "%s"', file_path)
@@ -56,7 +56,7 @@ def set_github_output(name: str, value: Any) -> None:
     file_path = os.getenv('GITHUB_OUTPUT')
 
     if not file_path:
-        logger.info('GITHUB_OUTPUT not in environment, skipping GitHub actions output')
+        logger.warning('GITHUB_OUTPUT not in environment, skipping GitHub actions output')
         return
 
     with open(file_path, 'a') as fh:
@@ -110,14 +110,15 @@ def get_current_version_tag(repo: git.Repo, prefix: str) -> git.TagReference | N
     Get the current version (= the latest git tag).
     If there are no tags, return None.
     """
-    try:
-        # Reverse the list of tags to start with the most recent one
-        for tag in reversed(repo.tags):
-            # Check if the tag name starts with the specified prefix
-            if tag.name.startswith(prefix):
-                return tag
-    except IndexError:
-        return None
+    # Reverse the list of tags to start with the most recent one
+    for tag in reversed(repo.tags):
+        # Check if the tag name starts with the specified prefix
+        if tag.name.startswith(prefix):
+            logger.debug('Found tag %s (%s)', tag.name, tag.commit.hexsha)
+            return tag
+
+    logger.debug('Found no tags that have the prefix %s', prefix)
+    return None
 
 
 def get_new_commits(repo: git.Repo, starting_tag: git.TagReference | None) -> list[git.Commit]:
@@ -185,6 +186,7 @@ def get_next_version(repo: git.Repo, current_version_tag: git.TagReference | Non
 
     # The maximum of the numbers in commit_bumps is the version we need to bump
     version_to_bump = max(commit_bumps) if len(commit_bumps) > 0 else 0
+    logger.debug('Version to bump is %s (0 = chore / unknown, 1 = patch, 2 = minor, 3 = major)', version_to_bump)
 
     # 4. Bump the version
     current_version_obj = semver.Version.parse(current_version)
@@ -228,7 +230,11 @@ def get_new_version(
         only_increase_suffix: bool,
         only_replace_prefix_with: str | None
 ) -> tuple[str, bool]:
-    """Get the new version, involving the only_increase_suffix flag."""
+    """
+    Get the new version, involving the only_increase_suffix flag.
+
+    :returns: A tuple of the previous version, the next version and if any changes were detected.
+    """
     repo = git.Repo(os.getcwd())
     current_version_tag = get_current_version_tag(repo, prefix)
 
@@ -247,7 +253,7 @@ def get_new_version(
             next_version = current_version
         has_changes = False
 
-    logger.info(
+    logger.debug(
         'current_version=%s, next_version=%s, has_changes=%s',
         current_version, next_version, has_changes
     )
@@ -255,16 +261,16 @@ def get_new_version(
     # Example case: No change that requires a semantic version increase
     if not has_changes:
         logger.info('No changes detected, version stays the same.')
-        return next_version, has_changes
+        return current_version, next_version, has_changes
 
     # Example case: Hotfix
     if only_increase_suffix:
         logger.info('Only the suffix will be incremented.')
-        return increment_suffix(current_version, suffix), has_changes
+        return current_version, increment_suffix(current_version, suffix), has_changes
 
     # Example case: New Release
     logger.info('Semantic Version will be incremented.')
-    return next_version, has_changes
+    return current_version, next_version, has_changes
 
 
 def main() -> None:
@@ -328,7 +334,7 @@ def main() -> None:
     args.only_replace_suffix_with = args.only_replace_suffix_with.strip() or None
     # endregion
 
-    new_version, has_changes = get_new_version(
+    previous_version, new_version, has_changes = get_new_version(
         args.prefix,
         args.suffix,
         args.only_increase_suffix,
@@ -336,6 +342,7 @@ def main() -> None:
     )
 
     new_version_tag_name = f'{args.prefix}{new_version}'
+    previous_version_tag_name = f'{args.prefix}{previous_version}'
 
     if args.create_tag and has_changes:
         create_tag(new_version_tag_name)
@@ -345,6 +352,8 @@ def main() -> None:
 
     set_github_output('version', new_version)
     set_github_output('version-name', new_version_tag_name)
+    set_github_output('previous-version', previous_version)
+    set_github_output('previous-version-name', previous_version_tag_name)
     set_github_output('has-changes', str(has_changes).lower())
 
     print_github_actions_output()
