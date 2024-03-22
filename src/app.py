@@ -222,7 +222,12 @@ def create_tag(version: str) -> None:
     logger.info('Pushed tag %s to remote', version)
 
 
-def get_new_version(prefix: str, suffix: str, only_increase_suffix: bool) -> tuple[str, bool]:
+def get_new_version(
+        prefix: str,
+        suffix: str,
+        only_increase_suffix: bool,
+        only_replace_prefix_with: str | None
+) -> tuple[str, bool]:
     """Get the new version, involving the only_increase_suffix flag."""
     repo = git.Repo(os.getcwd())
     current_version_tag = get_current_version_tag(repo, prefix)
@@ -232,7 +237,15 @@ def get_new_version(prefix: str, suffix: str, only_increase_suffix: bool) -> tup
     else:
         current_version = current_version_tag.name.removeprefix(prefix)
 
-    next_version, has_changes = get_next_version(repo, current_version_tag, current_version)
+    if only_replace_prefix_with is None:
+        next_version, has_changes = get_next_version(repo, current_version_tag, current_version)
+    else:
+        # Only replace the suffix if
+        if current_version.endswith(f'-{suffix}'):
+            next_version = current_version.removesuffix(suffix) + only_replace_prefix_with
+        else:
+            next_version = current_version
+        has_changes = False
 
     logger.info(
         'current_version=%s, next_version=%s, has_changes=%s',
@@ -293,6 +306,15 @@ def main() -> None:
     )
 
     parser.add_argument(
+        '--only-replace-suffix-with',
+        dest='only_replace_suffix_with',
+        type=str,
+        default='false',
+        help="Don't increment the version, only replace the suffix in `suffix` with the suffix from this input. "
+             "`create-tag` and `prefix` still work with this option."
+    )
+
+    parser.add_argument(
         '--create-tag',
         dest='create_tag',
         type=str,
@@ -303,9 +325,15 @@ def main() -> None:
     args = parser.parse_args()
     args.only_increase_suffix = args.only_increase_suffix.lower() == 'true'
     args.create_tag = args.create_tag.lower() == 'true'
+    args.only_replace_suffix_with = args.only_replace_suffix_with.strip() or None
     # endregion
 
-    new_version, has_changes = get_new_version(args.prefix, args.suffix, args.only_increase_suffix)
+    new_version, has_changes = get_new_version(
+        args.prefix,
+        args.suffix,
+        args.only_increase_suffix,
+        args.only_replace_suffix_with
+    )
 
     new_version_tag_name = f'{args.prefix}{new_version}'
 

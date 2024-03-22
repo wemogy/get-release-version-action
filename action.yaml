@@ -14,6 +14,10 @@ inputs:
     description: "Increment the suffix if any changes got detected"
     required: false
     default: "false"
+  only-replace-suffix-with:
+    description: "Don't increment the version, only replace the suffix in `suffix` with the suffix from this input. `create-tag` and `prefix` still work with this option."
+    required: false
+    default: "false"
   create-tag:
     description: "Create a Git Tag for the version and push it if a remote is configured"
     required: false
@@ -37,3 +41,5 @@ runs:
     - ${{ inputs.create-tag }}
     - --prefix
     - ${{ inputs.prefix }}
+    - --only-replace-suffix-with
+    - ${{ inputs.only-replace-suffix-with }}
