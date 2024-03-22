@@ -24,7 +24,7 @@ def print_github_actions_output() -> None:
     file_path = os.getenv('GITHUB_OUTPUT')
 
     if not file_path:
-        logger.info('GITHUB_OUTPUT not in environment, skipping GitHub actions output')
+        logger.warning('GITHUB_OUTPUT not in environment, skipping GitHub actions output')
         return
 
     # noinspection PyBroadException
@@ -32,9 +32,9 @@ def print_github_actions_output() -> None:
         with open(file_path, 'r') as fh:
             content = fh.read()
             logger.debug('Content of GITHUB_OUTPUT file "%s":\n%s', file_path, content)
-    except Exception:
+    except Exception as exc:
         # Catching every exception since this function is not necessary for the script to run
-        logger.exception('An error occurred')
+        logger.warning('An exception was ignored while trying to get contents of GITHUB_OUTPUT file', exc_info=True)
 
 
 def clear_github_output() -> None:
@@ -42,7 +42,7 @@ def clear_github_output() -> None:
     file_path = os.getenv('GITHUB_OUTPUT')
 
     if not file_path:
-        logger.info('GITHUB_OUTPUT not in environment, skipping GitHub actions output')
+        logger.warning('GITHUB_OUTPUT not in environment, skipping GitHub actions output')
         return
 
     logging.info('Clearing GITHUB_OUTPUT file "%s"', file_path)
@@ -56,7 +56,7 @@ def set_github_output(name: str, value: Any) -> None:
     file_path = os.getenv('GITHUB_OUTPUT')
 
     if not file_path:
-        logger.info('GITHUB_OUTPUT not in environment, skipping GitHub actions output')
+        logger.warning('GITHUB_OUTPUT not in environment, skipping GitHub actions output')
         return
 
     with open(file_path, 'a') as fh:
@@ -186,6 +186,7 @@ def get_next_version(repo: git.Repo, current_version_tag: git.TagReference | Non
 
     # The maximum of the numbers in commit_bumps is the version we need to bump
     version_to_bump = max(commit_bumps) if len(commit_bumps) > 0 else 0
+    logger.debug('Version to bump is %s (0 = chore / unknown, 1 = patch, 2 = minor, 3 = major)', version_to_bump)
 
     # 4. Bump the version
     current_version_obj = semver.Version.parse(current_version)
@@ -239,7 +240,7 @@ def get_new_version(prefix: str, suffix: str, only_increase_suffix: bool) -> tup
 
     next_version, has_changes = get_next_version(repo, current_version_tag, current_version)
 
-    logger.info(
+    logger.debug(
         'current_version=%s, next_version=%s, has_changes=%s',
         current_version, next_version, has_changes
     )
