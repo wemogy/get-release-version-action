@@ -15,9 +15,10 @@ for [Conventional Commits](https://www.conventionalcommits.org/) with support fo
   id: get-release-version
   with:
     prefix: "v"
-    suffix: "hotfix"
-    only-increase-suffix: "false"
-    only-replace-suffix-with: "beta"
+    suffix: "beta"
+    previous-version-suffix: "dev"
+    bumping-suffix: "hotfix"
+    only-bump-suffix: "true"
     create-tag: "true"
 
 - run: echo ${{ steps.get-release-version.outputs.version }}
@@ -29,13 +30,14 @@ for [Conventional Commits](https://www.conventionalcommits.org/) with support fo
 
 ## Inputs
 
-| Input                      | Required | Default  | Description                                                                                                                                              |
-|----------------------------|----------|----------|----------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `prefix`                   | `false`  | `v`      | The prefix that should be prepended to the version.                                                                                                      |
-| `suffix`                   | `false`  | `hotfix` | The suffix that should be incremented / appended to the version.                                                                                         |
-| `only-increase-suffix`     | `false`  | `false`  | Increment the suffix if any changes got detected.                                                                                                        |
-| `only-replace-suffix-with` | `false`  | `false`  | Don't increment the version, only replace the suffix in `suffix` with the suffix from this input. `create-tag` and `prefix` still work with this option. |
-| `create-tag`               | `false`  | `true`   | Create a Git Tag for the version and push it if a remote is configured.                                                                                  |
+| Input                     | Required | Default  | Description                                                                                              |
+|---------------------------|----------|----------|----------------------------------------------------------------------------------------------------------|
+| `prefix`                  | `false`  | `v`      | The prefix that should be prepended to the version.                                                      |
+| `suffix`                  | `false`  | ``       | The suffix that should appended to the version (e.g. `beta`).                                            |
+| `previous-version-suffix` | `false`  | ``       | The suffix that should be replaced with the value in `suffix` (e.g. `dev`).                              |
+| `bumping-suffix`          | `false`  | `hotfix` | The suffix to append to the version (or increment if it already exists) if `only-bump-suffix` is `true`. |
+| `only-bump-suffix`        | `false`  | `false`  | Bump the `bumping-suffix` instead of the version if changes were detected.                               |
+| `create-tag`              | `false`  | `true`   | Create a git tag for the version and push it if a remote is configured.                                  |
 
 ## Outputs
 

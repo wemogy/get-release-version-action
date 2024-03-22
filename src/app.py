@@ -11,12 +11,24 @@ from pathlib import Path
 from typing import Any
 
 import git
-import semver
 import yaml
 from semantic_release import LevelBump, ParseError
 from semantic_release.commit_parser import AngularCommitParser, AngularParserOptions
+from semver import Version
 
 logger = logging.getLogger('wemogy.get-release-version-action')
+
+
+def parse_bool(string: str) -> bool:
+    """Parse a string into a boolean."""
+    return string.lower() == 'true'
+
+
+def nullable_string(string: str) -> str | None:
+    """Return None if the string is empty or only contains whitespace characters."""
+    if string.strip() == '':
+        return None
+    return string
 
 
 def print_github_actions_output() -> None:
@@ -32,7 +44,7 @@ def print_github_actions_output() -> None:
         with open(file_path, 'r') as fh:
             content = fh.read()
             logger.debug('Content of GITHUB_OUTPUT file "%s":\n%s', file_path, content)
-    except Exception as exc:
+    except Exception:
         # Catching every exception since this function is not necessary for the script to run
         logger.warning('An exception was ignored while trying to get contents of GITHUB_OUTPUT file', exc_info=True)
 
@@ -105,7 +117,7 @@ def run_command(*command: str | bytes | os.PathLike[str] | os.PathLike[bytes]) -
     return process.stdout
 
 
-def get_current_version_tag(repo: git.Repo, prefix: str) -> git.TagReference | None:
+def get_current_version_tag(repo: git.Repo, prefix: str, suffix: str) -> git.TagReference | None:
     """
     Get the current version (= the latest git tag).
     If there are no tags, return None.
@@ -113,7 +125,7 @@ def get_current_version_tag(repo: git.Repo, prefix: str) -> git.TagReference | N
     # Reverse the list of tags to start with the most recent one
     for tag in sorted(repo.tags, key=lambda t: t.commit.committed_datetime, reverse=True):
         # Check if the tag name starts with the specified prefix
-        if tag.name.startswith(prefix):
+        if tag.name.startswith(prefix) and suffix in tag.name:
             logger.debug('Found tag %s (%s)', tag.name, tag.commit.hexsha)
             return tag
 
@@ -189,7 +201,7 @@ def get_next_version(repo: git.Repo, current_version_tag: git.TagReference | Non
     logger.debug('Version to bump is %s (0 = chore / unknown, 1 = patch, 2 = minor, 3 = major)', version_to_bump)
 
     # 4. Bump the version
-    current_version_obj = semver.Version.parse(current_version)
+    current_version_obj = Version.parse(current_version)
 
     if version_to_bump == 1:
         return str(current_version_obj.bump_patch()), True
@@ -203,7 +215,7 @@ def get_next_version(repo: git.Repo, current_version_tag: git.TagReference | Non
 
 def increment_suffix(version: str, suffix: str) -> str:
     """Increment the version suffix (-{suffix}.) or append -{suffix}.1, if the suffix does not exist."""
-    return str(semver.Version.parse(version).bump_prerelease(suffix))
+    return str(Version.parse(version).bump_prerelease(suffix))
 
 
 def create_tag(version: str) -> None:
@@ -226,9 +238,9 @@ def create_tag(version: str) -> None:
 
 def get_new_version(
         prefix: str,
-        suffix: str,
-        only_increase_suffix: bool,
-        only_replace_suffix_with: str | None
+        previous_version_suffix: str | None,
+        bumping_suffix: str,
+        only_bump_suffix: bool
 ) -> tuple[str, str, bool]:
     """
     Get the new version, involving the only_increase_suffix flag.
@@ -236,27 +248,16 @@ def get_new_version(
     :returns: A tuple of the previous version, the next version and if any changes were detected.
     """
     repo = git.Repo(os.getcwd())
-    current_version_tag = get_current_version_tag(repo, prefix)
+    current_version_tag = get_current_version_tag(repo, prefix, previous_version_suffix)
 
     if current_version_tag is None:
         current_version = '0.0.0'
     else:
         current_version = current_version_tag.name.removeprefix(prefix)
+        if previous_version_suffix is not None:
+            current_version = current_version.replace(f'-{previous_version_suffix}', '', 1)
 
-    if only_replace_suffix_with is None:
-        next_version, has_changes = get_next_version(repo, current_version_tag, current_version)
-    else:
-        # Only replace the suffix if it is present in the version, else return the current version
-        if current_version.endswith(f'-{suffix}'):
-            next_version = current_version.removesuffix(suffix) + only_replace_suffix_with
-            logger.info('Replacing suffix %s with %s', suffix, only_replace_suffix_with)
-        else:
-            next_version = current_version
-            logger.info(
-                'Suffix %s was not found in version %s, so it will not be replaced',
-                suffix, current_version
-            )
-        has_changes = False
+    next_version, has_changes = get_next_version(repo, current_version_tag, current_version)
 
     logger.debug(
         'current_version=%s, next_version=%s, has_changes=%s',
@@ -269,9 +270,9 @@ def get_new_version(
         return current_version, next_version, has_changes
 
     # Example case: Hotfix
-    if only_increase_suffix:
+    if only_bump_suffix:
         logger.info('Only the suffix will be incremented.')
-        return current_version, increment_suffix(current_version, suffix), has_changes
+        return current_version, increment_suffix(current_version, bumping_suffix), has_changes
 
     # Example case: New Release
     logger.info('Semantic Version will be incremented.')
@@ -303,48 +304,64 @@ def main() -> None:
     parser.add_argument(
         '--suffix',
         dest='suffix',
+        type=nullable_string,
+        default='',
+        help='The suffix that should be appended to the version (e.g. `beta`).'
+    )
+
+    parser.add_argument(
+        '--previous-version-suffix',
+        dest='previous_version_suffix',
+        type=nullable_string,
+        default='',
+        help='The suffix that should be replaced with the value in `suffix`.'
+    )
+
+    parser.add_argument(
+        '--bumping-suffix',
+        dest='bumping_suffix',
         type=str,
         default='hotfix',
-        help='The suffix that should be incremented / appended to the version.'
+        help='The suffix to append to the version (or increment if it already exists) if `only-bump-suffix` is `true`.'
     )
 
     parser.add_argument(
-        '--only-increase-suffix',
-        dest='only_increase_suffix',
-        type=str,
-        default='False',
-        help='Increment the suffix if any changes got detected.'
-    )
-
-    parser.add_argument(
-        '--only-replace-suffix-with',
-        dest='only_replace_suffix_with',
-        type=str,
+        '--only-bump-suffix',
+        dest='only_bump_suffix',
+        type=parse_bool,
         default='false',
-        help="Don't increment the version, only replace the suffix in `suffix` with the suffix from this input. "
-             "`create-tag` and `prefix` still work with this option."
+        help='Bump the `bumping-suffix` instead of the version if changes were detected.'
     )
 
     parser.add_argument(
         '--create-tag',
         dest='create_tag',
-        type=str,
-        default='False',
-        help='Create a Git Tag for the version and push it if a remote is configured.'
+        type=parse_bool,
+        default='true',
+        help='Create a git tag for the version and push it if a remote is configured.'
     )
 
     args = parser.parse_args()
-    args.only_increase_suffix = args.only_increase_suffix.lower() == 'true'
-    args.create_tag = args.create_tag.lower() == 'true'
-    args.only_replace_suffix_with = args.only_replace_suffix_with.strip() or None
     # endregion
 
     previous_version, new_version, has_changes = get_new_version(
         args.prefix,
-        args.suffix,
-        args.only_increase_suffix,
-        args.only_replace_suffix_with
+        args.previous_version_suffix,
+        args.bumping_suffix,
+        args.only_bump_suffix
     )
+
+    if args.previous_version_suffix is not None:
+        if '-' in previous_version:
+            previous_version = previous_version.replace('-', f'-{args.previous_version_suffix}-', 1)
+        else:
+            previous_version += f'-{args.previous_version_suffix}'
+
+    if args.suffix is not None:
+        if '-' in new_version:
+            new_version = new_version.replace('-', f'-{args.suffix}-', 1)
+        else:
+            new_version += f'-{args.suffix}'
 
     new_version_tag_name = f'{args.prefix}{new_version}'
     previous_version_tag_name = f'{args.prefix}{previous_version}'
