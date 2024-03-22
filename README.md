@@ -21,6 +21,8 @@ for [Conventional Commits](https://www.conventionalcommits.org/) with support fo
 
 - run: echo ${{ steps.get-release-version.outputs.version }}
 - run: echo ${{ steps.get-release-version.outputs.version-name }}
+- run: echo ${{ steps.get-release-version.outputs.previous-version }}
+- run: echo ${{ steps.get-release-version.outputs.previous-version-name }}
 - run: echo ${{ steps.get-release-version.outputs.has-changes }}
 ```
 
@@ -35,11 +37,13 @@ for [Conventional Commits](https://www.conventionalcommits.org/) with support fo
 
 ## Outputs
 
-| Output         | Description                           |
-| -------------- | ------------------------------------- |
-| `version`      | The next version, without the prefix. |
-| `version-name` | The next version, with the prefix.    |
-| `has-changes`  | If any relevant changes got detected. |
+| Output                  | Description                               |
+|-------------------------|-------------------------------------------|
+| `version`               | The next version, without the prefix.     |
+| `version-name`          | The next version, with the prefix.        |
+| `previous-version`      | The previous version, without the prefix. |
+| `previous-version-name` | The previous version, with the prefix.    |
+| `has-changes`           | If any relevant changes got detected.     |
 
 ## Docker
 
