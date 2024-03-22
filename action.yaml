@@ -45,15 +45,11 @@ runs:
     - ${{ inputs.prefix }}
     - --suffix
     - ${{ inputs.suffix }}
-    - --only-increase-suffix
-    - ${{ inputs.only-increase-suffix }}
-    - --only-replace-suffix-with
-    - ${{ inputs.only-replace-suffix-with }}
-    - --create-tag
-    - ${{ inputs.create-tag }}
     - --previous-version-suffix
     - ${{ inputs.previous-version-suffix }}
     - --bumping-suffix
     - ${{ inputs.bumping-suffix }}
     - --only-bump-suffix
     - ${{ inputs.only-bump-suffix }}
+    - --create-tag
+    - ${{ inputs.create-tag }}
