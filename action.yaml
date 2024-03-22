@@ -9,11 +9,11 @@ inputs:
   suffix:
     description: "The suffix that should appended to the version."
     required: false
-    default: ""
+    default: "NONE"
   previous-version-suffix:
     description: "The suffix that should be replaced with the value in `suffix`."
     required: false
-    default: ""
+    default: "NONE"
   bumping-suffix:
     description: "The suffix to append to the version (or increment if it already exists) if `only-bump-suffix` is `true`."
     required: false
@@ -45,15 +45,11 @@ runs:
     - ${{ inputs.prefix }}
     - --suffix
     - ${{ inputs.suffix }}
-    - --only-increase-suffix
-    - ${{ inputs.only-increase-suffix }}
-    - --only-replace-suffix-with
-    - ${{ inputs.only-replace-suffix-with }}
-    - --create-tag
-    - ${{ inputs.create-tag }}
     - --previous-version-suffix
     - ${{ inputs.previous-version-suffix }}
     - --bumping-suffix
     - ${{ inputs.bumping-suffix }}
     - --only-bump-suffix
     - ${{ inputs.only-bump-suffix }}
+    - --create-tag
+    - ${{ inputs.create-tag }}

@@ -26,7 +26,7 @@ def parse_bool(string: str) -> bool:
 
 def nullable_string(string: str) -> str | None:
     """Return None if the string is empty or only contains whitespace characters."""
-    if string.strip() == '':
+    if string.strip() == '' or string == 'NONE':
         return None
     return string
 
@@ -117,7 +117,7 @@ def run_command(*command: str | bytes | os.PathLike[str] | os.PathLike[bytes]) -
     return process.stdout
 
 
-def get_current_version_tag(repo: git.Repo, prefix: str, suffix: str) -> git.TagReference | None:
+def get_current_version_tag(repo: git.Repo, prefix: str, suffix: str | None) -> git.TagReference | None:
     """
     Get the current version (= the latest git tag).
     If there are no tags, return None.
@@ -125,7 +125,7 @@ def get_current_version_tag(repo: git.Repo, prefix: str, suffix: str) -> git.Tag
     # Reverse the list of tags to start with the most recent one
     for tag in sorted(repo.tags, key=lambda t: t.commit.committed_datetime, reverse=True):
         # Check if the tag name starts with the specified prefix
-        if tag.name.startswith(prefix) and suffix in tag.name:
+        if tag.name.startswith(prefix) and (suffix is None or suffix in tag.name):
             logger.debug('Found tag %s (%s)', tag.name, tag.commit.hexsha)
             return tag
 
@@ -297,6 +297,7 @@ def main() -> None:
         '--prefix',
         dest='prefix',
         type=str,
+        required=False,
         default='v',
         help='The prefix that should be prepended to the version.'
     )
@@ -305,7 +306,8 @@ def main() -> None:
         '--suffix',
         dest='suffix',
         type=nullable_string,
-        default='',
+        required=False,
+        default='NONE',
         help='The suffix that should be appended to the version (e.g. `beta`).'
     )
 
@@ -313,7 +315,8 @@ def main() -> None:
         '--previous-version-suffix',
         dest='previous_version_suffix',
         type=nullable_string,
-        default='',
+        required=False,
+        default='NONE',
         help='The suffix that should be replaced with the value in `suffix`.'
     )
 
@@ -321,6 +324,7 @@ def main() -> None:
         '--bumping-suffix',
         dest='bumping_suffix',
         type=str,
+        required=False,
         default='hotfix',
         help='The suffix to append to the version (or increment if it already exists) if `only-bump-suffix` is `true`.'
     )
@@ -329,6 +333,7 @@ def main() -> None:
         '--only-bump-suffix',
         dest='only_bump_suffix',
         type=parse_bool,
+        required=False,
         default='false',
         help='Bump the `bumping-suffix` instead of the version if changes were detected.'
     )
@@ -337,6 +342,7 @@ def main() -> None:
         '--create-tag',
         dest='create_tag',
         type=parse_bool,
+        required=False,
         default='true',
         help='Create a git tag for the version and push it if a remote is configured.'
     )
