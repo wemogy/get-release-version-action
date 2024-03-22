@@ -222,8 +222,12 @@ def create_tag(version: str) -> None:
     logger.info('Pushed tag %s to remote', version)
 
 
-def get_new_version(prefix: str, suffix: str, only_increase_suffix: bool) -> tuple[str, bool]:
-    """Get the new version, involving the only_increase_suffix flag."""
+def get_new_version(prefix: str, suffix: str, only_increase_suffix: bool) -> tuple[str, str, bool]:
+    """
+    Get the new version, involving the only_increase_suffix flag.
+
+    :returns: A tuple of the previous version, the next version and if any changes were detected.
+    """
     repo = git.Repo(os.getcwd())
     current_version_tag = get_current_version_tag(repo, prefix)
 
@@ -242,16 +246,16 @@ def get_new_version(prefix: str, suffix: str, only_increase_suffix: bool) -> tup
     # Example case: No change that requires a semantic version increase
     if not has_changes:
         logger.info('No changes detected, version stays the same.')
-        return next_version, has_changes
+        return current_version, next_version, has_changes
 
     # Example case: Hotfix
     if only_increase_suffix:
         logger.info('Only the suffix will be incremented.')
-        return increment_suffix(current_version, suffix), has_changes
+        return current_version, increment_suffix(current_version, suffix), has_changes
 
     # Example case: New Release
     logger.info('Semantic Version will be incremented.')
-    return next_version, has_changes
+    return current_version, next_version, has_changes
 
 
 def main() -> None:
@@ -305,9 +309,10 @@ def main() -> None:
     args.create_tag = args.create_tag.lower() == 'true'
     # endregion
 
-    new_version, has_changes = get_new_version(args.prefix, args.suffix, args.only_increase_suffix)
+    previous_version, new_version, has_changes = get_new_version(args.prefix, args.suffix, args.only_increase_suffix)
 
     new_version_tag_name = f'{args.prefix}{new_version}'
+    previous_version_tag_name = f'{args.prefix}{previous_version}'
 
     if args.create_tag and has_changes:
         create_tag(new_version_tag_name)
@@ -317,6 +322,8 @@ def main() -> None:
 
     set_github_output('version', new_version)
     set_github_output('version-name', new_version_tag_name)
+    set_github_output('previous-version', previous_version)
+    set_github_output('previous-version-name', previous_version_tag_name)
     set_github_output('has-changes', str(has_changes).lower())
 
     print_github_actions_output()

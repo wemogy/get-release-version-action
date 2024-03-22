@@ -23,6 +23,10 @@ outputs:
     description: "The next version, without the prefix"
   version-name:
     description: "The next version, with the prefix"
+  previous-version:
+    description: "The previous version, without the prefix"
+  previous-version-name:
+    description: "The previous version, with the prefix"
   has-changes:
     description: "If any relevant changes got detected"
 runs:

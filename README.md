@@ -35,11 +35,13 @@ for [Conventional Commits](https://www.conventionalcommits.org/) with support fo
 
 ## Outputs
 
-| Output         | Description                           |
-| -------------- | ------------------------------------- |
-| `version`      | The next version, without the prefix. |
-| `version-name` | The next version, with the prefix.    |
-| `has-changes`  | If any relevant changes got detected. |
+| Output                  | Description                               |
+|-------------------------|-------------------------------------------|
+| `version`               | The next version, without the prefix.     |
+| `version-name`          | The next version, with the prefix.        |
+| `previous-version`      | The previous version, without the prefix. |
+| `previous-version-name` | The previous version, with the prefix.    |
+| `has-changes`           | If any relevant changes got detected.     |
 
 ## Docker
 
@@ -89,26 +91,31 @@ We had this issue, which finally led to the decision to implement the semantic r
 
 5. After a bit waiting, merge from main into release => correct version gets created
 
-6. Merge from release into release-beta => hotfix version gets created (this could be because the cherry-pick duplicated the commit: <https://www.atlassian.com/git/tutorials/cherry-pick#:~:text=git%20cherry%2Dpick%20is%20a,be%20useful%20for%20undoing%20changes.>)
+6. Merge from release into release-beta => hotfix version gets created (this could be because the cherry-pick duplicated
+   the
+   commit: <https://www.atlassian.com/git/tutorials/cherry-pick#:~:text=git%20cherry%2Dpick%20is%20a,be%20useful%20for%20undoing%20changes.>)
 
 - I can confirm by checking the history that there is a duplicated commit in the release-beta branch
 
-- For me the merge commit which is tagged to the newest version is the newest commit in the release-beta branch => don't understand why the duplicated commit is an issue
+- For me the merge commit which is tagged to the newest version is the newest commit in the release-beta branch => don't
+  understand why the duplicated commit is an issue
 
 #### What causes the issue?
 
 1. `Semantic-Release` is checking the commit history for the latest full release version
 
-   - Prints `algorithm.next_version: The last full ...` (e.g. `algorithm.next_version: The last full release was 0.1.2, tagged as 'v0.1.2'`)
+    - Prints `algorithm.next_version: The last full ...` (
+      e.g. `algorithm.next_version: The last full release was 0.1.2, tagged as 'v0.1.2'`)
 
-2. `Semantic-Release` is fetching all commits which are reachable from the current branch, but not from the latest full release version
+2. `Semantic-Release` is fetching all commits which are reachable from the current branch, but not from the latest full
+   release version
 
-   - Using `git rev-list v0.1.2... --` to get the commits
+    - Using `git rev-list v0.1.2... --` to get the commits
 
 3. The unreachable commits are basically in this case two types:
 
-   1. The merge commits in the release-beta branch
+    1. The merge commits in the release-beta branch
 
-   2. The cherry-picked commit in the release-beta branch
+    2. The cherry-picked commit in the release-beta branch
 
 ==> The issue is that the unreachable commits are from all time, not only from the last full release version
