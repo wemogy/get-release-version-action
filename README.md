@@ -63,12 +63,6 @@ Run:
 docker run get-release-version-action:local
 ```
 
-## Testing
-
-1. Run the test script with `bash test.sh`.
-2. The test files are available in the folder `test`. There is also a debug log there.
-3. To exit the test and delete all files, press any key in the terminal.
-
 ## FAQ
 
 ### The version stopped incrementing and keeps the same - what's wrong?
@@ -79,7 +73,7 @@ If the version number is not incrementing, please check the following points:
 - Cleanup the tags in the repository - that means that you need to go to the `All tags` overview and delete all tags
   which have **not** the `Verified` badge
 
-## Why did we implemented the sematic release by ourself?
+### Why did we implemented the sematic release by ourself?
 
 We had this issue, which finally led to the decision to implement the semantic release by ourself:
 
