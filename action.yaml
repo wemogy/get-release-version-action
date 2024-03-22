@@ -9,11 +9,11 @@ inputs:
   suffix:
     description: "The suffix that should appended to the version."
     required: false
-    default: ""
+    default: " "
   previous-version-suffix:
     description: "The suffix that should be replaced with the value in `suffix`."
     required: false
-    default: ""
+    default: " "
   bumping-suffix:
     description: "The suffix to append to the version (or increment if it already exists) if `only-bump-suffix` is `true`."
     required: false
