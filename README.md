@@ -11,7 +11,7 @@ for [Conventional Commits](https://www.conventionalcommits.org/) with support fo
   with:
     fetch-depth: 0
 
-- uses: wemogy/get-release-version-action@v2
+- uses: wemogy/get-release-version-action@v3.1.0
   id: get-release-version
   with:
     prefix: "v"
@@ -42,7 +42,7 @@ for [Conventional Commits](https://www.conventionalcommits.org/) with support fo
 ## Outputs
 
 | Output                  | Description                               |
-|-------------------------|-------------------------------------------|
+| ----------------------- | ----------------------------------------- |
 | `version`               | The next version, without the prefix.     |
 | `version-name`          | The next version, with the prefix.        |
 | `previous-version`      | The previous version, without the prefix. |
