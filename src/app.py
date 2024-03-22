@@ -228,8 +228,8 @@ def get_new_version(
         prefix: str,
         suffix: str,
         only_increase_suffix: bool,
-        only_replace_prefix_with: str | None
-) -> tuple[str, bool]:
+        only_replace_suffix_with: str | None
+) -> tuple[str, str, bool]:
     """
     Get the new version, involving the only_increase_suffix flag.
 
@@ -243,14 +243,19 @@ def get_new_version(
     else:
         current_version = current_version_tag.name.removeprefix(prefix)
 
-    if only_replace_prefix_with is None:
+    if only_replace_suffix_with is None:
         next_version, has_changes = get_next_version(repo, current_version_tag, current_version)
     else:
-        # Only replace the suffix if
+        # Only replace the suffix if it is present in the version, else return the current version
         if current_version.endswith(f'-{suffix}'):
-            next_version = current_version.removesuffix(suffix) + only_replace_prefix_with
+            next_version = current_version.removesuffix(suffix) + only_replace_suffix_with
+            logger.info('Replacing suffix %s with %s', suffix, only_replace_suffix_with)
         else:
             next_version = current_version
+            logger.info(
+                'Suffix %s was not found in version %s, so it will not be replaced',
+                suffix, current_version
+            )
         has_changes = False
 
     logger.debug(
