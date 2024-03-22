@@ -26,7 +26,7 @@ def parse_bool(string: str) -> bool:
 
 def nullable_string(string: str) -> str | None:
     """Return None if the string is empty or only contains whitespace characters."""
-    if string.strip() == '':
+    if string.strip() == '' or string == 'NONE':
         return None
     return string
 
@@ -307,7 +307,7 @@ def main() -> None:
         dest='suffix',
         type=nullable_string,
         required=False,
-        default='',
+        default='NONE',
         help='The suffix that should be appended to the version (e.g. `beta`).'
     )
 
@@ -316,7 +316,7 @@ def main() -> None:
         dest='previous_version_suffix',
         type=nullable_string,
         required=False,
-        default='',
+        default='NONE',
         help='The suffix that should be replaced with the value in `suffix`.'
     )
 
