@@ -26,6 +26,10 @@ inputs:
     description: "Create a Git Tag for the version and push it if a remote is configured."
     required: false
     default: "true"
+  mode:
+    description: "The mode to use for determining the next version. Possible values: `semantic`, `hash-based`."
+    required: false
+    default: "semantic"
 outputs:
   version:
     description: "The next version, without the prefix"
@@ -53,3 +57,5 @@ runs:
     - ${{ inputs.only-bump-suffix }}
     - --create-tag
     - ${{ inputs.create-tag }}
+    - --mode
+    - ${{ inputs.mode }}
