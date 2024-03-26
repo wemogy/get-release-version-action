@@ -435,7 +435,7 @@ def main() -> None:
             new_version += f'-{args.suffix}'
 
     new_version_tag_name = f'{args.prefix}{new_version}'
-    previous_version_tag_name = f'{args.prefix}{previous_version}'
+    previous_version_tag_name = f'{args.prefix}{previous_version}' if previous_version else ''
 
     if args.create_tag and has_changes:
         create_tag(new_version_tag_name)
