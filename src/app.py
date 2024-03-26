@@ -132,6 +132,28 @@ def get_current_version_tag(repo: git.Repo, prefix: str, suffix: str | None) -> 
     logger.debug('Found no tags that have the prefix %s', prefix)
     return None
 
+def build_hash_based_tag_name(prefix: str, commit: git.Commit, suffix: str | None) -> str:
+    """Build a hash based tag name."""
+    # This is slicing the hexsha string to get the first 7 characters. Git often abbreviates hashes to the first 7 characters, as this is usually enough to uniquely identify a commit.
+    return prefix + commit.hexsha[:7] + (f'-{suffix}' if suffix is not None else '')
+
+def get_current_version_hash(repo: git.Repo, prefix: str, suffix: str | None) -> git.TagReference | None:
+    """
+    Get the current version (= the latest git tag).
+    If there are no tags, return None.
+    """
+    # Reverse the list of tags to start with the most recent one
+    for tag in sorted(repo.tags, key=lambda t: t.commit.committed_datetime, reverse=True):
+        # Create a hash based tag name
+        hash_based_tag = build_hash_based_tag_name(prefix, tag.commit, suffix)
+        # Check if the tag name starts with the specified prefix
+        if tag.name == hash_based_tag:
+            logger.debug('Found tag %s (%s)', tag.name, tag.commit.hexsha[:7])
+            return tag.commit.hexsha[:7]
+
+    logger.debug('Found no tags that have the prefix %s', prefix)
+    return None
+
 
 def get_new_commits(repo: git.Repo, starting_tag: git.TagReference | None) -> list[git.Commit]:
     """Get all commits newer than the current_version tag."""
@@ -278,6 +300,34 @@ def get_new_version(
     logger.info('Semantic Version will be incremented.')
     return current_version, next_version, has_changes
 
+def get_new_version_hash_based(
+        prefix: str,
+        previous_version_suffix: str | None
+) -> tuple[str, str, bool]:
+    """
+    Get the new version based on the hash of the latest commit.
+
+    :returns: A tuple of the previous version, the next version and if any changes were detected.
+    """
+    repo = git.Repo(os.getcwd())
+    current_version = get_current_version_hash(repo, prefix, previous_version_suffix)
+    next_version = repo.head.commit.hexsha[:7]
+    has_changes = current_version != next_version
+
+    logger.debug(
+        'current_version=%s, next_version=%s, has_changes=%s',
+        current_version, next_version, has_changes
+    )
+
+    # Example case: No change that requires a semantic version increase
+    if not has_changes:
+        logger.info('No changes detected, version stays the same.')
+        return current_version, next_version, has_changes
+
+    # Example case: New Release
+    logger.info('Hash based version will be incremented.')
+    return current_version, next_version, has_changes
+
 
 def main() -> None:
     """
@@ -347,15 +397,30 @@ def main() -> None:
         help='Create a git tag for the version and push it if a remote is configured.'
     )
 
+    parser.add_argument(
+        '--mode',
+        dest='mode',
+        type=str,
+        required=False,
+        default='semantic',
+        help='The mode to use for determining the next version. Possible values: `semantic`, `hash-based`.'
+    )
+
     args = parser.parse_args()
     # endregion
 
-    previous_version, new_version, has_changes = get_new_version(
-        args.prefix,
-        args.previous_version_suffix,
-        args.bumping_suffix,
-        args.only_bump_suffix
-    )
+    if args.mode == 'hash-based':
+        previous_version, new_version, has_changes = get_new_version_hash_based(
+            args.prefix,
+            args.previous_version_suffix
+        )
+    else:
+        previous_version, new_version, has_changes = get_new_version(
+            args.prefix,
+            args.previous_version_suffix,
+            args.bumping_suffix,
+            args.only_bump_suffix
+        )
 
     if args.previous_version_suffix is not None:
         if '-' in previous_version:
