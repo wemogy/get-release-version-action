@@ -455,7 +455,7 @@ def main() -> None:
 
     set_github_output('version', new_version)
     set_github_output('version-name', new_version_tag_name)
-    set_github_output('previous-version', previous_version or '')
+    set_github_output('previous-version', '')
     set_github_output('previous-version-name', previous_version_tag_name)
     set_github_output('has-changes', str(has_changes).lower())
 
