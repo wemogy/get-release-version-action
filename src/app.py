@@ -132,12 +132,15 @@ def get_current_version_tag(repo: git.Repo, prefix: str, suffix: str | None) -> 
     logger.debug('Found no tags that have the prefix %s', prefix)
     return None
 
+
 def build_hash_based_tag_name(prefix: str, commit: git.Commit, suffix: str | None) -> str:
     """Build a hash based tag name."""
-    # This is slicing the hexsha string to get the first 7 characters. Git often abbreviates hashes to the first 7 characters, as this is usually enough to uniquely identify a commit.
+    # This is slicing the hexsha string to get the first 7 characters.
+    # Git often abbreviates hashes to the first 7 characters, as this is usually enough to uniquely identify a commit.
     return prefix + commit.hexsha[:7] + (f'-{suffix}' if suffix is not None else '')
 
-def get_current_version_hash(repo: git.Repo, prefix: str, suffix: str | None) -> git.TagReference | None:
+
+def get_current_version_hash(repo: git.Repo, prefix: str, suffix: str | None) -> str | None:
     """
     Get the current version (= the latest git tag).
     If there are no tags, return None.
@@ -300,6 +303,7 @@ def get_new_version(
     logger.info('Semantic Version will be incremented.')
     return current_version, next_version, has_changes
 
+
 def get_new_version_hash_based(
         prefix: str,
         previous_version_suffix: str | None
@@ -401,6 +405,7 @@ def main() -> None:
         '--mode',
         dest='mode',
         type=str,
+        choices=('semantic', 'hash-based'),
         required=False,
         default='semantic',
         help='The mode to use for determining the next version. Possible values: `semantic`, `hash-based`.'
