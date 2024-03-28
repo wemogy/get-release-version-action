@@ -57,7 +57,7 @@ def clear_github_output() -> None:
         logger.warning('GITHUB_OUTPUT not in environment, skipping GitHub actions output')
         return
 
-    logging.info('Clearing GITHUB_OUTPUT file "%s"', file_path)
+    logger.info('Clearing GITHUB_OUTPUT file "%s"', file_path)
 
     with open(file_path, 'w') as fh:
         fh.write('')
@@ -166,7 +166,12 @@ def get_new_commits(repo: git.Repo, starting_tag: git.TagReference | None) -> li
     new_commits: list[git.Commit] = []
 
     while not reached_starting_tag:
-        commits = repo.iter_commits(max_count=max_commits, skip=commit_offset)
+        try:
+            commits = repo.iter_commits(max_count=max_commits, skip=commit_offset)
+        except ValueError:
+            logger.warning('No commits found')
+            return []
+
         i = 0
 
         for commit in commits:
@@ -201,7 +206,7 @@ def get_new_commits(repo: git.Repo, starting_tag: git.TagReference | None) -> li
 
 
 def get_next_version(repo: git.Repo, current_version_tag: git.TagReference | None,
-                     current_version: str) -> tuple[str, bool]:
+                     current_version: str | None) -> tuple[str, bool]:
     """Determine the next version."""
     # 1. Add all commits to list until commit with current_version_tag reached
     new_commits = get_new_commits(repo, current_version_tag)
@@ -226,7 +231,7 @@ def get_next_version(repo: git.Repo, current_version_tag: git.TagReference | Non
     logger.debug('Version to bump is %s (0 = chore / unknown, 1 = patch, 2 = minor, 3 = major)', version_to_bump)
 
     # 4. Bump the version
-    current_version_obj = Version.parse(current_version)
+    current_version_obj = Version.parse(current_version or '0.0.0')
 
     if version_to_bump == 1:
         return str(current_version_obj.bump_patch()), True
@@ -235,7 +240,7 @@ def get_next_version(repo: git.Repo, current_version_tag: git.TagReference | Non
     if version_to_bump == 3:
         return str(current_version_obj.bump_major()), True
 
-    return current_version, False
+    return current_version or '0.0.0', False
 
 
 def increment_suffix(version: str, suffix: str) -> str:
@@ -266,7 +271,7 @@ def get_new_version(
         previous_version_suffix: str | None,
         bumping_suffix: str,
         only_bump_suffix: bool
-) -> tuple[str, str, bool]:
+) -> tuple[str | None, str, bool]:
     """
     Get the new version, involving the only_increase_suffix flag.
 
@@ -276,7 +281,7 @@ def get_new_version(
     current_version_tag = get_current_version_tag(repo, prefix, previous_version_suffix)
 
     if current_version_tag is None:
-        current_version = '0.0.0'
+        current_version: str | None = None
     else:
         current_version = current_version_tag.name.removeprefix(prefix)
         if previous_version_suffix is not None:
@@ -427,7 +432,7 @@ def main() -> None:
             args.only_bump_suffix
         )
 
-    if args.previous_version_suffix is not None:
+    if args.previous_version_suffix is not None and previous_version is not None:
         if '-' in previous_version:
             previous_version = previous_version.replace('-', f'-{args.previous_version_suffix}-', 1)
         else:
@@ -450,7 +455,7 @@ def main() -> None:
 
     set_github_output('version', new_version)
     set_github_output('version-name', new_version_tag_name)
-    set_github_output('previous-version', previous_version)
+    set_github_output('previous-version', previous_version or '')
     set_github_output('previous-version-name', previous_version_tag_name)
     set_github_output('has-changes', str(has_changes).lower())
 
