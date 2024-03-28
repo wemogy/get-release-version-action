@@ -92,8 +92,8 @@ def run_command(*command: str | bytes | os.PathLike[str] | os.PathLike[bytes]) -
     else log the output and raise an exception.
 
     :param command: The command to run
-    :return: The command's output if the command exited successful
-    :throws subprocess.CalledProcessError: If the command did not exit successful.
+    :returns: The command's output if the command exited successful
+    :raises subprocess.CalledProcessError: If the command did not exit successful.
     """
     try:
         process = subprocess.run(
