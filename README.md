@@ -33,7 +33,7 @@ for [Conventional Commits](https://www.conventionalcommits.org/) with support fo
 | Input                     | Required | Default  | Description                                                                                              |
 |---------------------------|----------|----------|----------------------------------------------------------------------------------------------------------|
 | `prefix`                  | `false`  | `v`      | The prefix that should be prepended to the version.                                                      |
-| `suffix`                  | `false`  | ``       | The suffix that should appended to the version (e.g. `beta`).                                            |
+| `suffix`                  | `false`  | ``       | The suffix that should be appended to the version (e.g. `beta`).                                         |
 | `previous-version-suffix` | `false`  | ``       | The suffix that should be replaced with the value in `suffix` (e.g. `dev`).                              |
 | `bumping-suffix`          | `false`  | `hotfix` | The suffix to append to the version (or increment if it already exists) if `only-bump-suffix` is `true`. |
 | `only-bump-suffix`        | `false`  | `false`  | Bump the `bumping-suffix` instead of the version if changes were detected.                               |
