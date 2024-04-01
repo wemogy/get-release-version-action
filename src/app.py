@@ -75,12 +75,16 @@ def set_github_output(name: str, value: Any) -> None:
         fh.write(f'{name}={value}\n')
 
 
-def setup_logging() -> None:
+def setup_logging(debug: bool = False) -> None:
     """Setup logging"""
     config_file = Path(__file__).resolve().parent / 'logging.config.yaml'
 
     with config_file.open('r') as config_stream:
         config = yaml.load(config_stream, yaml.SafeLoader)
+
+    if debug:
+        config['handlers']['stdout']['formatter'] = 'indent'
+        config['handlers']['stdout']['level'] = 'DEBUG'
 
     logging.config.dictConfig(config)
     logging.getLogger().setLevel(logging.DEBUG)
@@ -284,13 +288,18 @@ def main() -> None:
     A GitHub Action to determine the next version by checking the commit history
     for Conventional Commits with support for hotfix changes.
     """
-    setup_logging()
-
     # region argparse
     parser = ArgumentParser(
         description='A GitHub Action to determine the next version by checking the commit history for Conventional '
                     'Commits with support for hotfix changes.',
         allow_abbrev=False
+    )
+
+    parser.add_argument(
+        '-v', '--verbose',
+        dest='verbose_output',
+        action='store_true',
+        help='Print debug messages to stdout.'
     )
 
     parser.add_argument(
@@ -348,6 +357,7 @@ def main() -> None:
     )
 
     args = parser.parse_args()
+    setup_logging(args.verbose_output)
     # endregion
 
     previous_version, new_version, has_changes = get_new_version(

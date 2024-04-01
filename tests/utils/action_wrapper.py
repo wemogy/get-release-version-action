@@ -85,7 +85,7 @@ def run_action(args: ActionArguments, python_executable: Path = None, python_pat
     python_path = python_path or python_executable.parent
     script_path = script_path or Path(__file__).parent.parent.parent / 'src' / 'app.py'
     github_output_file = Path('github-output.txt')
-    command = (python_executable, script_path, *args.to_arg_list())
+    command = (python_executable, script_path, *args.to_arg_list(), '--verbose')
 
     try:
         process = subprocess.run(
