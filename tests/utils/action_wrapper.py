@@ -86,6 +86,10 @@ def run_action(args: ActionArguments, python_executable: Path = None, python_pat
     script_path = script_path or Path(__file__).parent.parent.parent / 'src' / 'app.py'
     github_output_file = Path('github-output.txt')
     command = (python_executable, script_path, *args.to_arg_list(), '--verbose')
+    env = {
+        'GITHUB_OUTPUT': github_output_file,
+        'PATH': os.getenv('PATH') + os.pathsep + str(python_path)
+    }
 
     try:
         process = subprocess.run(
@@ -94,21 +98,18 @@ def run_action(args: ActionArguments, python_executable: Path = None, python_pat
             stderr=subprocess.STDOUT,
             check=True,
             text=True,
-            env={
-                'GITHUB_OUTPUT': github_output_file,
-                'PATH': os.getenv('PATH') + os.pathsep + str(python_path)
-            }
+            env=env
         )
     except subprocess.CalledProcessError as e:
         logger.error(
-            'Process %s exited unsuccessful with exit code %s:\n%s',
-            ' '.join([str(x) for x in command]), e.returncode, e.stdout
+            'Process exited unsuccessful with exit code %s:\nCommand: %s\nEnv: %s\n%s',
+            e.returncode, ' '.join([str(x) for x in command]), env, e.stdout
         )
         raise e
 
     logger.debug(
-        'Process %s exited successful with exit code %s:\n%s',
-        ' '.join([str(x) for x in command]), process.returncode, process.stdout
+        'Process exited successful with exit code %s:\nCommand: %s\nEnv: %s\n%s',
+        process.returncode, ' '.join([str(x) for x in command]), env, process.stdout
     )
 
     return ActionOutputs.from_github_output(github_output_file)
