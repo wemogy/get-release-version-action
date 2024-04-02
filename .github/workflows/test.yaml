@@ -21,6 +21,8 @@ jobs:
 
       - name: Show the next version
         run: |
-          echo "Version: ${{ steps.get-release-version.outputs.version }}"
-          echo "Version name: ${{ steps.get-release-version.outputs.version-name }}"
-          echo "Has changes: ${{ steps.get-release-version.outputs.has-changes }}"
+          echo "version=${{ steps.get-release-version.outputs.version }}"
+          echo "version-name=${{ steps.get-release-version.outputs.version-name }}"
+          echo "previous-version=${{ steps.get-release-version.outputs.previous-version }}"
+          echo "previous-version-name=${{ steps.get-release-version.outputs.previous-version-name }}"
+          echo "has-changes=${{ steps.get-release-version.outputs.has-changes }}"
