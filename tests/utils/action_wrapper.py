@@ -1,19 +1,31 @@
+"""Wrapper for the get-release-version-action script."""
+from __future__ import annotations
+
+import dataclasses
+import logging
 import os
 import subprocess
-import logging
-import dataclasses
 import sys
+from collections.abc import Iterable
 from dataclasses import dataclass
+from inspect import get_annotations
 from pathlib import Path
+from subprocess import CalledProcessError, CompletedProcess
 from typing import Any
-
-from git import Repo
 
 logger = logging.getLogger('wemogy.get-release-version-action.tests.wrapper')
 
+__all__ = [
+    'ActionInputs',
+    'ActionOutputs',
+    'run_action'
+]
+
 
 @dataclass(frozen=True, kw_only=True)
-class ActionArguments:
+class ActionInputs:
+    """Inputs of the get-release-version-action."""
+
     prefix: str = 'v'
     """The prefix that should be prepended to the version."""
 
@@ -33,6 +45,7 @@ class ActionArguments:
     """Create a git tag for the version and push it if a remote is configured."""
 
     def to_arg_list(self) -> list[str]:
+        """Convert the arguments object into a list of command line arguments."""
         arg_list: list[str] = []
 
         for name, value in dataclasses.asdict(self).items():
@@ -44,6 +57,7 @@ class ActionArguments:
 
 @dataclass(frozen=True, kw_only=True)
 class ActionOutputs:
+    """Outputs of the get-release-version-action."""
     version: str
     """The next version, without the prefix."""
 
@@ -59,11 +73,14 @@ class ActionOutputs:
     has_changes: bool
     """If any relevant changes got detected."""
 
-    latest_tag_name: str | None
-    """The name of the newest git tag or None, if no tags exist."""
-
     @classmethod
-    def from_github_output(cls, github_output_file: Path):
+    def from_github_output(cls, github_output_file: Path) -> ActionOutputs:
+        """
+        Parse the GitHub actions output into an outputs object.
+
+        :param github_output_file: The path to the file provided to the script
+                                   via the GITHUB_OUTPUT environment variable.
+        """
         lines = github_output_file.read_text().splitlines()
         ctor_args: dict[str, Any] = {}
 
@@ -71,7 +88,7 @@ class ActionOutputs:
             raw_name, raw_value = line.strip().split('=', 1)
             name = raw_name.replace('-', '_')
 
-            field_type = cls.__annotations__[name]
+            field_type = get_annotations(cls, eval_str=True)[name]
 
             if field_type is bool:
                 value = raw_value.lower() == 'true'
@@ -82,23 +99,47 @@ class ActionOutputs:
 
             ctor_args[name] = value
 
-        try:
-            latest_tag_name = sorted(Repo(os.getcwd()).tags, key=lambda t: t.commit.committed_datetime, reverse=True)[0].name
-        except IndexError:
-            latest_tag_name = None
-
-        return cls(**ctor_args, latest_tag_name=latest_tag_name)
+        return cls(**ctor_args)  # pylint: disable=missing-kwoa
 
 
-def run_action(args: ActionArguments, python_executable: Path = None, python_path: Path = None, script_path: Path = None) -> ActionOutputs:
-    python_executable = python_executable or Path(sys.executable)
-    python_path = python_path or python_executable.parent
-    script_path = script_path or Path(__file__).parent.parent.parent / 'src' / 'app.py'
+def log_command(command: Iterable[str], env: dict[str, str], process: CompletedProcess | CalledProcessError) -> None:
+    """Log the command, environment and process result."""
+    return_code = process.returncode
+    command_str = ' '.join([f'"{x}"' if (' ' in str(x) or str(x) == '') else str(x) for x in command])
+    env_str = '; '.join([f'${k}="{v}"' for k, v in env.items()])
+    output = '\n' + process.stdout if process.stdout.strip() else ''
+
+    if isinstance(process, CalledProcessError):
+        logger.error(
+            'Process exited unsuccessful with exit code %s:\nCommand: %s\nEnvironment: %s%s',
+            return_code, command_str, env_str, output
+        )
+    else:
+        logger.info(
+            'Process exited successful with exit code %s:\nCommand: %s\nEnvironment: %s%s',
+            return_code, command_str, env_str, output
+        )
+
+
+def run_action(
+        inputs: ActionInputs,
+        script_path: Path = None
+) -> ActionOutputs:
+    """
+    Run the get-release-version-action script with the current interpreter.
+
+    :param inputs: The action inputs.
+    :param script_path: The path to the get-release-version-action script. Defaults to ``__file__/../../../src/app.py``.
+    :returns: The parsed action output.
+    :raises CalledProcessError:
+    """
+    script_path = script_path or Path(__file__).resolve().parent.parent.parent / 'src' / 'app.py'
     github_output_file = Path('github-output.txt')
-    command = (python_executable, script_path, *args.to_arg_list(), '--verbose')
+
+    command = (sys.executable, script_path, *inputs.to_arg_list(), '--verbose')
     env = {
         'GITHUB_OUTPUT': github_output_file,
-        'PATH': os.getenv('PATH') + os.pathsep + str(python_path)
+        'PATH': os.getenv('PATH')
     }
 
     try:
@@ -110,16 +151,9 @@ def run_action(args: ActionArguments, python_executable: Path = None, python_pat
             text=True,
             env=env
         )
-    except subprocess.CalledProcessError as e:
-        logger.error(
-            'Process exited unsuccessful with exit code %s:\nCommand: %s\nEnv: %s\n%s',
-            e.returncode, ' '.join([str(x) for x in command]), env, e.stdout
-        )
+    except CalledProcessError as e:
+        log_command(command, env, e)
         raise e
 
-    logger.debug(
-        'Process exited successful with exit code %s:\nCommand: %s\nEnv: %s\n%s',
-        process.returncode, ' '.join([str(x) for x in command]), env, process.stdout
-    )
-
+    log_command(command, env, process)
     return ActionOutputs.from_github_output(github_output_file)

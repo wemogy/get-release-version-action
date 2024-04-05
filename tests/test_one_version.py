@@ -1,25 +1,13 @@
-import logging
-import logging.config
+"""Test all scenarios where one or zero commits (beside the initial commit) are made."""
+# pylint: disable=too-many-locals
 import unittest
-from pathlib import Path
+from unittest import TestCase
 
-import yaml
-
-from utils import *
+from utils import ActionInputs, ActionOutputs, CommitMessages, TestRepo, run_action, setup_logging
 
 
-def setup_logging() -> None:
-    """Setup logging"""
-    config_file = Path(__file__).resolve().parent / 'logging.config.yaml'
-
-    with config_file.open('r') as config_stream:
-        config = yaml.load(config_stream, yaml.SafeLoader)
-
-    logging.config.dictConfig(config)
-    logging.getLogger().setLevel(logging.DEBUG)
-
-
-class ActionTestCase(unittest.TestCase):
+class OneVersionTestCase(TestCase):
+    """Test all scenarios where one or zero commits (beside the initial commit) are made."""
     repo: TestRepo
 
     @classmethod
@@ -33,8 +21,9 @@ class ActionTestCase(unittest.TestCase):
         self.repo.close()
 
     def test_initial(self):
+        """Test Case: Run the action directly after the initial commit."""
         # Arrange
-        args_release = ActionArguments(
+        args_release = ActionInputs(
             prefix='v',
             suffix='pre',
             previous_version_suffix='pre',
@@ -46,11 +35,10 @@ class ActionTestCase(unittest.TestCase):
             version_name='v0.0.0-pre',
             previous_version='',
             previous_version_name='',
-            has_changes=False,
-            latest_tag_name=None
+            has_changes=False
         )
 
-        args_beta = ActionArguments(
+        args_beta = ActionInputs(
             prefix='v',
             suffix='beta',
             previous_version_suffix='pre',
@@ -62,11 +50,10 @@ class ActionTestCase(unittest.TestCase):
             version_name='v0.0.0-beta',
             previous_version='',
             previous_version_name='',
-            has_changes=False,
-            latest_tag_name=None
+            has_changes=False
         )
 
-        args_prod = ActionArguments(
+        args_prod = ActionInputs(
             prefix='v',
             suffix='',
             previous_version_suffix='beta',
@@ -78,28 +65,109 @@ class ActionTestCase(unittest.TestCase):
             version_name='v0.0.0',
             previous_version='',
             previous_version_name='',
-            has_changes=False,
-            latest_tag_name=None
+            has_changes=False
         )
 
         # Act
         self.repo.checkout('release')
         actual_output_release = run_action(args_release)
+        tag_release = self.repo.get_latest_tag_name()
 
         self.repo.checkout('release-beta')
         actual_output_beta = run_action(args_beta)
+        tag_beta = self.repo.get_latest_tag_name()
 
         self.repo.checkout('release-prod')
         actual_output_prod = run_action(args_prod)
+        tag_prod = self.repo.get_latest_tag_name()
 
         # Assert
         self.assertEqual(expected_output_release, actual_output_release)
+        self.assertEqual(expected_output_release.version_name, tag_release)
+
         self.assertEqual(expected_output_beta, actual_output_beta)
+        self.assertEqual(expected_output_beta.version_name, tag_beta)
+
         self.assertEqual(expected_output_prod, actual_output_prod)
+        self.assertEqual(expected_output_prod.version_name, tag_prod)
+
+    def test_chore(self):
+        """Test Case: Run the action after a ``chore:`` commit."""
+        # Arrange
+        args_release = ActionInputs(
+            prefix='v',
+            suffix='pre',
+            previous_version_suffix='pre',
+            create_tag=True
+        )
+
+        expected_output_release = ActionOutputs(
+            version='0.0.0-pre',
+            version_name='v0.0.0-pre',
+            previous_version='',
+            previous_version_name='',
+            has_changes=False
+        )
+
+        args_beta = ActionInputs(
+            prefix='v',
+            suffix='beta',
+            previous_version_suffix='pre',
+            create_tag=True
+        )
+
+        expected_output_beta = ActionOutputs(
+            version='0.0.0-beta',
+            version_name='v0.0.0-beta',
+            previous_version='',
+            previous_version_name='',
+            has_changes=False
+        )
+
+        args_prod = ActionInputs(
+            prefix='v',
+            suffix='',
+            previous_version_suffix='beta',
+            create_tag=True
+        )
+
+        expected_output_prod = ActionOutputs(
+            version='0.0.0',
+            version_name='v0.0.0',
+            previous_version='',
+            previous_version_name='',
+            has_changes=False
+        )
+
+        # Act
+        self.repo.commit(CommitMessages.CHORE)
+
+        self.repo.merge('main', 'release')
+        actual_output_release = run_action(args_release)
+        tag_release = self.repo.get_latest_tag_name()
+
+        self.repo.merge('release', 'release-beta')
+        actual_output_beta = run_action(args_beta)
+        tag_beta = self.repo.get_latest_tag_name()
+
+        self.repo.merge('release-beta', 'release-prod')
+        actual_output_prod = run_action(args_prod)
+        tag_prod = self.repo.get_latest_tag_name()
+
+        # Assert
+        self.assertEqual(expected_output_release, actual_output_release)
+        self.assertEqual(expected_output_release.version_name, tag_release)
+
+        self.assertEqual(expected_output_beta, actual_output_beta)
+        self.assertEqual(expected_output_beta.version_name, tag_beta)
+
+        self.assertEqual(expected_output_prod, actual_output_prod)
+        self.assertEqual(expected_output_prod.version_name, tag_prod)
 
     def test_first_fix(self):
+        """Test Case: Run the action after a ``fix:`` commit."""
         # Arrange
-        args_release = ActionArguments(
+        args_release = ActionInputs(
             prefix='v',
             suffix='pre',
             previous_version_suffix='pre',
@@ -111,11 +179,10 @@ class ActionTestCase(unittest.TestCase):
             version_name='v0.0.1-pre',
             previous_version='',
             previous_version_name='',
-            has_changes=True,
-            latest_tag_name='v0.0.1-pre'
+            has_changes=True
         )
 
-        args_beta = ActionArguments(
+        args_beta = ActionInputs(
             prefix='v',
             suffix='beta',
             previous_version_suffix='pre',
@@ -127,11 +194,10 @@ class ActionTestCase(unittest.TestCase):
             version_name='v0.0.1-beta',
             previous_version='',
             previous_version_name='',
-            has_changes=False,
-            latest_tag_name='v0.0.1-beta'
+            has_changes=True
         )
 
-        args_prod = ActionArguments(
+        args_prod = ActionInputs(
             prefix='v',
             suffix='',
             previous_version_suffix='beta',
@@ -143,8 +209,7 @@ class ActionTestCase(unittest.TestCase):
             version_name='v0.0.1',
             previous_version='',
             previous_version_name='',
-            has_changes=False,
-            latest_tag_name='v0.0.1'
+            has_changes=True
         )
 
         # Act
@@ -152,21 +217,30 @@ class ActionTestCase(unittest.TestCase):
 
         self.repo.merge('main', 'release')
         actual_output_release = run_action(args_release)
+        tag_release = self.repo.get_latest_tag_name()
 
         self.repo.merge('release', 'release-beta')
         actual_output_beta = run_action(args_beta)
+        tag_beta = self.repo.get_latest_tag_name()
 
         self.repo.merge('release-beta', 'release-prod')
         actual_output_prod = run_action(args_prod)
+        tag_prod = self.repo.get_latest_tag_name()
 
         # Assert
         self.assertEqual(expected_output_release, actual_output_release)
-        self.assertEqual(expected_output_beta, actual_output_beta)
-        self.assertEqual(expected_output_prod, actual_output_prod)
+        self.assertEqual(expected_output_release.version_name, tag_release)
 
-    def test_first_feature(self):
+        self.assertEqual(expected_output_beta, actual_output_beta)
+        self.assertEqual(expected_output_beta.version_name, tag_beta)
+
+        self.assertEqual(expected_output_prod, actual_output_prod)
+        self.assertEqual(expected_output_prod.version_name, tag_prod)
+
+    def test_first_feat(self):
+        """Test Case: Run the action after a ``feat:`` commit."""
         # Arrange
-        args_release = ActionArguments(
+        args_release = ActionInputs(
             prefix='v',
             suffix='pre',
             previous_version_suffix='pre',
@@ -178,11 +252,10 @@ class ActionTestCase(unittest.TestCase):
             version_name='v0.1.0-pre',
             previous_version='',
             previous_version_name='',
-            has_changes=True,
-            latest_tag_name='v0.1.0-pre'
+            has_changes=True
         )
 
-        args_beta = ActionArguments(
+        args_beta = ActionInputs(
             prefix='v',
             suffix='beta',
             previous_version_suffix='pre',
@@ -194,11 +267,10 @@ class ActionTestCase(unittest.TestCase):
             version_name='v0.1.0-beta',
             previous_version='',
             previous_version_name='',
-            has_changes=False,
-            latest_tag_name='v0.1.0-beta'
+            has_changes=True
         )
 
-        args_prod = ActionArguments(
+        args_prod = ActionInputs(
             prefix='v',
             suffix='',
             previous_version_suffix='beta',
@@ -210,8 +282,7 @@ class ActionTestCase(unittest.TestCase):
             version_name='v0.1.0',
             previous_version='',
             previous_version_name='',
-            has_changes=False,
-            latest_tag_name='v0.1.0'
+            has_changes=True
         )
 
         # Act
@@ -219,21 +290,30 @@ class ActionTestCase(unittest.TestCase):
 
         self.repo.merge('main', 'release')
         actual_output_release = run_action(args_release)
+        tag_release = self.repo.get_latest_tag_name()
 
         self.repo.merge('release', 'release-beta')
         actual_output_beta = run_action(args_beta)
+        tag_beta = self.repo.get_latest_tag_name()
 
         self.repo.merge('release-beta', 'release-prod')
         actual_output_prod = run_action(args_prod)
+        tag_prod = self.repo.get_latest_tag_name()
 
         # Assert
         self.assertEqual(expected_output_release, actual_output_release)
+        self.assertEqual(expected_output_release.version_name, tag_release)
+
         self.assertEqual(expected_output_beta, actual_output_beta)
+        self.assertEqual(expected_output_beta.version_name, tag_beta)
+
         self.assertEqual(expected_output_prod, actual_output_prod)
+        self.assertEqual(expected_output_prod.version_name, tag_prod)
 
     def test_first_breaking(self):
+        """Test Case: Run the action after a ``feat!:`` commit."""
         # Arrange
-        args_release = ActionArguments(
+        args_release = ActionInputs(
             prefix='v',
             suffix='pre',
             previous_version_suffix='pre',
@@ -245,11 +325,10 @@ class ActionTestCase(unittest.TestCase):
             version_name='v1.0.0-pre',
             previous_version='',
             previous_version_name='',
-            has_changes=True,
-            latest_tag_name='v1.0.0-pre'
+            has_changes=True
         )
 
-        args_beta = ActionArguments(
+        args_beta = ActionInputs(
             prefix='v',
             suffix='beta',
             previous_version_suffix='pre',
@@ -261,11 +340,10 @@ class ActionTestCase(unittest.TestCase):
             version_name='v1.0.0-beta',
             previous_version='',
             previous_version_name='',
-            has_changes=False,
-            latest_tag_name='v1.0.0-beta'
+            has_changes=True
         )
 
-        args_prod = ActionArguments(
+        args_prod = ActionInputs(
             prefix='v',
             suffix='',
             previous_version_suffix='beta',
@@ -277,8 +355,7 @@ class ActionTestCase(unittest.TestCase):
             version_name='v1.0.0',
             previous_version='',
             previous_version_name='',
-            has_changes=False,
-            latest_tag_name='v1.0.0'
+            has_changes=True
         )
 
         # Act
@@ -286,17 +363,25 @@ class ActionTestCase(unittest.TestCase):
 
         self.repo.merge('main', 'release')
         actual_output_release = run_action(args_release)
+        tag_release = self.repo.get_latest_tag_name()
 
         self.repo.merge('release', 'release-beta')
         actual_output_beta = run_action(args_beta)
+        tag_beta = self.repo.get_latest_tag_name()
 
         self.repo.merge('release-beta', 'release-prod')
         actual_output_prod = run_action(args_prod)
+        tag_prod = self.repo.get_latest_tag_name()
 
         # Assert
         self.assertEqual(expected_output_release, actual_output_release)
+        self.assertEqual(expected_output_release.version_name, tag_release)
+
         self.assertEqual(expected_output_beta, actual_output_beta)
+        self.assertEqual(expected_output_beta.version_name, tag_beta)
+
         self.assertEqual(expected_output_prod, actual_output_prod)
+        self.assertEqual(expected_output_prod.version_name, tag_prod)
 
 
 if __name__ == '__main__':
