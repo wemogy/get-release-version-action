@@ -457,7 +457,7 @@ def main() -> None:
     new_version_tag_name = f'{args.prefix}{new_version}'
     previous_version_tag_name = f'{args.prefix}{previous_version}' if previous_version else ''
 
-    if args.create_tag and has_changes:
+    if args.create_tag and (previous_version is not None and previous_version != new_version):
         create_tag(new_version_tag_name)
 
     # clear the output to ensure that it is empty
