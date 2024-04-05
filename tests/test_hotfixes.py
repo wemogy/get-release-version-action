@@ -1,5 +1,5 @@
 """Test all scenarios where a hotfix / cherrypick is made."""
-# pylint: disable=too-many-locals
+# pylint: disable=too-many-locals,too-many-lines
 import unittest
 from unittest import TestCase
 
