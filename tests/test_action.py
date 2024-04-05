@@ -121,12 +121,10 @@ class ActionTestCase(unittest.TestCase):
         expected_output_beta = ActionOutputs(
             version='0.0.1-beta',
             version_name='v0.0.1-beta',
-            previous_version='0.0.1-pre',        # TODO: Soll das so? Oder sollte da die letzte Version mit -beta
-            previous_version_name='v0.0.1-pre',  #  stehen, bzw. '', weil es noch keine letzte Version gab
+            previous_version='',
+            previous_version_name='',
             has_changes=False
         )
-        # TODO: Außerdem wird der Tag für beta nicht erstellt, da keine Changes.
-        #  Der Suffix wurde aber gewechselt, deswegen muss der Tag eigentlich trotzdem erstellt werden.
 
         args_prod = ActionArguments(
             prefix='v',
@@ -187,8 +185,8 @@ class ActionTestCase(unittest.TestCase):
         expected_output_beta = ActionOutputs(
             version='0.1.0-beta',
             version_name='v0.1.0-beta',
-            previous_version='0.1.0-pre',
-            previous_version_name='v0.1.0-pre',
+            previous_version='',
+            previous_version_name='',
             has_changes=False
         )
 
@@ -251,8 +249,8 @@ class ActionTestCase(unittest.TestCase):
         expected_output_beta = ActionOutputs(
             version='1.0.0-beta',
             version_name='v1.0.0-beta',
-            previous_version='1.0.0-pre',
-            previous_version_name='v1.0.0-pre',
+            previous_version='',
+            previous_version_name='',
             has_changes=False
         )
 

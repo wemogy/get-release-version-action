@@ -38,12 +38,12 @@ for [Conventional Commits](https://www.conventionalcommits.org/) with support fo
 | `bumping-suffix`          | `false`  | `hotfix`   | The suffix to append to the version (or increment if it already exists) if `only-bump-suffix` is `true`. |
 | `only-bump-suffix`        | `false`  | `false`    | Bump the `bumping-suffix` instead of the version if changes were detected.                               |
 | `create-tag`              | `false`  | `true`     | Create a git tag for the version and push it if a remote is configured.                                  |
-| `mode`                    | `false`  | `semantic` | The mode to use for determining the next version. Possible values: `semantic`, `hash-based`.           |
+| `mode`                    | `false`  | `semantic` | The mode to use for determining the next version. Possible values: `semantic`, `hash-based`.             |
 
 ## Outputs
 
 | Output                  | Description                               |
-| ----------------------- | ----------------------------------------- |
+|-------------------------|-------------------------------------------|
 | `version`               | The next version, without the prefix.     |
 | `version-name`          | The next version, with the prefix.        |
 | `previous-version`      | The previous version, without the prefix. |
