@@ -121,19 +121,24 @@ def run_command(*command: str | bytes | os.PathLike[str] | os.PathLike[bytes]) -
     return process.stdout
 
 
-def get_current_version_tag(repo: git.Repo, prefix: str, suffix: str | None) -> git.TagReference | None:
+def get_current_version_tag(repo: git.Repo, prefix: str, suffix: str | None, bumping_suffix: str) -> git.TagReference | None:
     """
     Get the current version (= the latest git tag).
     If there are no tags, return None.
     """
     # Reverse the list of tags to start with the most recent one
     for tag in sorted(repo.tags, key=lambda t: t.commit.committed_datetime, reverse=True):
-        # Check if the tag name starts with the specified prefix
-        if tag.name.startswith(prefix) and (suffix is None or suffix in tag.name):
-            logger.debug('Found tag %s (%s)', tag.name, tag.commit.hexsha)
+        # Check if the tag name starts with the specified prefix and,
+        # if the suffix is not None, if the suffix is in the tag name,
+        # else check if no suffix other than the bumping suffix is in the tag name.
+        if tag.name.startswith(prefix) and \
+            (suffix is None or suffix in tag.name) and \
+                (suffix is not None or '-' not in tag.name.replace(f'-{bumping_suffix}', '')):
+            logger.debug('Found tag %s (%s) with prefix "%s" and suffix "%s"',
+                         tag.name, tag.commit.hexsha, prefix, suffix)
             return tag
 
-    logger.debug('Found no tags that have the prefix %s', prefix)
+    logger.debug('Found no tags that have the prefix "%s" and suffix "%s"', prefix, suffix)
     return None
 
 
@@ -272,6 +277,7 @@ def create_tag(version: str) -> None:
 
 def get_new_version(
         prefix: str,
+        suffix: str | None,
         previous_version_suffix: str | None,
         bumping_suffix: str,
         only_bump_suffix: bool
@@ -282,20 +288,33 @@ def get_new_version(
     :returns: A tuple of the previous version, the next version and if any changes were detected.
     """
     repo = git.Repo(os.getcwd())
-    current_version_tag = get_current_version_tag(repo, prefix, previous_version_suffix)
+    # Previous version is the latest version that was made, possibly on another branch / channel.
+    # It is used to get the next version.
+    previous_version_tag = get_current_version_tag(repo, prefix, previous_version_suffix, bumping_suffix)
+
+    # Current version is the latest version on this branch / channel.
+    # This is the version returned as previous version at the end of the script.
+    current_version_tag = get_current_version_tag(repo, prefix, suffix, bumping_suffix)
+
+    if previous_version_tag is None:
+        previous_version: str | None = None
+    else:
+        previous_version = previous_version_tag.name.removeprefix(prefix)
+        if previous_version_suffix is not None:
+            previous_version = previous_version.replace(f'-{previous_version_suffix}', '', 1)
 
     if current_version_tag is None:
         current_version: str | None = None
     else:
         current_version = current_version_tag.name.removeprefix(prefix)
         if previous_version_suffix is not None:
-            current_version = current_version.replace(f'-{previous_version_suffix}', '', 1)
+            current_version = current_version.replace(f'-{suffix}', '', 1)
 
-    next_version, has_changes = get_next_version(repo, current_version_tag, current_version)
+    next_version, has_changes = get_next_version(repo, previous_version_tag, previous_version)
 
     logger.debug(
         'current_version=%s, next_version=%s, has_changes=%s',
-        current_version, next_version, has_changes
+        previous_version, next_version, has_changes
     )
 
     # Example case: No change that requires a semantic version increase
@@ -306,7 +325,7 @@ def get_new_version(
     # Example case: Hotfix
     if only_bump_suffix:
         logger.info('Only the suffix will be incremented.')
-        return current_version, increment_suffix(current_version, bumping_suffix), has_changes
+        return current_version, increment_suffix(previous_version, bumping_suffix), has_changes
 
     # Example case: New Release
     logger.info('Semantic Version will be incremented.')
@@ -437,6 +456,7 @@ def main() -> None:
     else:
         previous_version, new_version, has_changes = get_new_version(
             args.prefix,
+            args.suffix,
             args.previous_version_suffix,
             args.bumping_suffix,
             args.only_bump_suffix
@@ -457,7 +477,7 @@ def main() -> None:
     new_version_tag_name = f'{args.prefix}{new_version}'
     previous_version_tag_name = f'{args.prefix}{previous_version}' if previous_version else ''
 
-    if args.create_tag and (previous_version is not None and previous_version != new_version):
+    if args.create_tag and (has_changes or (previous_version != new_version)):
         create_tag(new_version_tag_name)
 
     # clear the output to ensure that it is empty
