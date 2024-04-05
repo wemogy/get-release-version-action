@@ -7,6 +7,8 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
+from git import Repo
+
 logger = logging.getLogger('wemogy.get-release-version-action.tests.wrapper')
 
 
@@ -57,6 +59,9 @@ class ActionOutputs:
     has_changes: bool
     """If any relevant changes got detected."""
 
+    latest_tag_name: str | None
+    """The name of the newest git tag or None, if no tags exist."""
+
     @classmethod
     def from_github_output(cls, github_output_file: Path):
         lines = github_output_file.read_text().splitlines()
@@ -77,7 +82,12 @@ class ActionOutputs:
 
             ctor_args[name] = value
 
-        return cls(**ctor_args)
+        try:
+            latest_tag_name = sorted(Repo(os.getcwd()).tags, key=lambda t: t.commit.committed_datetime, reverse=True)[0].name
+        except IndexError:
+            latest_tag_name = None
+
+        return cls(**ctor_args, latest_tag_name=latest_tag_name)
 
 
 def run_action(args: ActionArguments, python_executable: Path = None, python_path: Path = None, script_path: Path = None) -> ActionOutputs:

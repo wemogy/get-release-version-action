@@ -46,7 +46,8 @@ class ActionTestCase(unittest.TestCase):
             version_name='v0.0.0-pre',
             previous_version='',
             previous_version_name='',
-            has_changes=False
+            has_changes=False,
+            latest_tag_name=None
         )
 
         args_beta = ActionArguments(
@@ -61,7 +62,8 @@ class ActionTestCase(unittest.TestCase):
             version_name='v0.0.0-beta',
             previous_version='',
             previous_version_name='',
-            has_changes=False
+            has_changes=False,
+            latest_tag_name=None
         )
 
         args_prod = ActionArguments(
@@ -76,7 +78,8 @@ class ActionTestCase(unittest.TestCase):
             version_name='v0.0.0',
             previous_version='',
             previous_version_name='',
-            has_changes=False
+            has_changes=False,
+            latest_tag_name=None
         )
 
         # Act
@@ -108,7 +111,8 @@ class ActionTestCase(unittest.TestCase):
             version_name='v0.0.1-pre',
             previous_version='',
             previous_version_name='',
-            has_changes=True
+            has_changes=True,
+            latest_tag_name='v0.0.1-pre'
         )
 
         args_beta = ActionArguments(
@@ -123,7 +127,8 @@ class ActionTestCase(unittest.TestCase):
             version_name='v0.0.1-beta',
             previous_version='',
             previous_version_name='',
-            has_changes=False
+            has_changes=False,
+            latest_tag_name='v0.0.1-beta'
         )
 
         args_prod = ActionArguments(
@@ -138,7 +143,8 @@ class ActionTestCase(unittest.TestCase):
             version_name='v0.0.1',
             previous_version='',
             previous_version_name='',
-            has_changes=False
+            has_changes=False,
+            latest_tag_name='v0.0.1'
         )
 
         # Act
@@ -172,7 +178,8 @@ class ActionTestCase(unittest.TestCase):
             version_name='v0.1.0-pre',
             previous_version='',
             previous_version_name='',
-            has_changes=True
+            has_changes=True,
+            latest_tag_name='v0.1.0-pre'
         )
 
         args_beta = ActionArguments(
@@ -187,7 +194,8 @@ class ActionTestCase(unittest.TestCase):
             version_name='v0.1.0-beta',
             previous_version='',
             previous_version_name='',
-            has_changes=False
+            has_changes=False,
+            latest_tag_name='v0.1.0-beta'
         )
 
         args_prod = ActionArguments(
@@ -202,7 +210,8 @@ class ActionTestCase(unittest.TestCase):
             version_name='v0.1.0',
             previous_version='',
             previous_version_name='',
-            has_changes=False
+            has_changes=False,
+            latest_tag_name='v0.1.0'
         )
 
         # Act
@@ -236,7 +245,8 @@ class ActionTestCase(unittest.TestCase):
             version_name='v1.0.0-pre',
             previous_version='',
             previous_version_name='',
-            has_changes=True
+            has_changes=True,
+            latest_tag_name='v1.0.0-pre'
         )
 
         args_beta = ActionArguments(
@@ -251,7 +261,8 @@ class ActionTestCase(unittest.TestCase):
             version_name='v1.0.0-beta',
             previous_version='',
             previous_version_name='',
-            has_changes=False
+            has_changes=False,
+            latest_tag_name='v1.0.0-beta'
         )
 
         args_prod = ActionArguments(
@@ -266,7 +277,8 @@ class ActionTestCase(unittest.TestCase):
             version_name='v1.0.0',
             previous_version='',
             previous_version_name='',
-            has_changes=False
+            has_changes=False,
+            latest_tag_name='v1.0.0'
         )
 
         # Act
