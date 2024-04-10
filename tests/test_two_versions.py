@@ -20,6 +20,741 @@ class TwoVersionTestCase(TestCase):
     def tearDown(self) -> None:
         self.repo.close()
 
+    def test_chore_then_chore(self) -> None:
+        """Test Case: Run the action after a ``chore:`` and another ``chore:`` commit."""
+        # Arrange
+        # Chore 1
+        args_chore1_release = ActionInputs(
+            prefix='v',
+            suffix='pre',
+            previous_version_suffix='pre',
+            create_tag=True
+        )
+
+        expected_output_chore1_release = ActionOutputs(
+            version='0.0.0-pre',
+            version_name='v0.0.0-pre',
+            previous_version='',
+            previous_version_name='',
+            has_changes=False
+        )
+
+        args_chore1_beta = ActionInputs(
+            prefix='v',
+            suffix='beta',
+            previous_version_suffix='pre',
+            create_tag=True
+        )
+
+        expected_output_chore1_beta = ActionOutputs(
+            version='0.0.0-beta',
+            version_name='v0.0.0-beta',
+            previous_version='',
+            previous_version_name='',
+            has_changes=False
+        )
+
+        args_chore1_prod = ActionInputs(
+            prefix='v',
+            suffix='',
+            previous_version_suffix='beta',
+            create_tag=True
+        )
+
+        expected_output_chore1_prod = ActionOutputs(
+            version='0.0.0',
+            version_name='v0.0.0',
+            previous_version='',
+            previous_version_name='',
+            has_changes=False
+        )
+
+        # Chore 2
+        args_chore2_release = ActionInputs(
+            prefix='v',
+            suffix='pre',
+            previous_version_suffix='pre',
+            create_tag=True
+        )
+
+        expected_output_chore2_release = ActionOutputs(
+            version='0.0.0-pre',
+            version_name='v0.0.0-pre',
+            previous_version='',
+            previous_version_name='',
+            has_changes=False
+        )
+
+        args_chore2_beta = ActionInputs(
+            prefix='v',
+            suffix='beta',
+            previous_version_suffix='pre',
+            create_tag=True
+        )
+
+        expected_output_chore2_beta = ActionOutputs(
+            version='0.0.0-beta',
+            version_name='v0.0.0-beta',
+            previous_version='',
+            previous_version_name='',
+            has_changes=False
+        )
+
+        args_chore2_prod = ActionInputs(
+            prefix='v',
+            suffix='',
+            previous_version_suffix='beta',
+            create_tag=True
+        )
+
+        expected_output_chore2_prod = ActionOutputs(
+            version='0.0.0',
+            version_name='v0.0.0',
+            previous_version='',
+            previous_version_name='',
+            has_changes=False
+        )
+
+        # Act
+        # Chore 1
+        self.repo.commit(CommitMessages.CHORE)
+
+        self.repo.merge('main', 'release')
+        actual_output_chore1_release = run_action(args_chore1_release)
+        tag_chore1_release = self.repo.get_latest_tag_name()
+
+        self.repo.merge('release', 'release-beta')
+        actual_output_chore1_beta = run_action(args_chore1_beta)
+        tag_chore1_beta = self.repo.get_latest_tag_name()
+
+        self.repo.merge('release-beta', 'release-prod')
+        actual_output_chore1_prod = run_action(args_chore1_prod)
+        tag_chore1_prod = self.repo.get_latest_tag_name()
+
+        # Chore 2
+        self.repo.commit(CommitMessages.CHORE)
+
+        self.repo.merge('main', 'release')
+        actual_output_chore2_release = run_action(args_chore2_release)
+        tag_chore2_release = self.repo.get_latest_tag_name()
+
+        self.repo.merge('release', 'release-beta')
+        actual_output_chore2_beta = run_action(args_chore2_beta)
+        tag_chore2_beta = self.repo.get_latest_tag_name()
+
+        self.repo.merge('release-beta', 'release-prod')
+        actual_output_chore2_prod = run_action(args_chore2_prod)
+        tag_chore2_prod = self.repo.get_latest_tag_name()
+
+        # Assert
+        # Chore 1
+        self.assertEqual(expected_output_chore1_release, actual_output_chore1_release)
+        self.assertEqual(None, tag_chore1_release)
+
+        self.assertEqual(expected_output_chore1_beta, actual_output_chore1_beta)
+        self.assertEqual(None, tag_chore1_beta)
+
+        self.assertEqual(expected_output_chore1_prod, actual_output_chore1_prod)
+        self.assertEqual(None, tag_chore1_prod)
+
+        # Chore 2
+        self.assertEqual(expected_output_chore2_release, actual_output_chore2_release)
+        self.assertEqual(None, tag_chore2_release)
+
+        self.assertEqual(expected_output_chore2_beta, actual_output_chore2_beta)
+        self.assertEqual(None, tag_chore2_beta)
+
+        self.assertEqual(expected_output_chore2_prod, actual_output_chore2_prod)
+        self.assertEqual(None, tag_chore2_prod)
+
+    def test_chore_then_fix(self) -> None:
+        """Test Case: Run the action after a ``chore:`` and a ``fix:`` commit."""
+        # Arrange
+        # Chore
+        args_chore_release = ActionInputs(
+            prefix='v',
+            suffix='pre',
+            previous_version_suffix='pre',
+            create_tag=True
+        )
+
+        expected_output_chore_release = ActionOutputs(
+            version='0.0.0-pre',
+            version_name='v0.0.0-pre',
+            previous_version='',
+            previous_version_name='',
+            has_changes=False
+        )
+
+        args_chore_beta = ActionInputs(
+            prefix='v',
+            suffix='beta',
+            previous_version_suffix='pre',
+            create_tag=True
+        )
+
+        expected_output_chore_beta = ActionOutputs(
+            version='0.0.0-beta',
+            version_name='v0.0.0-beta',
+            previous_version='',
+            previous_version_name='',
+            has_changes=False
+        )
+
+        args_chore_prod = ActionInputs(
+            prefix='v',
+            suffix='',
+            previous_version_suffix='beta',
+            create_tag=True
+        )
+
+        expected_output_chore_prod = ActionOutputs(
+            version='0.0.0',
+            version_name='v0.0.0',
+            previous_version='',
+            previous_version_name='',
+            has_changes=False
+        )
+
+        # Fix
+        args_fix_release = ActionInputs(
+            prefix='v',
+            suffix='pre',
+            previous_version_suffix='pre',
+            create_tag=True
+        )
+
+        expected_output_fix_release = ActionOutputs(
+            version='0.0.1-pre',
+            version_name='v0.0.1-pre',
+            previous_version='',
+            previous_version_name='',
+            has_changes=True
+        )
+
+        args_fix_beta = ActionInputs(
+            prefix='v',
+            suffix='beta',
+            previous_version_suffix='pre',
+            create_tag=True
+        )
+
+        expected_output_fix_beta = ActionOutputs(
+            version='0.0.1-beta',
+            version_name='v0.0.1-beta',
+            previous_version='',
+            previous_version_name='',
+            has_changes=True
+        )
+
+        args_fix_prod = ActionInputs(
+            prefix='v',
+            suffix='',
+            previous_version_suffix='beta',
+            create_tag=True
+        )
+
+        expected_output_fix_prod = ActionOutputs(
+            version='0.0.1',
+            version_name='v0.0.1',
+            previous_version='',
+            previous_version_name='',
+            has_changes=True
+        )
+
+        # Act
+        # Chore
+        self.repo.commit(CommitMessages.CHORE)
+
+        self.repo.merge('main', 'release')
+        actual_output_chore_release = run_action(args_chore_release)
+        tag_chore_release = self.repo.get_latest_tag_name()
+
+        self.repo.merge('release', 'release-beta')
+        actual_output_chore_beta = run_action(args_chore_beta)
+        tag_chore_beta = self.repo.get_latest_tag_name()
+
+        self.repo.merge('release-beta', 'release-prod')
+        actual_output_chore_prod = run_action(args_chore_prod)
+        tag_chore_prod = self.repo.get_latest_tag_name()
+
+        # Fix
+        self.repo.commit(CommitMessages.FIX)
+
+        self.repo.merge('main', 'release')
+        actual_output_fix_release = run_action(args_fix_release)
+        tag_fix_release = self.repo.get_latest_tag_name()
+
+        self.repo.merge('release', 'release-beta')
+        actual_output_fix_beta = run_action(args_fix_beta)
+        tag_fix_beta = self.repo.get_latest_tag_name()
+
+        self.repo.merge('release-beta', 'release-prod')
+        actual_output_fix_prod = run_action(args_fix_prod)
+        tag_fix_prod = self.repo.get_latest_tag_name()
+
+        # Assert
+        # Chore
+        self.assertEqual(expected_output_chore_release, actual_output_chore_release)
+        self.assertEqual(None, tag_chore_release)
+
+        self.assertEqual(expected_output_chore_beta, actual_output_chore_beta)
+        self.assertEqual(None, tag_chore_beta)
+
+        self.assertEqual(expected_output_chore_prod, actual_output_chore_prod)
+        self.assertEqual(None, tag_chore_prod)
+
+        # Fix
+        self.assertEqual(expected_output_fix_release, actual_output_fix_release)
+        self.assertEqual(expected_output_fix_release.version_name, tag_fix_release)
+
+        self.assertEqual(expected_output_fix_beta, actual_output_fix_beta)
+        self.assertEqual(expected_output_fix_beta.version_name, tag_fix_beta)
+
+        self.assertEqual(expected_output_fix_prod, actual_output_fix_prod)
+        self.assertEqual(expected_output_fix_prod.version_name, tag_fix_prod)
+
+    def test_chore_then_feat(self) -> None:
+        """Test Case: Run the action after a ``chore:`` and a ``feat:`` commit."""
+        # Arrange
+        # Chore
+        args_chore_release = ActionInputs(
+            prefix='v',
+            suffix='pre',
+            previous_version_suffix='pre',
+            create_tag=True
+        )
+
+        expected_output_chore_release = ActionOutputs(
+            version='0.0.0-pre',
+            version_name='v0.0.0-pre',
+            previous_version='',
+            previous_version_name='',
+            has_changes=False
+        )
+
+        args_chore_beta = ActionInputs(
+            prefix='v',
+            suffix='beta',
+            previous_version_suffix='pre',
+            create_tag=True
+        )
+
+        expected_output_chore_beta = ActionOutputs(
+            version='0.0.0-beta',
+            version_name='v0.0.0-beta',
+            previous_version='',
+            previous_version_name='',
+            has_changes=False
+        )
+
+        args_chore_prod = ActionInputs(
+            prefix='v',
+            suffix='',
+            previous_version_suffix='beta',
+            create_tag=True
+        )
+
+        expected_output_chore_prod = ActionOutputs(
+            version='0.0.0',
+            version_name='v0.0.0',
+            previous_version='',
+            previous_version_name='',
+            has_changes=False
+        )
+
+        # Feature
+        args_feat_release = ActionInputs(
+            prefix='v',
+            suffix='pre',
+            previous_version_suffix='pre',
+            create_tag=True
+        )
+
+        expected_output_feat_release = ActionOutputs(
+            version='0.1.0-pre',
+            version_name='v0.1.0-pre',
+            previous_version='',
+            previous_version_name='',
+            has_changes=True
+        )
+
+        args_feat_beta = ActionInputs(
+            prefix='v',
+            suffix='beta',
+            previous_version_suffix='pre',
+            create_tag=True
+        )
+
+        expected_output_feat_beta = ActionOutputs(
+            version='0.1.0-beta',
+            version_name='v0.1.0-beta',
+            previous_version='',
+            previous_version_name='',
+            has_changes=True
+        )
+
+        args_feat_prod = ActionInputs(
+            prefix='v',
+            suffix='',
+            previous_version_suffix='beta',
+            create_tag=True
+        )
+
+        expected_output_feat_prod = ActionOutputs(
+            version='0.1.0',
+            version_name='v0.1.0',
+            previous_version='',
+            previous_version_name='',
+            has_changes=True
+        )
+
+        # Act
+        # Chore
+        self.repo.commit(CommitMessages.CHORE)
+
+        self.repo.merge('main', 'release')
+        actual_output_chore_release = run_action(args_chore_release)
+        tag_chore_release = self.repo.get_latest_tag_name()
+
+        self.repo.merge('release', 'release-beta')
+        actual_output_chore_beta = run_action(args_chore_beta)
+        tag_chore_beta = self.repo.get_latest_tag_name()
+
+        self.repo.merge('release-beta', 'release-prod')
+        actual_output_chore_prod = run_action(args_chore_prod)
+        tag_chore_prod = self.repo.get_latest_tag_name()
+
+        # Feature
+        self.repo.commit(CommitMessages.FEATURE)
+
+        self.repo.merge('main', 'release')
+        actual_output_feat_release = run_action(args_feat_release)
+        tag_feat_release = self.repo.get_latest_tag_name()
+
+        self.repo.merge('release', 'release-beta')
+        actual_output_feat_beta = run_action(args_feat_beta)
+        tag_feat_beta = self.repo.get_latest_tag_name()
+
+        self.repo.merge('release-beta', 'release-prod')
+        actual_output_feat_prod = run_action(args_feat_prod)
+        tag_feat_prod = self.repo.get_latest_tag_name()
+
+        # Assert
+        # Chore
+        self.assertEqual(expected_output_chore_release, actual_output_chore_release)
+        self.assertEqual(None, tag_chore_release)
+
+        self.assertEqual(expected_output_chore_beta, actual_output_chore_beta)
+        self.assertEqual(None, tag_chore_beta)
+
+        self.assertEqual(expected_output_chore_prod, actual_output_chore_prod)
+        self.assertEqual(None, tag_chore_prod)
+
+        # Feature
+        self.assertEqual(expected_output_feat_release, actual_output_feat_release)
+        self.assertEqual(None, tag_feat_release)
+
+        self.assertEqual(expected_output_feat_beta, actual_output_feat_beta)
+        self.assertEqual(None, tag_feat_beta)
+
+        self.assertEqual(expected_output_feat_prod, actual_output_feat_prod)
+        self.assertEqual(None, tag_feat_prod)
+
+    def test_chore_then_breaking(self) -> None:
+        """Test Case: Run the action after a ``chore:`` and a ``feat!:`` commit."""
+        # Arrange
+        # Chore
+        args_chore_release = ActionInputs(
+            prefix='v',
+            suffix='pre',
+            previous_version_suffix='pre',
+            create_tag=True
+        )
+
+        expected_output_chore_release = ActionOutputs(
+            version='0.0.0-pre',
+            version_name='v0.0.0-pre',
+            previous_version='',
+            previous_version_name='',
+            has_changes=False
+        )
+
+        args_chore_beta = ActionInputs(
+            prefix='v',
+            suffix='beta',
+            previous_version_suffix='pre',
+            create_tag=True
+        )
+
+        expected_output_chore_beta = ActionOutputs(
+            version='0.0.0-beta',
+            version_name='v0.0.0-beta',
+            previous_version='',
+            previous_version_name='',
+            has_changes=False
+        )
+
+        args_chore_prod = ActionInputs(
+            prefix='v',
+            suffix='',
+            previous_version_suffix='beta',
+            create_tag=True
+        )
+
+        expected_output_chore_prod = ActionOutputs(
+            version='0.0.0',
+            version_name='v0.0.0',
+            previous_version='',
+            previous_version_name='',
+            has_changes=False
+        )
+
+        # Breaking
+        args_breaking_release = ActionInputs(
+            prefix='v',
+            suffix='pre',
+            previous_version_suffix='pre',
+            create_tag=True
+        )
+
+        expected_output_breaking_release = ActionOutputs(
+            version='1.0.0-pre',
+            version_name='v1.0.0-pre',
+            previous_version='',
+            previous_version_name='',
+            has_changes=True
+        )
+
+        args_breaking_beta = ActionInputs(
+            prefix='v',
+            suffix='beta',
+            previous_version_suffix='pre',
+            create_tag=True
+        )
+
+        expected_output_breaking_beta = ActionOutputs(
+            version='1.0.0-beta',
+            version_name='v1.0.0-beta',
+            previous_version='',
+            previous_version_name='',
+            has_changes=True
+        )
+
+        args_breaking_prod = ActionInputs(
+            prefix='v',
+            suffix='',
+            previous_version_suffix='beta',
+            create_tag=True
+        )
+
+        expected_output_breaking_prod = ActionOutputs(
+            version='1.0.0',
+            version_name='v1.0.0',
+            previous_version='',
+            previous_version_name='',
+            has_changes=True
+        )
+
+        # Act
+        # Chore
+        self.repo.commit(CommitMessages.CHORE)
+
+        self.repo.merge('main', 'release')
+        actual_output_chore_release = run_action(args_chore_release)
+        tag_chore_release = self.repo.get_latest_tag_name()
+
+        self.repo.merge('release', 'release-beta')
+        actual_output_chore_beta = run_action(args_chore_beta)
+        tag_chore_beta = self.repo.get_latest_tag_name()
+
+        self.repo.merge('release-beta', 'release-prod')
+        actual_output_chore_prod = run_action(args_chore_prod)
+        tag_chore_prod = self.repo.get_latest_tag_name()
+
+        # Breaking
+        self.repo.commit(CommitMessages.BREAKING_FEATURE)
+
+        self.repo.merge('main', 'release')
+        actual_output_breaking_release = run_action(args_breaking_release)
+        tag_breaking_release = self.repo.get_latest_tag_name()
+
+        self.repo.merge('release', 'release-beta')
+        actual_output_breaking_beta = run_action(args_breaking_beta)
+        tag_breaking_beta = self.repo.get_latest_tag_name()
+
+        self.repo.merge('release-beta', 'release-prod')
+        actual_output_breaking_prod = run_action(args_breaking_prod)
+        tag_breaking_prod = self.repo.get_latest_tag_name()
+
+        # Assert
+        # Chore
+        self.assertEqual(expected_output_chore_release, actual_output_chore_release)
+        self.assertEqual(None, tag_chore_release)
+
+        self.assertEqual(expected_output_chore_beta, actual_output_chore_beta)
+        self.assertEqual(None, tag_chore_beta)
+
+        self.assertEqual(expected_output_chore_prod, actual_output_chore_prod)
+        self.assertEqual(None, tag_chore_prod)
+
+        # Breaking
+        self.assertEqual(expected_output_breaking_release, actual_output_breaking_release)
+        self.assertEqual(expected_output_breaking_release.version_name, tag_breaking_release)
+
+        self.assertEqual(expected_output_breaking_beta, actual_output_breaking_beta)
+        self.assertEqual(expected_output_breaking_beta.version_name, tag_breaking_beta)
+
+        self.assertEqual(expected_output_breaking_prod, actual_output_breaking_prod)
+        self.assertEqual(expected_output_breaking_prod.version_name, tag_breaking_prod)
+
+    def test_fix_then_chore(self) -> None:
+        """Test Case: Run the action after a ``fix:`` and a ``chore:`` commit."""
+        # Arrange
+        # Fix
+        args_fix_release = ActionInputs(
+            prefix='v',
+            suffix='pre',
+            previous_version_suffix='pre',
+            create_tag=True
+        )
+
+        expected_output_fix_release = ActionOutputs(
+            version='0.0.1-pre',
+            version_name='v0.0.1-pre',
+            previous_version='',
+            previous_version_name='',
+            has_changes=True
+        )
+
+        args_fix_beta = ActionInputs(
+            prefix='v',
+            suffix='beta',
+            previous_version_suffix='pre',
+            create_tag=True
+        )
+
+        expected_output_fix_beta = ActionOutputs(
+            version='0.0.1-beta',
+            version_name='v0.0.1-beta',
+            previous_version='',
+            previous_version_name='',
+            has_changes=True
+        )
+
+        args_fix_prod = ActionInputs(
+            prefix='v',
+            suffix='',
+            previous_version_suffix='beta',
+            create_tag=True
+        )
+
+        expected_output_fix_prod = ActionOutputs(
+            version='0.0.1',
+            version_name='v0.0.1',
+            previous_version='',
+            previous_version_name='',
+            has_changes=True
+        )
+
+        # Chore
+        args_chore_release = ActionInputs(
+            prefix='v',
+            suffix='pre',
+            previous_version_suffix='pre',
+            create_tag=True
+        )
+
+        expected_output_chore_release = ActionOutputs(
+            version='0.0.1-pre',
+            version_name='v0.0.1-pre',
+            previous_version='',
+            previous_version_name='',
+            has_changes=False
+        )
+
+        args_chore_beta = ActionInputs(
+            prefix='v',
+            suffix='beta',
+            previous_version_suffix='pre',
+            create_tag=True
+        )
+
+        expected_output_chore_beta = ActionOutputs(
+            version='0.0.1-beta',
+            version_name='v0.0.1-beta',
+            previous_version='',
+            previous_version_name='',
+            has_changes=False
+        )
+
+        args_chore_prod = ActionInputs(
+            prefix='v',
+            suffix='',
+            previous_version_suffix='beta',
+            create_tag=True
+        )
+
+        expected_output_chore_prod = ActionOutputs(
+            version='0.0.1',
+            version_name='v0.0.1',
+            previous_version='',
+            previous_version_name='',
+            has_changes=False
+        )
+
+        # Act
+        # Fix
+        self.repo.commit(CommitMessages.FIX)
+
+        self.repo.merge('main', 'release')
+        actual_output_fix_release = run_action(args_fix_release)
+        tag_fix_release = self.repo.get_latest_tag_name()
+
+        self.repo.merge('release', 'release-beta')
+        actual_output_fix_beta = run_action(args_fix_beta)
+        tag_fix_beta = self.repo.get_latest_tag_name()
+
+        self.repo.merge('release-beta', 'release-prod')
+        actual_output_fix_prod = run_action(args_fix_prod)
+        tag_fix_prod = self.repo.get_latest_tag_name()
+
+        # Chore
+        self.repo.commit(CommitMessages.CHORE)
+
+        self.repo.merge('main', 'release')
+        actual_output_chore_release = run_action(args_chore_release)
+        tag_chore_release = self.repo.get_latest_tag_name()
+
+        self.repo.merge('release', 'release-beta')
+        actual_output_chore_beta = run_action(args_chore_beta)
+        tag_chore_beta = self.repo.get_latest_tag_name()
+
+        self.repo.merge('release-beta', 'release-prod')
+        actual_output_chore_prod = run_action(args_chore_prod)
+        tag_chore_prod = self.repo.get_latest_tag_name()
+
+        # Assert
+        # Fix
+        self.assertEqual(expected_output_fix_release, actual_output_fix_release)
+        self.assertEqual(expected_output_fix_release.version_name, tag_fix_release)
+
+        self.assertEqual(expected_output_fix_beta, actual_output_fix_beta)
+        self.assertEqual(expected_output_fix_beta.version_name, tag_fix_beta)
+
+        self.assertEqual(expected_output_fix_prod, actual_output_fix_prod)
+        self.assertEqual(expected_output_fix_prod.version_name, tag_fix_prod)
+
+        # Chore
+        self.assertEqual(expected_output_chore_release, actual_output_chore_release)
+        self.assertEqual(expected_output_fix_release.version_name, tag_chore_release)
+
+        self.assertEqual(expected_output_chore_beta, actual_output_chore_beta)
+        self.assertEqual(expected_output_fix_beta.version_name, tag_chore_beta)
+
+        self.assertEqual(expected_output_chore_prod, actual_output_chore_prod)
+        self.assertEqual(expected_output_fix_prod.version_name, tag_chore_prod)
+
     def test_fix_then_fix(self) -> None:
         """Test Case: Run the action after a ``fix:`` and another ``fix:`` commit."""
         # Arrange
@@ -461,6 +1196,153 @@ class TwoVersionTestCase(TestCase):
         self.assertEqual(expected_output_breaking_prod, actual_output_breaking_prod)
         self.assertEqual(expected_output_breaking_prod.version_name, tag_breaking_prod)
 
+    def test_feat_then_chore(self) -> None:
+        """Test Case: Run the action after a ``feat:`` and a ``chore:`` commit."""
+        # Arrange
+        # Feature
+        args_feat_release = ActionInputs(
+            prefix='v',
+            suffix='pre',
+            previous_version_suffix='pre',
+            create_tag=True
+        )
+
+        expected_output_feat_release = ActionOutputs(
+            version='0.1.0-pre',
+            version_name='v0.1.0-pre',
+            previous_version='',
+            previous_version_name='',
+            has_changes=True
+        )
+
+        args_feat_beta = ActionInputs(
+            prefix='v',
+            suffix='beta',
+            previous_version_suffix='pre',
+            create_tag=True
+        )
+
+        expected_output_feat_beta = ActionOutputs(
+            version='0.1.0-beta',
+            version_name='v0.1.0-beta',
+            previous_version='',
+            previous_version_name='',
+            has_changes=True
+        )
+
+        args_feat_prod = ActionInputs(
+            prefix='v',
+            suffix='',
+            previous_version_suffix='beta',
+            create_tag=True
+        )
+
+        expected_output_feat_prod = ActionOutputs(
+            version='0.1.0',
+            version_name='v0.1.0',
+            previous_version='',
+            previous_version_name='',
+            has_changes=True
+        )
+
+        # Chore
+        args_chore_release = ActionInputs(
+            prefix='v',
+            suffix='pre',
+            previous_version_suffix='pre',
+            create_tag=True
+        )
+
+        expected_output_chore_release = ActionOutputs(
+            version='0.1.0-pre',
+            version_name='v0.1.0-pre',
+            previous_version='',
+            previous_version_name='',
+            has_changes=False
+        )
+
+        args_chore_beta = ActionInputs(
+            prefix='v',
+            suffix='beta',
+            previous_version_suffix='pre',
+            create_tag=True
+        )
+
+        expected_output_chore_beta = ActionOutputs(
+            version='0.1.0-beta',
+            version_name='v0.1.0-beta',
+            previous_version='',
+            previous_version_name='',
+            has_changes=False
+        )
+
+        args_chore_prod = ActionInputs(
+            prefix='v',
+            suffix='',
+            previous_version_suffix='beta',
+            create_tag=True
+        )
+
+        expected_output_chore_prod = ActionOutputs(
+            version='0.1.0',
+            version_name='v0.1.0',
+            previous_version='',
+            previous_version_name='',
+            has_changes=False
+        )
+
+        # Act
+        # Feature
+        self.repo.commit(CommitMessages.FEATURE)
+
+        self.repo.merge('main', 'release')
+        actual_output_feat_release = run_action(args_feat_release)
+        tag_feat_release = self.repo.get_latest_tag_name()
+
+        self.repo.merge('release', 'release-beta')
+        actual_output_feat_beta = run_action(args_feat_beta)
+        tag_feat_beta = self.repo.get_latest_tag_name()
+
+        self.repo.merge('release-beta', 'release-prod')
+        actual_output_feat_prod = run_action(args_feat_prod)
+        tag_feat_prod = self.repo.get_latest_tag_name()
+
+        # Chore
+        self.repo.commit(CommitMessages.CHORE)
+
+        self.repo.merge('main', 'release')
+        actual_output_chore_release = run_action(args_chore_release)
+        tag_chore_release = self.repo.get_latest_tag_name()
+
+        self.repo.merge('release', 'release-beta')
+        actual_output_chore_beta = run_action(args_chore_beta)
+        tag_chore_beta = self.repo.get_latest_tag_name()
+
+        self.repo.merge('release-beta', 'release-prod')
+        actual_output_chore_prod = run_action(args_chore_prod)
+        tag_chore_prod = self.repo.get_latest_tag_name()
+
+        # Assert
+        # Feature
+        self.assertEqual(expected_output_feat_release, actual_output_feat_release)
+        self.assertEqual(expected_output_feat_release.version_name, tag_feat_release)
+
+        self.assertEqual(expected_output_feat_beta, actual_output_feat_beta)
+        self.assertEqual(expected_output_feat_beta.version_name, tag_feat_beta)
+
+        self.assertEqual(expected_output_feat_prod, actual_output_feat_prod)
+        self.assertEqual(expected_output_feat_prod.version_name, tag_feat_prod)
+
+        # Chore
+        self.assertEqual(expected_output_chore_release, actual_output_chore_release)
+        self.assertEqual(expected_output_feat_release.version_name, tag_chore_release)
+
+        self.assertEqual(expected_output_chore_beta, actual_output_chore_beta)
+        self.assertEqual(expected_output_feat_beta.version_name, tag_chore_beta)
+
+        self.assertEqual(expected_output_chore_prod, actual_output_chore_prod)
+        self.assertEqual(expected_output_feat_prod.version_name, tag_chore_prod)
+
     def test_feat_then_fix(self) -> None:
         """Test Case: Run the action after a ``feat:`` and a ``fix:`` commit."""
         # Arrange
@@ -901,6 +1783,153 @@ class TwoVersionTestCase(TestCase):
 
         self.assertEqual(expected_output_breaking_prod, actual_output_breaking_prod)
         self.assertEqual(expected_output_breaking_prod.version_name, tag_breaking_prod)
+
+    def test_breaking_then_chore(self) -> None:
+        """Test Case: Run the action after a ``feat!:`` and a ``chore:`` commit."""
+        # Arrange
+        # Breaking
+        args_breaking_release = ActionInputs(
+            prefix='v',
+            suffix='pre',
+            previous_version_suffix='pre',
+            create_tag=True
+        )
+
+        expected_output_breaking_release = ActionOutputs(
+            version='1.0.0-pre',
+            version_name='v1.0.0-pre',
+            previous_version='',
+            previous_version_name='',
+            has_changes=True
+        )
+
+        args_breaking_beta = ActionInputs(
+            prefix='v',
+            suffix='beta',
+            previous_version_suffix='pre',
+            create_tag=True
+        )
+
+        expected_output_breaking_beta = ActionOutputs(
+            version='1.0.0-beta',
+            version_name='v1.0.0-beta',
+            previous_version='',
+            previous_version_name='',
+            has_changes=True
+        )
+
+        args_breaking_prod = ActionInputs(
+            prefix='v',
+            suffix='',
+            previous_version_suffix='beta',
+            create_tag=True
+        )
+
+        expected_output_breaking_prod = ActionOutputs(
+            version='1.0.0',
+            version_name='v1.0.0',
+            previous_version='',
+            previous_version_name='',
+            has_changes=True
+        )
+
+        # Chore
+        args_chore_release = ActionInputs(
+            prefix='v',
+            suffix='pre',
+            previous_version_suffix='pre',
+            create_tag=True
+        )
+
+        expected_output_chore_release = ActionOutputs(
+            version='1.0.0-pre',
+            version_name='v1.0.0-pre',
+            previous_version='',
+            previous_version_name='',
+            has_changes=False
+        )
+
+        args_chore_beta = ActionInputs(
+            prefix='v',
+            suffix='beta',
+            previous_version_suffix='pre',
+            create_tag=True
+        )
+
+        expected_output_chore_beta = ActionOutputs(
+            version='1.0.0-beta',
+            version_name='v1.0.0-beta',
+            previous_version='',
+            previous_version_name='',
+            has_changes=False
+        )
+
+        args_chore_prod = ActionInputs(
+            prefix='v',
+            suffix='',
+            previous_version_suffix='beta',
+            create_tag=True
+        )
+
+        expected_output_chore_prod = ActionOutputs(
+            version='1.0.0',
+            version_name='v1.0.0',
+            previous_version='',
+            previous_version_name='',
+            has_changes=False
+        )
+
+        # Act
+        # Breaking
+        self.repo.commit(CommitMessages.BREAKING_FEATURE)
+
+        self.repo.merge('main', 'release')
+        actual_output_breaking_release = run_action(args_breaking_release)
+        tag_breaking_release = self.repo.get_latest_tag_name()
+
+        self.repo.merge('release', 'release-beta')
+        actual_output_breaking_beta = run_action(args_breaking_beta)
+        tag_breaking_beta = self.repo.get_latest_tag_name()
+
+        self.repo.merge('release-beta', 'release-prod')
+        actual_output_breaking_prod = run_action(args_breaking_prod)
+        tag_breaking_prod = self.repo.get_latest_tag_name()
+
+        # Chore
+        self.repo.commit(CommitMessages.CHORE)
+
+        self.repo.merge('main', 'release')
+        actual_output_chore_release = run_action(args_chore_release)
+        tag_chore_release = self.repo.get_latest_tag_name()
+
+        self.repo.merge('release', 'release-beta')
+        actual_output_chore_beta = run_action(args_chore_beta)
+        tag_chore_beta = self.repo.get_latest_tag_name()
+
+        self.repo.merge('release-beta', 'release-prod')
+        actual_output_chore_prod = run_action(args_chore_prod)
+        tag_chore_prod = self.repo.get_latest_tag_name()
+
+        # Assert
+        # Breaking
+        self.assertEqual(expected_output_breaking_release, actual_output_breaking_release)
+        self.assertEqual(expected_output_breaking_release.version_name, tag_breaking_release)
+
+        self.assertEqual(expected_output_breaking_beta, actual_output_breaking_beta)
+        self.assertEqual(expected_output_breaking_beta.version_name, tag_breaking_beta)
+
+        self.assertEqual(expected_output_breaking_prod, actual_output_breaking_prod)
+        self.assertEqual(expected_output_breaking_prod.version_name, tag_breaking_prod)
+
+        # Chore
+        self.assertEqual(expected_output_chore_release, actual_output_chore_release)
+        self.assertEqual(expected_output_breaking_release.version_name, tag_chore_release)
+
+        self.assertEqual(expected_output_chore_beta, actual_output_chore_beta)
+        self.assertEqual(expected_output_breaking_beta.version_name, tag_chore_beta)
+
+        self.assertEqual(expected_output_chore_prod, actual_output_chore_prod)
+        self.assertEqual(expected_output_breaking_prod.version_name, tag_chore_prod)
 
     def test_breaking_then_fix(self) -> None:
         """Test Case: Run the action after a ``feat!:`` and a ``fix:`` commit."""

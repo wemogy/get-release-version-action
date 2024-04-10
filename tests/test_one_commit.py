@@ -6,7 +6,7 @@ from unittest import TestCase
 from utils import ActionInputs, ActionOutputs, CommitMessages, TestRepo, run_action, setup_logging
 
 
-class OneVersionTestCase(TestCase):
+class OneCommitTestCase(TestCase):
     """Test all scenarios where one or zero commits (beside the initial commit) are made."""
     repo: TestRepo
 
@@ -83,13 +83,13 @@ class OneVersionTestCase(TestCase):
 
         # Assert
         self.assertEqual(expected_output_release, actual_output_release)
-        self.assertEqual(expected_output_release.version_name, tag_release)
+        self.assertEqual(None, tag_release)
 
         self.assertEqual(expected_output_beta, actual_output_beta)
-        self.assertEqual(expected_output_beta.version_name, tag_beta)
+        self.assertEqual(None, tag_beta)
 
         self.assertEqual(expected_output_prod, actual_output_prod)
-        self.assertEqual(expected_output_prod.version_name, tag_prod)
+        self.assertEqual(None, tag_prod)
 
     def test_chore(self) -> None:
         """Test Case: Run the action after a ``chore:`` commit."""
@@ -156,13 +156,13 @@ class OneVersionTestCase(TestCase):
 
         # Assert
         self.assertEqual(expected_output_release, actual_output_release)
-        self.assertEqual(expected_output_release.version_name, tag_release)
+        self.assertEqual(None, tag_release)
 
         self.assertEqual(expected_output_beta, actual_output_beta)
-        self.assertEqual(expected_output_beta.version_name, tag_beta)
+        self.assertEqual(None, tag_beta)
 
         self.assertEqual(expected_output_prod, actual_output_prod)
-        self.assertEqual(expected_output_prod.version_name, tag_prod)
+        self.assertEqual(None, tag_prod)
 
     def test_first_fix(self) -> None:
         """Test Case: Run the action after a ``fix:`` commit."""
