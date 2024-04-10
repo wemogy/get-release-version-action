@@ -15,11 +15,11 @@ __all__ = [
 
 class IndentLoggingFormatter(logging.Formatter):
     """Logging formatter to indent multiline messages."""
-    def __init__(self, fmt):
+    def __init__(self, fmt: str | None) -> None:
         super().__init__(fmt)
 
     @override
-    def format(self, record):
+    def format(self, record: logging.LogRecord) -> str:
         msg = super().format(record)
         return indent(msg, '    ', predicate=lambda line: line != msg.splitlines(keepends=True)[0])
 

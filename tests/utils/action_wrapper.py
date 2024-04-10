@@ -6,7 +6,8 @@ import logging
 import os
 import subprocess
 import sys
-from collections.abc import Iterable
+from os import PathLike
+from collections.abc import Sequence
 from dataclasses import dataclass
 from inspect import get_annotations
 from pathlib import Path
@@ -81,7 +82,7 @@ class ActionOutputs:
         :param github_output_file: The path to the file provided to the script
                                    via the GITHUB_OUTPUT environment variable.
         """
-        lines = github_output_file.read_text().splitlines()
+        lines = github_output_file.read_text(encoding='utf-8').splitlines()
         ctor_args: dict[str, Any] = {}
 
         for line in lines:
@@ -89,6 +90,7 @@ class ActionOutputs:
             name = raw_name.replace('-', '_')
 
             field_type = get_annotations(cls, eval_str=True)[name]
+            value: Any
 
             if field_type is bool:
                 value = raw_value.lower() == 'true'
@@ -102,7 +104,11 @@ class ActionOutputs:
         return cls(**ctor_args)  # pylint: disable=missing-kwoa
 
 
-def log_command(command: Iterable[str], env: dict[str, str], process: CompletedProcess | CalledProcessError) -> None:
+def log_command(
+        command: Sequence[str | PathLike[str]],
+        env: dict[str, str | PathLike[str]],
+        process: CompletedProcess[str] | CalledProcessError
+) -> None:
     """Log the command, environment and process result."""
     return_code = process.returncode
     command_str = ' '.join([f'"{x}"' if (' ' in str(x) or str(x) == '') else str(x) for x in command])
@@ -123,7 +129,7 @@ def log_command(command: Iterable[str], env: dict[str, str], process: CompletedP
 
 def run_action(
         inputs: ActionInputs,
-        script_path: Path = None
+        script_path: Path | None = None
 ) -> ActionOutputs:
     """
     Run the get-release-version-action script with the current interpreter.
@@ -133,13 +139,18 @@ def run_action(
     :returns: The parsed action output.
     :raises CalledProcessError:
     """
-    script_path = script_path or Path(__file__).resolve().parent.parent.parent / 'src' / 'app.py'
     github_output_file = Path('github-output.txt')
 
-    command = (sys.executable, script_path, *inputs.to_arg_list(), '--verbose')
-    env = {
+    command: tuple[str | PathLike[str], ...] = (
+        sys.executable,
+        script_path if script_path is not None else Path(__file__).resolve().parent.parent.parent / 'src' / 'app.py',
+        *inputs.to_arg_list(),
+        '--verbose'
+    )
+
+    env: dict[str, str | PathLike[str]] = {
         'GITHUB_OUTPUT': github_output_file,
-        'PATH': os.getenv('PATH')
+        'PATH': os.environ['PATH']
     }
 
     try:

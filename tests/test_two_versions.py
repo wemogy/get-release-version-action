@@ -11,16 +11,16 @@ class TwoVersionTestCase(TestCase):
     repo: TestRepo
 
     @classmethod
-    def setUpClass(cls):
+    def setUpClass(cls) -> None:
         setup_logging()
 
-    def setUp(self):
+    def setUp(self) -> None:
         self.repo = TestRepo()
 
-    def tearDown(self):
+    def tearDown(self) -> None:
         self.repo.close()
 
-    def test_fix_then_fix(self):
+    def test_fix_then_fix(self) -> None:
         """Test Case: Run the action after a ``fix:`` and another ``fix:`` commit."""
         # Arrange
         # Fix 1
@@ -167,7 +167,7 @@ class TwoVersionTestCase(TestCase):
         self.assertEqual(expected_output_fix2_prod, actual_output_fix2_prod)
         self.assertEqual(expected_output_fix2_prod.version_name, tag_fix2_prod)
 
-    def test_fix_then_feat(self):
+    def test_fix_then_feat(self) -> None:
         """Test Case: Run the action after a ``fix:`` and a ``feat:`` commit."""
         # Arrange
         # Fix
@@ -314,7 +314,7 @@ class TwoVersionTestCase(TestCase):
         self.assertEqual(expected_output_feat_prod, actual_output_feat_prod)
         self.assertEqual(expected_output_feat_prod.version_name, tag_feat_prod)
 
-    def test_fix_then_breaking(self):
+    def test_fix_then_breaking(self) -> None:
         """Test Case: Run the action after a ``fix:`` and a ``feat!:`` commit."""
         # Arrange
         # Fix
@@ -461,7 +461,7 @@ class TwoVersionTestCase(TestCase):
         self.assertEqual(expected_output_breaking_prod, actual_output_breaking_prod)
         self.assertEqual(expected_output_breaking_prod.version_name, tag_breaking_prod)
 
-    def test_feat_then_fix(self):
+    def test_feat_then_fix(self) -> None:
         """Test Case: Run the action after a ``feat:`` and a ``fix:`` commit."""
         # Arrange
         # Feature
@@ -608,7 +608,7 @@ class TwoVersionTestCase(TestCase):
         self.assertEqual(expected_output_fix_prod, actual_output_fix_prod)
         self.assertEqual(expected_output_fix_prod.version_name, tag_fix_prod)
 
-    def test_feat_then_feat(self):
+    def test_feat_then_feat(self) -> None:
         """Test Case: Run the action after a ``feat:`` and another ``feat:`` commit."""
         # Arrange
         # Feature 1
@@ -755,7 +755,7 @@ class TwoVersionTestCase(TestCase):
         self.assertEqual(expected_output_feat2_prod, actual_output_feat2_prod)
         self.assertEqual(expected_output_feat2_prod.version_name, tag_feat2_prod)
 
-    def test_feat_then_breaking(self):
+    def test_feat_then_breaking(self) -> None:
         """Test Case: Run the action after a ``feat:`` and a ``feat!:`` commit."""
         # Arrange
         # Feature
@@ -902,7 +902,7 @@ class TwoVersionTestCase(TestCase):
         self.assertEqual(expected_output_breaking_prod, actual_output_breaking_prod)
         self.assertEqual(expected_output_breaking_prod.version_name, tag_breaking_prod)
 
-    def test_breaking_then_fix(self):
+    def test_breaking_then_fix(self) -> None:
         """Test Case: Run the action after a ``feat!:`` and a ``fix:`` commit."""
         # Arrange
         # Breaking
@@ -1049,7 +1049,7 @@ class TwoVersionTestCase(TestCase):
         self.assertEqual(expected_output_fix_prod, actual_output_fix_prod)
         self.assertEqual(expected_output_fix_prod.version_name, tag_fix_prod)
 
-    def test_breaking_then_feat(self):
+    def test_breaking_then_feat(self) -> None:
         """Test Case: Run the action after a ``feat!:`` and a ``feat:`` commit."""
         # Arrange
         # Breaking
@@ -1196,7 +1196,7 @@ class TwoVersionTestCase(TestCase):
         self.assertEqual(expected_output_feat_prod, actual_output_feat_prod)
         self.assertEqual(expected_output_feat_prod.version_name, tag_feat_prod)
 
-    def test_breaking_then_breaking(self):
+    def test_breaking_then_breaking(self) -> None:
         """Test Case: Run the action after a ``feat!:`` and another ``feat!:`` commit."""
         # Arrange
         # Breaking 1

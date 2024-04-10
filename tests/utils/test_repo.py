@@ -1,10 +1,13 @@
 """Wrapper around the ``git.Repo`` class that implements specific methods for unit testing."""
+from __future__ import annotations
+
 import logging
 import os
 import shutil
 from enum import StrEnum
 from pathlib import Path
 from tempfile import mkdtemp
+from typing import Any
 from uuid import uuid4
 
 from git import Commit, Repo
@@ -36,7 +39,7 @@ class TestRepo:
     path: Path
     repo: Repo
 
-    def __init__(self):
+    def __init__(self) -> None:
         """
         Wrapper around the ``git.Repo`` class that implements specific methods for unit testing.
 
@@ -59,10 +62,10 @@ class TestRepo:
 
         logger.info('Initializing done')
 
-    def __enter__(self):
+    def __enter__(self) -> TestRepo:
         return self
 
-    def __exit__(self, exc_type, exc_val, exc_tb):
+    def __exit__(self, exc_type: Any, exc_val: Any, exc_tb: Any) -> None:
         self.close()
 
     def close(self, keep_repository_dir: bool = False) -> None:
@@ -108,7 +111,7 @@ class TestRepo:
         """
         file_name = file_name or f'file_{uuid4()}'
         file_path = self.path / file_name
-        file_path.write_text('test')
+        file_path.write_text('test', encoding='utf-8')
 
         logger.info('Committing file %s with message %s', file_name, message)
         self.repo.index.add(file_name)

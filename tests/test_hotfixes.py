@@ -11,16 +11,16 @@ class HotfixTestCase(TestCase):
     repo: TestRepo
 
     @classmethod
-    def setUpClass(cls):
+    def setUpClass(cls) -> None:
         setup_logging()
 
-    def setUp(self):
+    def setUp(self) -> None:
         self.repo = TestRepo()
 
-    def tearDown(self):
+    def tearDown(self) -> None:
         self.repo.close()
 
-    def test_feature_then_hotfix(self):
+    def test_feature_then_hotfix(self) -> None:
         """Test Case: Run the action after a ``feat:`` commit and after a hotfix."""
         # Arrange
         # Feature

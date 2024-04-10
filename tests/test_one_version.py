@@ -11,16 +11,16 @@ class OneVersionTestCase(TestCase):
     repo: TestRepo
 
     @classmethod
-    def setUpClass(cls):
+    def setUpClass(cls) -> None:
         setup_logging()
 
-    def setUp(self):
+    def setUp(self) -> None:
         self.repo = TestRepo()
 
-    def tearDown(self):
+    def tearDown(self) -> None:
         self.repo.close()
 
-    def test_initial(self):
+    def test_initial(self) -> None:
         """Test Case: Run the action directly after the initial commit."""
         # Arrange
         args_release = ActionInputs(
@@ -91,7 +91,7 @@ class OneVersionTestCase(TestCase):
         self.assertEqual(expected_output_prod, actual_output_prod)
         self.assertEqual(expected_output_prod.version_name, tag_prod)
 
-    def test_chore(self):
+    def test_chore(self) -> None:
         """Test Case: Run the action after a ``chore:`` commit."""
         # Arrange
         args_release = ActionInputs(
@@ -164,7 +164,7 @@ class OneVersionTestCase(TestCase):
         self.assertEqual(expected_output_prod, actual_output_prod)
         self.assertEqual(expected_output_prod.version_name, tag_prod)
 
-    def test_first_fix(self):
+    def test_first_fix(self) -> None:
         """Test Case: Run the action after a ``fix:`` commit."""
         # Arrange
         args_release = ActionInputs(
@@ -237,7 +237,7 @@ class OneVersionTestCase(TestCase):
         self.assertEqual(expected_output_prod, actual_output_prod)
         self.assertEqual(expected_output_prod.version_name, tag_prod)
 
-    def test_first_feat(self):
+    def test_first_feat(self) -> None:
         """Test Case: Run the action after a ``feat:`` commit."""
         # Arrange
         args_release = ActionInputs(
@@ -310,7 +310,7 @@ class OneVersionTestCase(TestCase):
         self.assertEqual(expected_output_prod, actual_output_prod)
         self.assertEqual(expected_output_prod.version_name, tag_prod)
 
-    def test_first_breaking(self):
+    def test_first_breaking(self) -> None:
         """Test Case: Run the action after a ``feat!:`` commit."""
         # Arrange
         args_release = ActionInputs(
