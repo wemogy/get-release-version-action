@@ -1,0 +1,17 @@
+name: Setup Python
+description: Setup python
+runs:
+  using: composite
+  steps:
+    - name: Setup Python
+      uses: actions/setup-python@v5
+      with:
+        python-version-file: pyproject.toml
+        cache: 'poetry'
+
+    - name: Setup poetry
+      uses: Gr1N/setup-poetry@v9
+
+    - name: Install dependencies
+      run: poetry install --with dev
+      shell: bash

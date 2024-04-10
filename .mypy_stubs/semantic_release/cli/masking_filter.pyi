@@ -1,0 +1,13 @@
+import logging
+import re
+from _typeshed import Incomplete
+from typing import Iterable
+
+log: Incomplete
+
+class MaskingFilter(logging.Filter):
+    REPLACE_STR: Incomplete
+    def __init__(self, _use_named_masks: bool = False, **patterns: Iterable[str | re.Pattern[str]]) -> None: ...
+    def add_mask_for(self, data: str, name: str = 'redacted') -> MaskingFilter: ...
+    def filter(self, record: logging.LogRecord) -> bool: ...
+    def mask(self, msg: str) -> str: ...

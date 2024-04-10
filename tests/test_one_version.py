@@ -1,5 +1,5 @@
 """Test all scenarios where one or zero commits (beside the initial commit) are made."""
-# pylint: disable=too-many-locals,too-many-lines
+# pylint: disable=too-many-locals,too-many-lines,duplicate-code
 import unittest
 from unittest import TestCase
 

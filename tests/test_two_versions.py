@@ -1,5 +1,5 @@
 """Test all scenarios where two commits with a release after each are made."""
-# pylint: disable=too-many-locals,too-many-lines
+# pylint: disable=too-many-locals,too-many-lines,duplicate-code
 import unittest
 from unittest import TestCase
 
