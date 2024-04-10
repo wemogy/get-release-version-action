@@ -164,7 +164,7 @@ class OneCommitTestCase(TestCase):
         self.assertEqual(expected_output_prod, actual_output_prod)
         self.assertEqual(None, tag_prod)
 
-    def test_first_fix(self) -> None:
+    def test_fix(self) -> None:
         """Test Case: Run the action after a ``fix:`` commit."""
         # Arrange
         args_release = ActionInputs(
@@ -237,7 +237,7 @@ class OneCommitTestCase(TestCase):
         self.assertEqual(expected_output_prod, actual_output_prod)
         self.assertEqual(expected_output_prod.version_name, tag_prod)
 
-    def test_first_feat(self) -> None:
+    def test_feat(self) -> None:
         """Test Case: Run the action after a ``feat:`` commit."""
         # Arrange
         args_release = ActionInputs(
@@ -310,7 +310,7 @@ class OneCommitTestCase(TestCase):
         self.assertEqual(expected_output_prod, actual_output_prod)
         self.assertEqual(expected_output_prod.version_name, tag_prod)
 
-    def test_first_breaking(self) -> None:
+    def test_breaking(self) -> None:
         """Test Case: Run the action after a ``feat!:`` commit."""
         # Arrange
         args_release = ActionInputs(
