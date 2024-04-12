@@ -10,6 +10,9 @@ jobs:
     name: pylint (App)
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
       - name: Setup Python
         uses: .github/actions/setup-python
 
@@ -23,6 +26,9 @@ jobs:
     name: flake8 (App)
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
       - name: Setup Python
         uses: .github/actions/setup-python
 
@@ -36,6 +42,9 @@ jobs:
     name: mypy (App)
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
       - name: Setup Python
         uses: .github/actions/setup-python
 
@@ -49,6 +58,9 @@ jobs:
     name: pylint (Tests)
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
       - name: Setup Python
         uses: .github/actions/setup-python
 
@@ -62,6 +74,9 @@ jobs:
     name: flake8 (Tests)
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
       - name: Setup Python
         uses: .github/actions/setup-python
 
@@ -75,6 +90,9 @@ jobs:
     name: mypy (Tests)
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
       - name: Setup Python
         uses: .github/actions/setup-python
 
