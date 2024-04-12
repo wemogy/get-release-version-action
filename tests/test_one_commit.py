@@ -35,7 +35,7 @@ class OneCommitTestCase(TestCase):
             version_name='v0.0.0-pre',
             previous_version='',
             previous_version_name='',
-            has_changes=False
+            tag_created=False
         )
 
         args_beta = ActionInputs(
@@ -50,7 +50,7 @@ class OneCommitTestCase(TestCase):
             version_name='v0.0.0-beta',
             previous_version='',
             previous_version_name='',
-            has_changes=False
+            tag_created=False
         )
 
         args_prod = ActionInputs(
@@ -65,7 +65,7 @@ class OneCommitTestCase(TestCase):
             version_name='v0.0.0',
             previous_version='',
             previous_version_name='',
-            has_changes=False
+            tag_created=False
         )
 
         # Act
@@ -106,7 +106,7 @@ class OneCommitTestCase(TestCase):
             version_name='v0.0.0-pre',
             previous_version='',
             previous_version_name='',
-            has_changes=False
+            tag_created=False
         )
 
         args_beta = ActionInputs(
@@ -121,7 +121,7 @@ class OneCommitTestCase(TestCase):
             version_name='v0.0.0-beta',
             previous_version='',
             previous_version_name='',
-            has_changes=False
+            tag_created=False
         )
 
         args_prod = ActionInputs(
@@ -136,7 +136,7 @@ class OneCommitTestCase(TestCase):
             version_name='v0.0.0',
             previous_version='',
             previous_version_name='',
-            has_changes=False
+            tag_created=False
         )
 
         # Act
@@ -179,7 +179,7 @@ class OneCommitTestCase(TestCase):
             version_name='v0.0.1-pre',
             previous_version='',
             previous_version_name='',
-            has_changes=True
+            tag_created=True
         )
 
         args_beta = ActionInputs(
@@ -194,7 +194,7 @@ class OneCommitTestCase(TestCase):
             version_name='v0.0.1-beta',
             previous_version='',
             previous_version_name='',
-            has_changes=True
+            tag_created=True
         )
 
         args_prod = ActionInputs(
@@ -209,7 +209,7 @@ class OneCommitTestCase(TestCase):
             version_name='v0.0.1',
             previous_version='',
             previous_version_name='',
-            has_changes=True
+            tag_created=True
         )
 
         # Act
@@ -252,7 +252,7 @@ class OneCommitTestCase(TestCase):
             version_name='v0.1.0-pre',
             previous_version='',
             previous_version_name='',
-            has_changes=True
+            tag_created=True
         )
 
         args_beta = ActionInputs(
@@ -267,7 +267,7 @@ class OneCommitTestCase(TestCase):
             version_name='v0.1.0-beta',
             previous_version='',
             previous_version_name='',
-            has_changes=True
+            tag_created=True
         )
 
         args_prod = ActionInputs(
@@ -282,7 +282,7 @@ class OneCommitTestCase(TestCase):
             version_name='v0.1.0',
             previous_version='',
             previous_version_name='',
-            has_changes=True
+            tag_created=True
         )
 
         # Act
@@ -325,7 +325,7 @@ class OneCommitTestCase(TestCase):
             version_name='v1.0.0-pre',
             previous_version='',
             previous_version_name='',
-            has_changes=True
+            tag_created=True
         )
 
         args_beta = ActionInputs(
@@ -340,7 +340,7 @@ class OneCommitTestCase(TestCase):
             version_name='v1.0.0-beta',
             previous_version='',
             previous_version_name='',
-            has_changes=True
+            tag_created=True
         )
 
         args_prod = ActionInputs(
@@ -355,7 +355,7 @@ class OneCommitTestCase(TestCase):
             version_name='v1.0.0',
             previous_version='',
             previous_version_name='',
-            has_changes=True
+            tag_created=True
         )
 
         # Act

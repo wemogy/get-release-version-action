@@ -36,7 +36,7 @@ class OneHotfixTestCase(TestCase):
             version_name='v0.0.1-pre',
             previous_version='',
             previous_version_name='',
-            has_changes=True
+            tag_created=True
         )
 
         args_fix1_beta = ActionInputs(
@@ -51,7 +51,7 @@ class OneHotfixTestCase(TestCase):
             version_name='v0.0.1-beta',
             previous_version='',
             previous_version_name='',
-            has_changes=True
+            tag_created=True
         )
 
         args_fix1_prod = ActionInputs(
@@ -66,7 +66,7 @@ class OneHotfixTestCase(TestCase):
             version_name='v0.0.1',
             previous_version='',
             previous_version_name='',
-            has_changes=True
+            tag_created=True
         )
 
         # Hotfix
@@ -84,7 +84,7 @@ class OneHotfixTestCase(TestCase):
             version_name='v0.0.1-pre-hotfix.1',
             previous_version='0.0.1-pre',
             previous_version_name='v0.0.1-pre',
-            has_changes=True
+            tag_created=True
         )
 
         args_hotfix_beta = ActionInputs(
@@ -101,7 +101,7 @@ class OneHotfixTestCase(TestCase):
             version_name='v0.0.1-beta-hotfix.1',
             previous_version='0.0.1-beta',
             previous_version_name='v0.0.1-beta',
-            has_changes=True
+            tag_created=True
         )
 
         args_hotfix_prod = ActionInputs(
@@ -118,7 +118,7 @@ class OneHotfixTestCase(TestCase):
             version_name='v0.0.1-hotfix.1',
             previous_version='0.0.1',
             previous_version_name='v0.0.1',
-            has_changes=True
+            tag_created=True
         )
 
         # Fix 2
@@ -134,7 +134,7 @@ class OneHotfixTestCase(TestCase):
             version_name='v0.0.2-pre',
             previous_version='0.0.1-pre-hotfix.1',
             previous_version_name='v0.0.1-pre-hotfix.1',
-            has_changes=True
+            tag_created=True
         )
 
         args_fix2_beta = ActionInputs(
@@ -149,7 +149,7 @@ class OneHotfixTestCase(TestCase):
             version_name='v0.0.2-beta',
             previous_version='0.0.1-beta-hotfix.1',
             previous_version_name='v0.0.1-beta-hotfix.1',
-            has_changes=True
+            tag_created=True
         )
 
         args_fix2_prod = ActionInputs(
@@ -164,7 +164,7 @@ class OneHotfixTestCase(TestCase):
             version_name='v0.0.2',
             previous_version='0.0.1-hotfix.1',
             previous_version_name='v0.0.1-hotfix.1',
-            has_changes=True
+            tag_created=True
         )
 
         # Act
@@ -261,7 +261,7 @@ class OneHotfixTestCase(TestCase):
             version_name='v0.0.1-pre',
             previous_version='',
             previous_version_name='',
-            has_changes=True
+            tag_created=True
         )
 
         args_fix_beta = ActionInputs(
@@ -276,7 +276,7 @@ class OneHotfixTestCase(TestCase):
             version_name='v0.0.1-beta',
             previous_version='',
             previous_version_name='',
-            has_changes=True
+            tag_created=True
         )
 
         args_fix_prod = ActionInputs(
@@ -291,7 +291,7 @@ class OneHotfixTestCase(TestCase):
             version_name='v0.0.1',
             previous_version='',
             previous_version_name='',
-            has_changes=True
+            tag_created=True
         )
 
         # Hotfix
@@ -309,7 +309,7 @@ class OneHotfixTestCase(TestCase):
             version_name='v0.0.1-pre-hotfix.1',
             previous_version='0.0.1-pre',
             previous_version_name='v0.0.1-pre',
-            has_changes=True
+            tag_created=True
         )
 
         args_hotfix_beta = ActionInputs(
@@ -326,7 +326,7 @@ class OneHotfixTestCase(TestCase):
             version_name='v0.0.1-beta-hotfix.1',
             previous_version='0.0.1-beta',
             previous_version_name='v0.0.1-beta',
-            has_changes=True
+            tag_created=True
         )
 
         args_hotfix_prod = ActionInputs(
@@ -343,7 +343,7 @@ class OneHotfixTestCase(TestCase):
             version_name='v0.0.1-hotfix.1',
             previous_version='0.0.1',
             previous_version_name='v0.0.1',
-            has_changes=True
+            tag_created=True
         )
 
         # Feature
@@ -359,7 +359,7 @@ class OneHotfixTestCase(TestCase):
             version_name='v0.1.0-pre',
             previous_version='0.0.1-pre-hotfix.1',
             previous_version_name='v0.0.1-pre-hotfix.1',
-            has_changes=True
+            tag_created=True
         )
 
         args_feature_beta = ActionInputs(
@@ -374,7 +374,7 @@ class OneHotfixTestCase(TestCase):
             version_name='v0.1.0-beta',
             previous_version='0.0.1-beta-hotfix.1',
             previous_version_name='v0.0.1-beta-hotfix.1',
-            has_changes=True
+            tag_created=True
         )
 
         args_feature_prod = ActionInputs(
@@ -389,7 +389,7 @@ class OneHotfixTestCase(TestCase):
             version_name='v0.1.0',
             previous_version='0.0.1-hotfix.1',
             previous_version_name='v0.0.1-hotfix.1',
-            has_changes=True
+            tag_created=True
         )
 
         # Act
@@ -486,7 +486,7 @@ class OneHotfixTestCase(TestCase):
             version_name='v0.0.1-pre',
             previous_version='',
             previous_version_name='',
-            has_changes=True
+            tag_created=True
         )
 
         args_fix_beta = ActionInputs(
@@ -501,7 +501,7 @@ class OneHotfixTestCase(TestCase):
             version_name='v0.0.1-beta',
             previous_version='',
             previous_version_name='',
-            has_changes=True
+            tag_created=True
         )
 
         args_fix_prod = ActionInputs(
@@ -516,7 +516,7 @@ class OneHotfixTestCase(TestCase):
             version_name='v0.0.1',
             previous_version='',
             previous_version_name='',
-            has_changes=True
+            tag_created=True
         )
 
         # Hotfix
@@ -534,7 +534,7 @@ class OneHotfixTestCase(TestCase):
             version_name='v0.0.1-pre-hotfix.1',
             previous_version='0.0.1-pre',
             previous_version_name='v0.0.1-pre',
-            has_changes=True
+            tag_created=True
         )
 
         args_hotfix_beta = ActionInputs(
@@ -551,7 +551,7 @@ class OneHotfixTestCase(TestCase):
             version_name='v0.0.1-beta-hotfix.1',
             previous_version='0.0.1-beta',
             previous_version_name='v0.0.1-beta',
-            has_changes=True
+            tag_created=True
         )
 
         args_hotfix_prod = ActionInputs(
@@ -568,7 +568,7 @@ class OneHotfixTestCase(TestCase):
             version_name='v0.0.1-hotfix.1',
             previous_version='0.0.1',
             previous_version_name='v0.0.1',
-            has_changes=True
+            tag_created=True
         )
 
         # Breaking
@@ -584,7 +584,7 @@ class OneHotfixTestCase(TestCase):
             version_name='v1.0.0-pre',
             previous_version='0.0.1-pre-hotfix.1',
             previous_version_name='v0.0.1-pre-hotfix.1',
-            has_changes=True
+            tag_created=True
         )
 
         args_breaking_beta = ActionInputs(
@@ -599,7 +599,7 @@ class OneHotfixTestCase(TestCase):
             version_name='v1.0.0-beta',
             previous_version='0.0.1-beta-hotfix.1',
             previous_version_name='v0.0.1-beta-hotfix.1',
-            has_changes=True
+            tag_created=True
         )
 
         args_breaking_prod = ActionInputs(
@@ -614,7 +614,7 @@ class OneHotfixTestCase(TestCase):
             version_name='v1.0.0',
             previous_version='0.0.1-hotfix.1',
             previous_version_name='v0.0.1-hotfix.1',
-            has_changes=True
+            tag_created=True
         )
 
         # Act

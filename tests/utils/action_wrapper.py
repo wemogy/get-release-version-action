@@ -71,7 +71,7 @@ class ActionOutputs:
     previous_version_name: str
     """The previous version, with the prefix."""
 
-    has_changes: bool
+    tag_created: bool
     """If any relevant changes got detected."""
 
     @classmethod

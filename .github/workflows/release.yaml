@@ -27,12 +27,12 @@ jobs:
         run: |
           echo "Version: ${{ steps.get-release-version.outputs.version }}"
           echo "Version name: ${{ steps.get-release-version.outputs.version-name }}"
-          echo "Has changes: ${{ steps.get-release-version.outputs.has-changes }}"
+          echo "Has changes: ${{ steps.get-release-version.outputs.tag-created }}"
 
       # Create GitHub Release
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v1
-        if: steps.get-release-version.outputs.has-changes == 'true'
+        if: steps.get-release-version.outputs.tag-created == 'true'
         with:
           tag_name: ${{ steps.get-release-version.outputs.version-name }}
           name: Version ${{ steps.get-release-version.outputs.version }}

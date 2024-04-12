@@ -36,7 +36,7 @@ class TwoVersionTestCase(TestCase):
             version_name='v0.0.0-pre',
             previous_version='',
             previous_version_name='',
-            has_changes=False
+            tag_created=False
         )
 
         args_chore1_beta = ActionInputs(
@@ -51,7 +51,7 @@ class TwoVersionTestCase(TestCase):
             version_name='v0.0.0-beta',
             previous_version='',
             previous_version_name='',
-            has_changes=False
+            tag_created=False
         )
 
         args_chore1_prod = ActionInputs(
@@ -66,7 +66,7 @@ class TwoVersionTestCase(TestCase):
             version_name='v0.0.0',
             previous_version='',
             previous_version_name='',
-            has_changes=False
+            tag_created=False
         )
 
         # Chore 2
@@ -82,7 +82,7 @@ class TwoVersionTestCase(TestCase):
             version_name='v0.0.0-pre',
             previous_version='',
             previous_version_name='',
-            has_changes=False
+            tag_created=False
         )
 
         args_chore2_beta = ActionInputs(
@@ -97,7 +97,7 @@ class TwoVersionTestCase(TestCase):
             version_name='v0.0.0-beta',
             previous_version='',
             previous_version_name='',
-            has_changes=False
+            tag_created=False
         )
 
         args_chore2_prod = ActionInputs(
@@ -112,7 +112,7 @@ class TwoVersionTestCase(TestCase):
             version_name='v0.0.0',
             previous_version='',
             previous_version_name='',
-            has_changes=False
+            tag_created=False
         )
 
         # Act
@@ -183,7 +183,7 @@ class TwoVersionTestCase(TestCase):
             version_name='v0.0.0-pre',
             previous_version='',
             previous_version_name='',
-            has_changes=False
+            tag_created=False
         )
 
         args_chore_beta = ActionInputs(
@@ -198,7 +198,7 @@ class TwoVersionTestCase(TestCase):
             version_name='v0.0.0-beta',
             previous_version='',
             previous_version_name='',
-            has_changes=False
+            tag_created=False
         )
 
         args_chore_prod = ActionInputs(
@@ -213,7 +213,7 @@ class TwoVersionTestCase(TestCase):
             version_name='v0.0.0',
             previous_version='',
             previous_version_name='',
-            has_changes=False
+            tag_created=False
         )
 
         # Fix
@@ -229,7 +229,7 @@ class TwoVersionTestCase(TestCase):
             version_name='v0.0.1-pre',
             previous_version='',
             previous_version_name='',
-            has_changes=True
+            tag_created=True
         )
 
         args_fix_beta = ActionInputs(
@@ -244,7 +244,7 @@ class TwoVersionTestCase(TestCase):
             version_name='v0.0.1-beta',
             previous_version='',
             previous_version_name='',
-            has_changes=True
+            tag_created=True
         )
 
         args_fix_prod = ActionInputs(
@@ -259,7 +259,7 @@ class TwoVersionTestCase(TestCase):
             version_name='v0.0.1',
             previous_version='',
             previous_version_name='',
-            has_changes=True
+            tag_created=True
         )
 
         # Act
@@ -330,7 +330,7 @@ class TwoVersionTestCase(TestCase):
             version_name='v0.0.0-pre',
             previous_version='',
             previous_version_name='',
-            has_changes=False
+            tag_created=False
         )
 
         args_chore_beta = ActionInputs(
@@ -345,7 +345,7 @@ class TwoVersionTestCase(TestCase):
             version_name='v0.0.0-beta',
             previous_version='',
             previous_version_name='',
-            has_changes=False
+            tag_created=False
         )
 
         args_chore_prod = ActionInputs(
@@ -360,7 +360,7 @@ class TwoVersionTestCase(TestCase):
             version_name='v0.0.0',
             previous_version='',
             previous_version_name='',
-            has_changes=False
+            tag_created=False
         )
 
         # Feature
@@ -376,7 +376,7 @@ class TwoVersionTestCase(TestCase):
             version_name='v0.1.0-pre',
             previous_version='',
             previous_version_name='',
-            has_changes=True
+            tag_created=True
         )
 
         args_feat_beta = ActionInputs(
@@ -391,7 +391,7 @@ class TwoVersionTestCase(TestCase):
             version_name='v0.1.0-beta',
             previous_version='',
             previous_version_name='',
-            has_changes=True
+            tag_created=True
         )
 
         args_feat_prod = ActionInputs(
@@ -406,7 +406,7 @@ class TwoVersionTestCase(TestCase):
             version_name='v0.1.0',
             previous_version='',
             previous_version_name='',
-            has_changes=True
+            tag_created=True
         )
 
         # Act
@@ -477,7 +477,7 @@ class TwoVersionTestCase(TestCase):
             version_name='v0.0.0-pre',
             previous_version='',
             previous_version_name='',
-            has_changes=False
+            tag_created=False
         )
 
         args_chore_beta = ActionInputs(
@@ -492,7 +492,7 @@ class TwoVersionTestCase(TestCase):
             version_name='v0.0.0-beta',
             previous_version='',
             previous_version_name='',
-            has_changes=False
+            tag_created=False
         )
 
         args_chore_prod = ActionInputs(
@@ -507,7 +507,7 @@ class TwoVersionTestCase(TestCase):
             version_name='v0.0.0',
             previous_version='',
             previous_version_name='',
-            has_changes=False
+            tag_created=False
         )
 
         # Breaking
@@ -523,7 +523,7 @@ class TwoVersionTestCase(TestCase):
             version_name='v1.0.0-pre',
             previous_version='',
             previous_version_name='',
-            has_changes=True
+            tag_created=True
         )
 
         args_breaking_beta = ActionInputs(
@@ -538,7 +538,7 @@ class TwoVersionTestCase(TestCase):
             version_name='v1.0.0-beta',
             previous_version='',
             previous_version_name='',
-            has_changes=True
+            tag_created=True
         )
 
         args_breaking_prod = ActionInputs(
@@ -553,7 +553,7 @@ class TwoVersionTestCase(TestCase):
             version_name='v1.0.0',
             previous_version='',
             previous_version_name='',
-            has_changes=True
+            tag_created=True
         )
 
         # Act
@@ -624,7 +624,7 @@ class TwoVersionTestCase(TestCase):
             version_name='v0.0.1-pre',
             previous_version='',
             previous_version_name='',
-            has_changes=True
+            tag_created=True
         )
 
         args_fix_beta = ActionInputs(
@@ -639,7 +639,7 @@ class TwoVersionTestCase(TestCase):
             version_name='v0.0.1-beta',
             previous_version='',
             previous_version_name='',
-            has_changes=True
+            tag_created=True
         )
 
         args_fix_prod = ActionInputs(
@@ -654,7 +654,7 @@ class TwoVersionTestCase(TestCase):
             version_name='v0.0.1',
             previous_version='',
             previous_version_name='',
-            has_changes=True
+            tag_created=True
         )
 
         # Chore
@@ -670,7 +670,7 @@ class TwoVersionTestCase(TestCase):
             version_name='v0.0.1-pre',
             previous_version='',
             previous_version_name='',
-            has_changes=False
+            tag_created=False
         )
 
         args_chore_beta = ActionInputs(
@@ -685,7 +685,7 @@ class TwoVersionTestCase(TestCase):
             version_name='v0.0.1-beta',
             previous_version='',
             previous_version_name='',
-            has_changes=False
+            tag_created=False
         )
 
         args_chore_prod = ActionInputs(
@@ -700,7 +700,7 @@ class TwoVersionTestCase(TestCase):
             version_name='v0.0.1',
             previous_version='',
             previous_version_name='',
-            has_changes=False
+            tag_created=False
         )
 
         # Act
@@ -771,7 +771,7 @@ class TwoVersionTestCase(TestCase):
             version_name='v0.0.1-pre',
             previous_version='',
             previous_version_name='',
-            has_changes=True
+            tag_created=True
         )
 
         args_fix1_beta = ActionInputs(
@@ -786,7 +786,7 @@ class TwoVersionTestCase(TestCase):
             version_name='v0.0.1-beta',
             previous_version='',
             previous_version_name='',
-            has_changes=True
+            tag_created=True
         )
 
         args_fix1_prod = ActionInputs(
@@ -801,7 +801,7 @@ class TwoVersionTestCase(TestCase):
             version_name='v0.0.1',
             previous_version='',
             previous_version_name='',
-            has_changes=True
+            tag_created=True
         )
 
         # Fix 2
@@ -817,7 +817,7 @@ class TwoVersionTestCase(TestCase):
             version_name='v0.0.2-pre',
             previous_version='0.0.1-pre',
             previous_version_name='v0.0.1-pre',
-            has_changes=True
+            tag_created=True
         )
 
         args_fix2_beta = ActionInputs(
@@ -832,7 +832,7 @@ class TwoVersionTestCase(TestCase):
             version_name='v0.0.2-beta',
             previous_version='0.0.1-beta',
             previous_version_name='v0.0.1-beta',
-            has_changes=True
+            tag_created=True
         )
 
         args_fix2_prod = ActionInputs(
@@ -847,7 +847,7 @@ class TwoVersionTestCase(TestCase):
             version_name='v0.0.2',
             previous_version='0.0.1',
             previous_version_name='v0.0.1',
-            has_changes=True
+            tag_created=True
         )
 
         # Act
@@ -918,7 +918,7 @@ class TwoVersionTestCase(TestCase):
             version_name='v0.0.1-pre',
             previous_version='',
             previous_version_name='',
-            has_changes=True
+            tag_created=True
         )
 
         args_fix_beta = ActionInputs(
@@ -933,7 +933,7 @@ class TwoVersionTestCase(TestCase):
             version_name='v0.0.1-beta',
             previous_version='',
             previous_version_name='',
-            has_changes=True
+            tag_created=True
         )
 
         args_fix_prod = ActionInputs(
@@ -948,7 +948,7 @@ class TwoVersionTestCase(TestCase):
             version_name='v0.0.1',
             previous_version='',
             previous_version_name='',
-            has_changes=True
+            tag_created=True
         )
 
         # Feature
@@ -964,7 +964,7 @@ class TwoVersionTestCase(TestCase):
             version_name='v0.1.0-pre',
             previous_version='0.0.1-pre',
             previous_version_name='v0.0.1-pre',
-            has_changes=True
+            tag_created=True
         )
 
         args_feat_beta = ActionInputs(
@@ -979,7 +979,7 @@ class TwoVersionTestCase(TestCase):
             version_name='v0.1.0-beta',
             previous_version='0.0.1-beta',
             previous_version_name='v0.0.1-beta',
-            has_changes=True
+            tag_created=True
         )
 
         args_feat_prod = ActionInputs(
@@ -994,7 +994,7 @@ class TwoVersionTestCase(TestCase):
             version_name='v0.1.0',
             previous_version='0.0.1',
             previous_version_name='v0.0.1',
-            has_changes=True
+            tag_created=True
         )
 
         # Act
@@ -1065,7 +1065,7 @@ class TwoVersionTestCase(TestCase):
             version_name='v0.0.1-pre',
             previous_version='',
             previous_version_name='',
-            has_changes=True
+            tag_created=True
         )
 
         args_fix_beta = ActionInputs(
@@ -1080,7 +1080,7 @@ class TwoVersionTestCase(TestCase):
             version_name='v0.0.1-beta',
             previous_version='',
             previous_version_name='',
-            has_changes=True
+            tag_created=True
         )
 
         args_fix_prod = ActionInputs(
@@ -1095,7 +1095,7 @@ class TwoVersionTestCase(TestCase):
             version_name='v0.0.1',
             previous_version='',
             previous_version_name='',
-            has_changes=True
+            tag_created=True
         )
 
         # Breaking
@@ -1111,7 +1111,7 @@ class TwoVersionTestCase(TestCase):
             version_name='v1.0.0-pre',
             previous_version='0.0.1-pre',
             previous_version_name='v0.0.1-pre',
-            has_changes=True
+            tag_created=True
         )
 
         args_breaking_beta = ActionInputs(
@@ -1126,7 +1126,7 @@ class TwoVersionTestCase(TestCase):
             version_name='v1.0.0-beta',
             previous_version='0.0.1-beta',
             previous_version_name='v0.0.1-beta',
-            has_changes=True
+            tag_created=True
         )
 
         args_breaking_prod = ActionInputs(
@@ -1141,7 +1141,7 @@ class TwoVersionTestCase(TestCase):
             version_name='v1.0.0',
             previous_version='0.0.1',
             previous_version_name='v0.0.1',
-            has_changes=True
+            tag_created=True
         )
 
         # Act
@@ -1212,7 +1212,7 @@ class TwoVersionTestCase(TestCase):
             version_name='v0.1.0-pre',
             previous_version='',
             previous_version_name='',
-            has_changes=True
+            tag_created=True
         )
 
         args_feat_beta = ActionInputs(
@@ -1227,7 +1227,7 @@ class TwoVersionTestCase(TestCase):
             version_name='v0.1.0-beta',
             previous_version='',
             previous_version_name='',
-            has_changes=True
+            tag_created=True
         )
 
         args_feat_prod = ActionInputs(
@@ -1242,7 +1242,7 @@ class TwoVersionTestCase(TestCase):
             version_name='v0.1.0',
             previous_version='',
             previous_version_name='',
-            has_changes=True
+            tag_created=True
         )
 
         # Chore
@@ -1258,7 +1258,7 @@ class TwoVersionTestCase(TestCase):
             version_name='v0.1.0-pre',
             previous_version='',
             previous_version_name='',
-            has_changes=False
+            tag_created=False
         )
 
         args_chore_beta = ActionInputs(
@@ -1273,7 +1273,7 @@ class TwoVersionTestCase(TestCase):
             version_name='v0.1.0-beta',
             previous_version='',
             previous_version_name='',
-            has_changes=False
+            tag_created=False
         )
 
         args_chore_prod = ActionInputs(
@@ -1288,7 +1288,7 @@ class TwoVersionTestCase(TestCase):
             version_name='v0.1.0',
             previous_version='',
             previous_version_name='',
-            has_changes=False
+            tag_created=False
         )
 
         # Act
@@ -1359,7 +1359,7 @@ class TwoVersionTestCase(TestCase):
             version_name='v0.1.0-pre',
             previous_version='',
             previous_version_name='',
-            has_changes=True
+            tag_created=True
         )
 
         args_feat_beta = ActionInputs(
@@ -1374,7 +1374,7 @@ class TwoVersionTestCase(TestCase):
             version_name='v0.1.0-beta',
             previous_version='',
             previous_version_name='',
-            has_changes=True
+            tag_created=True
         )
 
         args_feat_prod = ActionInputs(
@@ -1389,7 +1389,7 @@ class TwoVersionTestCase(TestCase):
             version_name='v0.1.0',
             previous_version='',
             previous_version_name='',
-            has_changes=True
+            tag_created=True
         )
 
         # Fix
@@ -1405,7 +1405,7 @@ class TwoVersionTestCase(TestCase):
             version_name='v0.1.1-pre',
             previous_version='0.1.0-pre',
             previous_version_name='v0.1.0-pre',
-            has_changes=True
+            tag_created=True
         )
 
         args_fix_beta = ActionInputs(
@@ -1420,7 +1420,7 @@ class TwoVersionTestCase(TestCase):
             version_name='v0.1.1-beta',
             previous_version='0.1.0-beta',
             previous_version_name='v0.1.0-beta',
-            has_changes=True
+            tag_created=True
         )
 
         args_fix_prod = ActionInputs(
@@ -1435,7 +1435,7 @@ class TwoVersionTestCase(TestCase):
             version_name='v0.1.1',
             previous_version='0.1.0',
             previous_version_name='v0.1.0',
-            has_changes=True
+            tag_created=True
         )
 
         # Act
@@ -1506,7 +1506,7 @@ class TwoVersionTestCase(TestCase):
             version_name='v0.1.0-pre',
             previous_version='',
             previous_version_name='',
-            has_changes=True
+            tag_created=True
         )
 
         args_feat1_beta = ActionInputs(
@@ -1521,7 +1521,7 @@ class TwoVersionTestCase(TestCase):
             version_name='v0.1.0-beta',
             previous_version='',
             previous_version_name='',
-            has_changes=True
+            tag_created=True
         )
 
         args_feat1_prod = ActionInputs(
@@ -1536,7 +1536,7 @@ class TwoVersionTestCase(TestCase):
             version_name='v0.1.0',
             previous_version='',
             previous_version_name='',
-            has_changes=True
+            tag_created=True
         )
 
         # Feature 2
@@ -1552,7 +1552,7 @@ class TwoVersionTestCase(TestCase):
             version_name='v0.2.0-pre',
             previous_version='0.1.0-pre',
             previous_version_name='v0.1.0-pre',
-            has_changes=True
+            tag_created=True
         )
 
         args_feat2_beta = ActionInputs(
@@ -1567,7 +1567,7 @@ class TwoVersionTestCase(TestCase):
             version_name='v0.2.0-beta',
             previous_version='0.1.0-beta',
             previous_version_name='v0.1.0-beta',
-            has_changes=True
+            tag_created=True
         )
 
         args_feat2_prod = ActionInputs(
@@ -1582,7 +1582,7 @@ class TwoVersionTestCase(TestCase):
             version_name='v0.2.0',
             previous_version='0.1.0',
             previous_version_name='v0.1.0',
-            has_changes=True
+            tag_created=True
         )
 
         # Act
@@ -1653,7 +1653,7 @@ class TwoVersionTestCase(TestCase):
             version_name='v0.1.0-pre',
             previous_version='',
             previous_version_name='',
-            has_changes=True
+            tag_created=True
         )
 
         args_feat_beta = ActionInputs(
@@ -1668,7 +1668,7 @@ class TwoVersionTestCase(TestCase):
             version_name='v0.1.0-beta',
             previous_version='',
             previous_version_name='',
-            has_changes=True
+            tag_created=True
         )
 
         args_feat_prod = ActionInputs(
@@ -1683,7 +1683,7 @@ class TwoVersionTestCase(TestCase):
             version_name='v0.1.0',
             previous_version='',
             previous_version_name='',
-            has_changes=True
+            tag_created=True
         )
 
         # Breaking
@@ -1699,7 +1699,7 @@ class TwoVersionTestCase(TestCase):
             version_name='v1.0.0-pre',
             previous_version='0.1.0-pre',
             previous_version_name='v0.1.0-pre',
-            has_changes=True
+            tag_created=True
         )
 
         args_breaking_beta = ActionInputs(
@@ -1714,7 +1714,7 @@ class TwoVersionTestCase(TestCase):
             version_name='v1.0.0-beta',
             previous_version='0.1.0-beta',
             previous_version_name='v0.1.0-beta',
-            has_changes=True
+            tag_created=True
         )
 
         args_breaking_prod = ActionInputs(
@@ -1729,7 +1729,7 @@ class TwoVersionTestCase(TestCase):
             version_name='v1.0.0',
             previous_version='0.1.0',
             previous_version_name='v0.1.0',
-            has_changes=True
+            tag_created=True
         )
 
         # Act
@@ -1800,7 +1800,7 @@ class TwoVersionTestCase(TestCase):
             version_name='v1.0.0-pre',
             previous_version='',
             previous_version_name='',
-            has_changes=True
+            tag_created=True
         )
 
         args_breaking_beta = ActionInputs(
@@ -1815,7 +1815,7 @@ class TwoVersionTestCase(TestCase):
             version_name='v1.0.0-beta',
             previous_version='',
             previous_version_name='',
-            has_changes=True
+            tag_created=True
         )
 
         args_breaking_prod = ActionInputs(
@@ -1830,7 +1830,7 @@ class TwoVersionTestCase(TestCase):
             version_name='v1.0.0',
             previous_version='',
             previous_version_name='',
-            has_changes=True
+            tag_created=True
         )
 
         # Chore
@@ -1846,7 +1846,7 @@ class TwoVersionTestCase(TestCase):
             version_name='v1.0.0-pre',
             previous_version='',
             previous_version_name='',
-            has_changes=False
+            tag_created=False
         )
 
         args_chore_beta = ActionInputs(
@@ -1861,7 +1861,7 @@ class TwoVersionTestCase(TestCase):
             version_name='v1.0.0-beta',
             previous_version='',
             previous_version_name='',
-            has_changes=False
+            tag_created=False
         )
 
         args_chore_prod = ActionInputs(
@@ -1876,7 +1876,7 @@ class TwoVersionTestCase(TestCase):
             version_name='v1.0.0',
             previous_version='',
             previous_version_name='',
-            has_changes=False
+            tag_created=False
         )
 
         # Act
@@ -1947,7 +1947,7 @@ class TwoVersionTestCase(TestCase):
             version_name='v1.0.0-pre',
             previous_version='',
             previous_version_name='',
-            has_changes=True
+            tag_created=True
         )
 
         args_breaking_beta = ActionInputs(
@@ -1962,7 +1962,7 @@ class TwoVersionTestCase(TestCase):
             version_name='v1.0.0-beta',
             previous_version='',
             previous_version_name='',
-            has_changes=True
+            tag_created=True
         )
 
         args_breaking_prod = ActionInputs(
@@ -1977,7 +1977,7 @@ class TwoVersionTestCase(TestCase):
             version_name='v1.0.0',
             previous_version='',
             previous_version_name='',
-            has_changes=True
+            tag_created=True
         )
 
         # Fix
@@ -1993,7 +1993,7 @@ class TwoVersionTestCase(TestCase):
             version_name='v1.0.1-pre',
             previous_version='1.0.0-pre',
             previous_version_name='v1.0.0-pre',
-            has_changes=True
+            tag_created=True
         )
 
         args_fix_beta = ActionInputs(
@@ -2008,7 +2008,7 @@ class TwoVersionTestCase(TestCase):
             version_name='v1.0.1-beta',
             previous_version='1.0.0-beta',
             previous_version_name='v1.0.0-beta',
-            has_changes=True
+            tag_created=True
         )
 
         args_fix_prod = ActionInputs(
@@ -2023,7 +2023,7 @@ class TwoVersionTestCase(TestCase):
             version_name='v1.0.1',
             previous_version='1.0.0',
             previous_version_name='v1.0.0',
-            has_changes=True
+            tag_created=True
         )
 
         # Act
@@ -2094,7 +2094,7 @@ class TwoVersionTestCase(TestCase):
             version_name='v1.0.0-pre',
             previous_version='',
             previous_version_name='',
-            has_changes=True
+            tag_created=True
         )
 
         args_breaking_beta = ActionInputs(
@@ -2109,7 +2109,7 @@ class TwoVersionTestCase(TestCase):
             version_name='v1.0.0-beta',
             previous_version='',
             previous_version_name='',
-            has_changes=True
+            tag_created=True
         )
 
         args_breaking_prod = ActionInputs(
@@ -2124,7 +2124,7 @@ class TwoVersionTestCase(TestCase):
             version_name='v1.0.0',
             previous_version='',
             previous_version_name='',
-            has_changes=True
+            tag_created=True
         )
 
         # Feature
@@ -2140,7 +2140,7 @@ class TwoVersionTestCase(TestCase):
             version_name='v1.1.0-pre',
             previous_version='1.0.0-pre',
             previous_version_name='v1.0.0-pre',
-            has_changes=True
+            tag_created=True
         )
 
         args_feat_beta = ActionInputs(
@@ -2155,7 +2155,7 @@ class TwoVersionTestCase(TestCase):
             version_name='v1.1.0-beta',
             previous_version='1.0.0-beta',
             previous_version_name='v1.0.0-beta',
-            has_changes=True
+            tag_created=True
         )
 
         args_feat_prod = ActionInputs(
@@ -2170,7 +2170,7 @@ class TwoVersionTestCase(TestCase):
             version_name='v1.1.0',
             previous_version='1.0.0',
             previous_version_name='v1.0.0',
-            has_changes=True
+            tag_created=True
         )
 
         # Act
@@ -2241,7 +2241,7 @@ class TwoVersionTestCase(TestCase):
             version_name='v1.0.0-pre',
             previous_version='',
             previous_version_name='',
-            has_changes=True
+            tag_created=True
         )
 
         args_breaking1_beta = ActionInputs(
@@ -2256,7 +2256,7 @@ class TwoVersionTestCase(TestCase):
             version_name='v1.0.0-beta',
             previous_version='',
             previous_version_name='',
-            has_changes=True
+            tag_created=True
         )
 
         args_breaking1_prod = ActionInputs(
@@ -2271,7 +2271,7 @@ class TwoVersionTestCase(TestCase):
             version_name='v1.0.0',
             previous_version='',
             previous_version_name='',
-            has_changes=True
+            tag_created=True
         )
 
         # Breaking 2
@@ -2287,7 +2287,7 @@ class TwoVersionTestCase(TestCase):
             version_name='v2.0.0-pre',
             previous_version='1.0.0-pre',
             previous_version_name='v1.0.0-pre',
-            has_changes=True
+            tag_created=True
         )
 
         args_breaking2_beta = ActionInputs(
@@ -2302,7 +2302,7 @@ class TwoVersionTestCase(TestCase):
             version_name='v2.0.0-beta',
             previous_version='1.0.0-beta',
             previous_version_name='v1.0.0-beta',
-            has_changes=True
+            tag_created=True
         )
 
         args_breaking2_prod = ActionInputs(
@@ -2317,7 +2317,7 @@ class TwoVersionTestCase(TestCase):
             version_name='v2.0.0',
             previous_version='1.0.0',
             previous_version_name='v1.0.0',
-            has_changes=True
+            tag_created=True
         )
 
         # Act

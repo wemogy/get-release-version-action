@@ -310,26 +310,26 @@ def get_new_version(
         if previous_version_suffix is not None:
             current_version = current_version.replace(f'-{suffix}', '', 1)
 
-    next_version, has_changes = get_next_version(repo, previous_version_tag, previous_version)
+    next_version, tag_created = get_next_version(repo, previous_version_tag, previous_version)
 
     logger.debug(
-        'current_version=%s, next_version=%s, has_changes=%s',
-        previous_version, next_version, has_changes
+        'current_version=%s, next_version=%s, tag_created=%s',
+        previous_version, next_version, tag_created
     )
 
     # Example case: No change that requires a semantic version increase
-    if not has_changes:
+    if not tag_created:
         logger.info('No changes detected, version stays the same.')
-        return current_version, next_version, has_changes
+        return current_version, next_version, tag_created
 
     # Example case: Hotfix
     if only_bump_suffix:
         logger.info('Only the suffix will be incremented.')
-        return current_version, increment_suffix(previous_version, bumping_suffix), has_changes
+        return current_version, increment_suffix(previous_version, bumping_suffix), tag_created
 
     # Example case: New Release
     logger.info('Semantic Version will be incremented.')
-    return current_version, next_version, has_changes
+    return current_version, next_version, tag_created
 
 
 def get_new_version_hash_based(
@@ -344,21 +344,21 @@ def get_new_version_hash_based(
     repo = git.Repo(os.getcwd())
     current_version = get_current_version_hash(repo, prefix, previous_version_suffix)
     next_version = repo.head.commit.hexsha[:7]
-    has_changes = current_version != next_version
+    tag_created = current_version != next_version
 
     logger.debug(
-        'current_version=%s, next_version=%s, has_changes=%s',
-        current_version, next_version, has_changes
+        'current_version=%s, next_version=%s, tag_created=%s',
+        current_version, next_version, tag_created
     )
 
     # Example case: No change that requires a semantic version increase
-    if not has_changes:
+    if not tag_created:
         logger.info('No changes detected, version stays the same.')
-        return current_version, next_version, has_changes
+        return current_version, next_version, tag_created
 
     # Example case: New Release
     logger.info('Hash based version will be incremented.')
-    return current_version, next_version, has_changes
+    return current_version, next_version, tag_created
 
 
 def main() -> None:
@@ -449,12 +449,12 @@ def main() -> None:
     # endregion
 
     if args.mode == 'hash-based':
-        previous_version, new_version, has_changes = get_new_version_hash_based(
+        previous_version, new_version, tag_created = get_new_version_hash_based(
             args.prefix,
             args.previous_version_suffix
         )
     else:
-        previous_version, new_version, has_changes = get_new_version(
+        previous_version, new_version, tag_created = get_new_version(
             args.prefix,
             args.suffix,
             args.previous_version_suffix,
@@ -477,7 +477,7 @@ def main() -> None:
     new_version_tag_name = f'{args.prefix}{new_version}'
     previous_version_tag_name = f'{args.prefix}{previous_version}' if previous_version else ''
 
-    if args.create_tag and (has_changes or (previous_version != new_version)):
+    if args.create_tag and (tag_created or (previous_version is not None and previous_version != new_version)):
         create_tag(new_version_tag_name)
 
     # clear the output to ensure that it is empty
@@ -487,7 +487,7 @@ def main() -> None:
     set_github_output('version-name', new_version_tag_name)
     set_github_output('previous-version', previous_version or '')
     set_github_output('previous-version-name', previous_version_tag_name)
-    set_github_output('has-changes', str(has_changes).lower())
+    set_github_output('tag-created', str(tag_created).lower())
 
     print_github_actions_output()
 

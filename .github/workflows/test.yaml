@@ -27,7 +27,7 @@ jobs:
           echo "version-name=${{ steps.get-release-version.outputs.version-name }}"
           echo "previous-version=${{ steps.get-release-version.outputs.previous-version }}"
           echo "previous-version-name=${{ steps.get-release-version.outputs.previous-version-name }}"
-          echo "has-changes=${{ steps.get-release-version.outputs.has-changes }}"
+          echo "tag-created=${{ steps.get-release-version.outputs.tag-created }}"
 
   run-tests:
     runs-on: ubuntu-latest
