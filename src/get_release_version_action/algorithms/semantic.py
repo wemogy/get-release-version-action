@@ -227,7 +227,7 @@ def get_next_version(inputs: Inputs, repo: git.Repo) -> GetNextVersionOutput:
         logger.info('Only the suffix will be incremented.')
         return (
             current_version_tag_name,
-            str(Version.parse(reference_version or '0.0.0').bump_prerelease(inputs.suffix)),
+            str(Version.parse(reference_version or '0.0.0').bump_prerelease(inputs.bumping_suffix)),
             version_bumped
         )
 
