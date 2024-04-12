@@ -33,7 +33,7 @@ class ActionInputs:
     suffix: str = ''
     """The suffix that should be appended to the version (e.g. `beta`)."""
 
-    previous_version_suffix: str = ''
+    reference_version_suffix: str = ''
     """The suffix that should be replaced with the value in `suffix` (e.g. `dev`)."""
 
     bumping_suffix: str = 'hotfix'

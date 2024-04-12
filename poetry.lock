@@ -658,6 +658,16 @@ files = [
 typing-extensions = ">=4.6.0,<4.7.0 || >4.7.0"
 
 [[package]]
+name = "pydevd-pycharm"
+version = "241.14494.241"
+description = "PyCharm Debugger (used in PyCharm and PyDev)"
+optional = false
+python-versions = "*"
+files = [
+    {file = "pydevd-pycharm-241.14494.241.tar.gz", hash = "sha256:01a2444fe04056ea21254a24df388528b5fcea5180ed9642722a13ab2e4ce570"},
+]
+
+[[package]]
 name = "pyflakes"
 version = "3.2.0"
 description = "passive checker of Python programs"
@@ -976,4 +986,4 @@ zstd = ["zstandard (>=0.18.0)"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.12"
-content-hash = "31eeca8fa7df1f3e6f4d8d490c56ac6926212e325d7aeebe7d6e9815e84c80be"
+content-hash = "e7c218d7e1651409e68d3293b90a4e028528a31673c5dc43e40c52f28e83fa7e"
