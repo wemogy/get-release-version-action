@@ -121,21 +121,64 @@ def run_command(*command: str | bytes | os.PathLike[str] | os.PathLike[bytes]) -
     return process.stdout
 
 
-def get_current_version_tag(repo: git.Repo, prefix: str, suffix: str | None, bumping_suffix: str) -> git.TagReference | None:
+def get_current_version_tag(
+        repo: git.Repo,
+        prefix: str,
+        suffix: str | None,
+        bumping_suffix: str,
+        reference_version_suffix: str | None
+) -> git.TagReference | None:
     """
     Get the current version (= the latest git tag).
     If there are no tags, return None.
     """
     # Reverse the list of tags to start with the most recent one
     for tag in sorted(repo.tags, key=lambda t: t.commit.committed_datetime, reverse=True):
-        # Check if the tag name starts with the specified prefix and,
-        # if the suffix is not None, if the suffix is in the tag name,
-        # else check if no suffix other than the bumping suffix is in the tag name.
-        if tag.name.startswith(prefix) and \
-            (suffix is None or suffix in tag.name) and \
-                (suffix is not None or '-' not in tag.name.replace(f'-{bumping_suffix}', '')):
-            logger.debug('Found tag %s (%s) with prefix "%s" and suffix "%s"',
-                         tag.name, tag.commit.hexsha, prefix, suffix)
+        if not tag.name.startswith(prefix):
+            continue
+
+        if reference_version_suffix is None:
+            if suffix is None:
+                dash_count = tag.name.count('-')
+
+                if bumping_suffix in tag.name and dash_count == 1:
+                    logger.debug(
+                        'Found tag %s (%s) with prefix "%s" and suffix "%s"',
+                        tag.name, tag.commit.hexsha, prefix, suffix
+                    )
+                    return tag
+
+                if dash_count == 0:
+                    logger.debug(
+                        'Found tag %s (%s) with prefix "%s" and suffix "%s"',
+                        tag.name, tag.commit.hexsha, prefix, suffix
+                    )
+                    return tag
+                continue
+
+            if suffix in tag.name:
+                logger.debug(
+                    'Found tag %s (%s) with prefix "%s" and suffix "%s"',
+                    tag.name, tag.commit.hexsha, prefix, suffix
+                )
+                return tag
+
+            continue
+
+        # Check if not bumped version is of reference version suffix
+        if tag.name.endswith(reference_version_suffix):
+            logger.debug(
+                'Found tag %s (%s) with prefix "%s" and suffix "%s"',
+                tag.name, tag.commit.hexsha, prefix, suffix
+            )
+            return tag
+
+        # Check if bumped version is from current suffix
+        if f'{suffix or ''}-{bumping_suffix}' in tag.name:
+            logger.debug(
+                'Found tag %s (%s) with prefix "%s" and suffix "%s"',
+                tag.name, tag.commit.hexsha, prefix, suffix
+            )
             return tag
 
     logger.debug('Found no tags that have the prefix "%s" and suffix "%s"', prefix, suffix)
@@ -293,11 +336,11 @@ def get_new_version(
     repo = git.Repo(os.getcwd())
     # Previous version is the latest version that was made, possibly on another branch / channel.
     # It is used to get the next version.
-    reference_version_tag = get_current_version_tag(repo, prefix, reference_version_suffix, bumping_suffix)
+    reference_version_tag = get_current_version_tag(repo, prefix, suffix, bumping_suffix, reference_version_suffix)
 
     # Current version is the latest version on this branch / channel.
     # This is the version returned as previous version at the end of the script.
-    current_version_tag = get_current_version_tag(repo, prefix, suffix, bumping_suffix)
+    current_version_tag = get_current_version_tag(repo, prefix, suffix, bumping_suffix, None)
     current_version_tag_name = current_version_tag.name if current_version_tag is not None else None
 
     if reference_version_tag is None:
@@ -306,6 +349,8 @@ def get_new_version(
         reference_version = reference_version_tag.name.removeprefix(prefix)
         if reference_version_suffix is not None:
             reference_version = reference_version.replace(f'-{reference_version_suffix}', '', 1)
+        else:
+            reference_version = reference_version.replace(f'-{suffix}', '', 1)
 
     next_version, version_bumped = get_next_version_from_commits(repo, reference_version_tag, reference_version)
 

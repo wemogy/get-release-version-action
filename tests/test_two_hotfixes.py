@@ -27,7 +27,7 @@ class TwoHotfixesTestCase(TestCase):
         args_fix_release = ActionInputs(
             prefix='v',
             suffix='pre',
-            reference_version_suffix='pre',
+            reference_version_suffix='',
             create_tag=True
         )
 
@@ -73,7 +73,7 @@ class TwoHotfixesTestCase(TestCase):
         args_hotfix1_release = ActionInputs(
             prefix='v',
             suffix='pre',
-            reference_version_suffix='pre',
+            reference_version_suffix='',
             bumping_suffix='hotfix',
             only_bump_suffix=True,
             create_tag=True
@@ -125,7 +125,7 @@ class TwoHotfixesTestCase(TestCase):
         args_hotfix2_release = ActionInputs(
             prefix='v',
             suffix='pre',
-            reference_version_suffix='pre',
+            reference_version_suffix='',
             bumping_suffix='hotfix',
             only_bump_suffix=True,
             create_tag=True
@@ -259,7 +259,7 @@ class TwoHotfixesTestCase(TestCase):
         args_feat_release = ActionInputs(
             prefix='v',
             suffix='pre',
-            reference_version_suffix='pre',
+            reference_version_suffix='',
             create_tag=True
         )
 
@@ -305,7 +305,7 @@ class TwoHotfixesTestCase(TestCase):
         args_hotfix1_release = ActionInputs(
             prefix='v',
             suffix='pre',
-            reference_version_suffix='pre',
+            reference_version_suffix='',
             bumping_suffix='hotfix',
             only_bump_suffix=True,
             create_tag=True
@@ -357,7 +357,7 @@ class TwoHotfixesTestCase(TestCase):
         args_hotfix2_release = ActionInputs(
             prefix='v',
             suffix='pre',
-            reference_version_suffix='pre',
+            reference_version_suffix='',
             bumping_suffix='hotfix',
             only_bump_suffix=True,
             create_tag=True
@@ -491,7 +491,7 @@ class TwoHotfixesTestCase(TestCase):
         args_breaking_release = ActionInputs(
             prefix='v',
             suffix='pre',
-            reference_version_suffix='pre',
+            reference_version_suffix='',
             create_tag=True
         )
 
@@ -537,7 +537,7 @@ class TwoHotfixesTestCase(TestCase):
         args_hotfix1_release = ActionInputs(
             prefix='v',
             suffix='pre',
-            reference_version_suffix='pre',
+            reference_version_suffix='',
             bumping_suffix='hotfix',
             only_bump_suffix=True,
             create_tag=True
@@ -589,7 +589,7 @@ class TwoHotfixesTestCase(TestCase):
         args_hotfix2_release = ActionInputs(
             prefix='v',
             suffix='pre',
-            reference_version_suffix='pre',
+            reference_version_suffix='',
             bumping_suffix='hotfix',
             only_bump_suffix=True,
             create_tag=True

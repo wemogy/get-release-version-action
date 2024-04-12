@@ -26,7 +26,7 @@ class OneCommitTestCase(TestCase):
         args_release = ActionInputs(
             prefix='v',
             suffix='pre',
-            reference_version_suffix='pre',
+            reference_version_suffix='',
             create_tag=True
         )
 
@@ -97,7 +97,7 @@ class OneCommitTestCase(TestCase):
         args_release = ActionInputs(
             prefix='v',
             suffix='pre',
-            reference_version_suffix='pre',
+            reference_version_suffix='',
             create_tag=True
         )
 
@@ -170,7 +170,7 @@ class OneCommitTestCase(TestCase):
         args_release = ActionInputs(
             prefix='v',
             suffix='pre',
-            reference_version_suffix='pre',
+            reference_version_suffix='',
             create_tag=True
         )
 
@@ -243,7 +243,7 @@ class OneCommitTestCase(TestCase):
         args_release = ActionInputs(
             prefix='v',
             suffix='pre',
-            reference_version_suffix='pre',
+            reference_version_suffix='',
             create_tag=True
         )
 
@@ -316,7 +316,7 @@ class OneCommitTestCase(TestCase):
         args_release = ActionInputs(
             prefix='v',
             suffix='pre',
-            reference_version_suffix='pre',
+            reference_version_suffix='',
             create_tag=True
         )
 

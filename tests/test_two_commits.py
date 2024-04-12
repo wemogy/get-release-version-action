@@ -26,7 +26,7 @@ class TwoCommitsTestCase(TestCase):
         args_release = ActionInputs(
             prefix='v',
             suffix='pre',
-            reference_version_suffix='pre',
+            reference_version_suffix='',
             create_tag=True
         )
 
@@ -100,7 +100,7 @@ class TwoCommitsTestCase(TestCase):
         args_release = ActionInputs(
             prefix='v',
             suffix='pre',
-            reference_version_suffix='pre',
+            reference_version_suffix='',
             create_tag=True
         )
 
@@ -174,7 +174,7 @@ class TwoCommitsTestCase(TestCase):
         args_release = ActionInputs(
             prefix='v',
             suffix='pre',
-            reference_version_suffix='pre',
+            reference_version_suffix='',
             create_tag=True
         )
 
@@ -248,7 +248,7 @@ class TwoCommitsTestCase(TestCase):
         args_release = ActionInputs(
             prefix='v',
             suffix='pre',
-            reference_version_suffix='pre',
+            reference_version_suffix='',
             create_tag=True
         )
 
@@ -322,7 +322,7 @@ class TwoCommitsTestCase(TestCase):
         args_release = ActionInputs(
             prefix='v',
             suffix='pre',
-            reference_version_suffix='pre',
+            reference_version_suffix='',
             create_tag=True
         )
 
@@ -396,7 +396,7 @@ class TwoCommitsTestCase(TestCase):
         args_release = ActionInputs(
             prefix='v',
             suffix='pre',
-            reference_version_suffix='pre',
+            reference_version_suffix='',
             create_tag=True
         )
 
@@ -470,7 +470,7 @@ class TwoCommitsTestCase(TestCase):
         args_release = ActionInputs(
             prefix='v',
             suffix='pre',
-            reference_version_suffix='pre',
+            reference_version_suffix='',
             create_tag=True
         )
         expected_output_release = ActionOutputs(
@@ -543,7 +543,7 @@ class TwoCommitsTestCase(TestCase):
         args_release = ActionInputs(
             prefix='v',
             suffix='pre',
-            reference_version_suffix='pre',
+            reference_version_suffix='',
             create_tag=True
         )
 
@@ -617,7 +617,7 @@ class TwoCommitsTestCase(TestCase):
         args_release = ActionInputs(
             prefix='v',
             suffix='pre',
-            reference_version_suffix='pre',
+            reference_version_suffix='',
             create_tag=True
         )
 
@@ -691,7 +691,7 @@ class TwoCommitsTestCase(TestCase):
         args_release = ActionInputs(
             prefix='v',
             suffix='pre',
-            reference_version_suffix='pre',
+            reference_version_suffix='',
             create_tag=True
         )
 
@@ -765,7 +765,7 @@ class TwoCommitsTestCase(TestCase):
         args_release = ActionInputs(
             prefix='v',
             suffix='pre',
-            reference_version_suffix='pre',
+            reference_version_suffix='',
             create_tag=True
         )
         expected_output_release = ActionOutputs(
@@ -838,7 +838,7 @@ class TwoCommitsTestCase(TestCase):
         args_release = ActionInputs(
             prefix='v',
             suffix='pre',
-            reference_version_suffix='pre',
+            reference_version_suffix='',
             create_tag=True
         )
 
@@ -912,7 +912,7 @@ class TwoCommitsTestCase(TestCase):
         args_release = ActionInputs(
             prefix='v',
             suffix='pre',
-            reference_version_suffix='pre',
+            reference_version_suffix='',
             create_tag=True
         )
 
@@ -986,7 +986,7 @@ class TwoCommitsTestCase(TestCase):
         args_release = ActionInputs(
             prefix='v',
             suffix='pre',
-            reference_version_suffix='pre',
+            reference_version_suffix='',
             create_tag=True
         )
 
@@ -1060,7 +1060,7 @@ class TwoCommitsTestCase(TestCase):
         args_release = ActionInputs(
             prefix='v',
             suffix='pre',
-            reference_version_suffix='pre',
+            reference_version_suffix='',
             create_tag=True
         )
         expected_output_release = ActionOutputs(
@@ -1133,7 +1133,7 @@ class TwoCommitsTestCase(TestCase):
         args_release = ActionInputs(
             prefix='v',
             suffix='pre',
-            reference_version_suffix='pre',
+            reference_version_suffix='',
             create_tag=True
         )
 
