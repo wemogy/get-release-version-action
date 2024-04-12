@@ -13,5 +13,5 @@ runs:
       uses: Gr1N/setup-poetry@v9
 
     - name: Install dependencies
-      run: poetry install --with dev
+      run: poetry install --no-root --no-interaction --with dev
       shell: bash

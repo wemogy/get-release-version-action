@@ -1,5 +1,4 @@
 [tool.poetry]
-package-mode = false
 name = "get-release-version-action"
 version = "5.0.0"
 description = "A GitHub Action to determine the next version by checking the commit history for conventional commits with support for hotfix changes."
@@ -10,6 +9,10 @@ readme = "README.md"
 homepage = "https://github.com/wemogy/get-release-version-action"
 repository = "https://github.com/wemogy/get-release-version-action"
 documentation = "https://github.com/wemogy/get-release-version-action"
+
+[[tool.poetry.packages]]
+include = "get_release_version_action"
+from = "src"
 
 [tool.poetry.dependencies]
 python = "^3.12"

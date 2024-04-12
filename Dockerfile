@@ -17,7 +17,7 @@ RUN $POETRY_VENV/bin/python -m pip install poetry==${POETRY_VERSION}
 # Add Poetry to the PATH
 ENV PATH="${PATH}:${POETRY_VENV}/bin"
 
-RUN poetry -C /action install --no-interaction --no-cache --without dev
+RUN poetry -C /action install --no-root --no-interaction --no-cache --without dev
 
 # Print which git
 RUN echo "which git: $(which git)"

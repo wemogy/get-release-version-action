@@ -1,9 +1,9 @@
 """Test all scenarios where two hotfixes / cherrypicks are made."""
-# pylint: disable=too-many-locals,too-many-lines,duplicate-code
+# pylint: disable=too-many-locals,too-many-lines,duplicate-code,too-many-statements
 import unittest
 from unittest import TestCase
 
-from utils import ActionInputs, ActionOutputs, CommitMessages, TestRepo, run_action, setup_logging
+from test_utils import ActionInputs, ActionOutputs, CommitMessages, TestRepo, run_action, setup_logging
 
 
 class TwoHotfixesTestCase(TestCase):
@@ -27,7 +27,7 @@ class TwoHotfixesTestCase(TestCase):
         args_fix_release = ActionInputs(
             prefix='v',
             suffix='pre',
-            reference_version_suffix='',
+            reference_version_suffix=None,
             create_tag=True
         )
 
@@ -56,7 +56,7 @@ class TwoHotfixesTestCase(TestCase):
 
         args_fix_prod = ActionInputs(
             prefix='v',
-            suffix='',
+            suffix=None,
             reference_version_suffix='beta',
             create_tag=True
         )
@@ -73,7 +73,7 @@ class TwoHotfixesTestCase(TestCase):
         args_hotfix1_release = ActionInputs(
             prefix='v',
             suffix='pre',
-            reference_version_suffix='',
+            reference_version_suffix=None,
             bumping_suffix='hotfix',
             only_bump_suffix=True,
             create_tag=True
@@ -106,7 +106,7 @@ class TwoHotfixesTestCase(TestCase):
 
         args_hotfix1_prod = ActionInputs(
             prefix='v',
-            suffix='',
+            suffix=None,
             reference_version_suffix='beta',
             bumping_suffix='hotfix',
             only_bump_suffix=True,
@@ -125,7 +125,7 @@ class TwoHotfixesTestCase(TestCase):
         args_hotfix2_release = ActionInputs(
             prefix='v',
             suffix='pre',
-            reference_version_suffix='',
+            reference_version_suffix=None,
             bumping_suffix='hotfix',
             only_bump_suffix=True,
             create_tag=True
@@ -158,7 +158,7 @@ class TwoHotfixesTestCase(TestCase):
 
         args_hotfix2_prod = ActionInputs(
             prefix='v',
-            suffix='',
+            suffix=None,
             reference_version_suffix='beta',
             bumping_suffix='hotfix',
             only_bump_suffix=True,
@@ -259,7 +259,7 @@ class TwoHotfixesTestCase(TestCase):
         args_feat_release = ActionInputs(
             prefix='v',
             suffix='pre',
-            reference_version_suffix='',
+            reference_version_suffix=None,
             create_tag=True
         )
 
@@ -288,7 +288,7 @@ class TwoHotfixesTestCase(TestCase):
 
         args_feat_prod = ActionInputs(
             prefix='v',
-            suffix='',
+            suffix=None,
             reference_version_suffix='beta',
             create_tag=True
         )
@@ -305,7 +305,7 @@ class TwoHotfixesTestCase(TestCase):
         args_hotfix1_release = ActionInputs(
             prefix='v',
             suffix='pre',
-            reference_version_suffix='',
+            reference_version_suffix=None,
             bumping_suffix='hotfix',
             only_bump_suffix=True,
             create_tag=True
@@ -338,7 +338,7 @@ class TwoHotfixesTestCase(TestCase):
 
         args_hotfix1_prod = ActionInputs(
             prefix='v',
-            suffix='',
+            suffix=None,
             reference_version_suffix='beta',
             bumping_suffix='hotfix',
             only_bump_suffix=True,
@@ -357,7 +357,7 @@ class TwoHotfixesTestCase(TestCase):
         args_hotfix2_release = ActionInputs(
             prefix='v',
             suffix='pre',
-            reference_version_suffix='',
+            reference_version_suffix=None,
             bumping_suffix='hotfix',
             only_bump_suffix=True,
             create_tag=True
@@ -390,7 +390,7 @@ class TwoHotfixesTestCase(TestCase):
 
         args_hotfix2_prod = ActionInputs(
             prefix='v',
-            suffix='',
+            suffix=None,
             reference_version_suffix='beta',
             bumping_suffix='hotfix',
             only_bump_suffix=True,
@@ -491,7 +491,7 @@ class TwoHotfixesTestCase(TestCase):
         args_breaking_release = ActionInputs(
             prefix='v',
             suffix='pre',
-            reference_version_suffix='',
+            reference_version_suffix=None,
             create_tag=True
         )
 
@@ -520,7 +520,7 @@ class TwoHotfixesTestCase(TestCase):
 
         args_breaking_prod = ActionInputs(
             prefix='v',
-            suffix='',
+            suffix=None,
             reference_version_suffix='beta',
             create_tag=True
         )
@@ -537,7 +537,7 @@ class TwoHotfixesTestCase(TestCase):
         args_hotfix1_release = ActionInputs(
             prefix='v',
             suffix='pre',
-            reference_version_suffix='',
+            reference_version_suffix=None,
             bumping_suffix='hotfix',
             only_bump_suffix=True,
             create_tag=True
@@ -570,7 +570,7 @@ class TwoHotfixesTestCase(TestCase):
 
         args_hotfix1_prod = ActionInputs(
             prefix='v',
-            suffix='',
+            suffix=None,
             reference_version_suffix='beta',
             bumping_suffix='hotfix',
             only_bump_suffix=True,
@@ -589,7 +589,7 @@ class TwoHotfixesTestCase(TestCase):
         args_hotfix2_release = ActionInputs(
             prefix='v',
             suffix='pre',
-            reference_version_suffix='',
+            reference_version_suffix=None,
             bumping_suffix='hotfix',
             only_bump_suffix=True,
             create_tag=True
@@ -622,7 +622,7 @@ class TwoHotfixesTestCase(TestCase):
 
         args_hotfix2_prod = ActionInputs(
             prefix='v',
-            suffix='',
+            suffix=None,
             reference_version_suffix='beta',
             bumping_suffix='hotfix',
             only_bump_suffix=True,
