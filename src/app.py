@@ -293,46 +293,40 @@ def get_new_version(
     repo = git.Repo(os.getcwd())
     # Previous version is the latest version that was made, possibly on another branch / channel.
     # It is used to get the next version.
-    previous_version_tag = get_current_version_tag(repo, prefix, reference_version_suffix, bumping_suffix)
+    reference_version_tag = get_current_version_tag(repo, prefix, reference_version_suffix, bumping_suffix)
 
     # Current version is the latest version on this branch / channel.
     # This is the version returned as previous version at the end of the script.
     current_version_tag = get_current_version_tag(repo, prefix, suffix, bumping_suffix)
+    current_version_tag_name = current_version_tag.name if current_version_tag is not None else None
 
-    if previous_version_tag is None:
-        previous_version: str | None = None
+    if reference_version_tag is None:
+        reference_version: str | None = None
     else:
-        previous_version = previous_version_tag.name.removeprefix(prefix)
+        reference_version = reference_version_tag.name.removeprefix(prefix)
         if reference_version_suffix is not None:
-            previous_version = previous_version.replace(f'-{reference_version_suffix}', '', 1)
+            reference_version = reference_version.replace(f'-{reference_version_suffix}', '', 1)
 
-    if current_version_tag is None:
-        current_version: str | None = None
-    else:
-        current_version = current_version_tag.name.removeprefix(prefix)
-        if reference_version_suffix is not None:
-            current_version = current_version.replace(f'-{suffix}', '', 1)
-
-    next_version, version_bumped = get_next_version_from_commits(repo, previous_version_tag, previous_version)
+    next_version, version_bumped = get_next_version_from_commits(repo, reference_version_tag, reference_version)
 
     logger.debug(
         'current_version=%s, next_version=%s, version_bumped=%s',
-        previous_version, next_version, version_bumped
+        reference_version, next_version, version_bumped
     )
 
     # Example case: No change that requires a semantic version increase
     if not version_bumped:
         logger.info('No changes detected, version stays the same.')
-        return current_version, next_version, version_bumped
+        return current_version_tag_name, next_version, version_bumped
 
     # Example case: Hotfix
     if only_bump_suffix:
         logger.info('Only the suffix will be incremented.')
-        return current_version, increment_suffix(previous_version, bumping_suffix), version_bumped
+        return current_version_tag_name, increment_suffix(reference_version, bumping_suffix), version_bumped
 
     # Example case: New Release
     logger.info('Semantic Version will be incremented.')
-    return current_version, next_version, version_bumped
+    return current_version_tag_name, next_version, version_bumped
 
 
 def get_new_version_hash_based(
@@ -452,24 +446,18 @@ def main() -> None:
     # endregion
 
     if args.mode == 'hash-based':
-        previous_version, new_version, version_bumped = get_new_version_hash_based(
+        previous_version_tag_name, new_version, version_bumped = get_new_version_hash_based(
             args.prefix,
             args.reference_version_suffix
         )
     else:
-        previous_version, new_version, version_bumped = get_new_version(
+        previous_version_tag_name, new_version, version_bumped = get_new_version(
             args.prefix,
             args.suffix,
             args.reference_version_suffix,
             args.bumping_suffix,
             args.only_bump_suffix
         )
-
-    if args.reference_version_suffix is not None and previous_version is not None:
-        if '-' in previous_version:
-            previous_version = previous_version.replace('-', f'-{args.reference_version_suffix}-', 1)
-        else:
-            previous_version += f'-{args.reference_version_suffix}'
 
     if args.suffix is not None:
         if '-' in new_version:
@@ -478,9 +466,8 @@ def main() -> None:
             new_version += f'-{args.suffix}'
 
     new_version_tag_name = f'{args.prefix}{new_version}'
-    previous_version_tag_name = f'{args.prefix}{previous_version}' if previous_version else ''
 
-    new_tag_needed = (version_bumped or ('0.0.0' not in new_version and previous_version != new_version))
+    new_tag_needed = (version_bumped or ('0.0.0' not in new_version_tag_name and previous_version_tag_name != new_version_tag_name))
 
     if args.create_tag and new_tag_needed:
         create_tag(new_version_tag_name)
@@ -490,8 +477,8 @@ def main() -> None:
 
     set_github_output('version', new_version)
     set_github_output('version-name', new_version_tag_name)
-    set_github_output('previous-version', previous_version or '')
-    set_github_output('previous-version-name', previous_version_tag_name)
+    set_github_output('previous-version', (previous_version_tag_name or '').removeprefix(args.prefix))
+    set_github_output('previous-version-name', previous_version_tag_name or '')
     set_github_output('tag-created', str(new_tag_needed).lower())
 
     print_github_actions_output()

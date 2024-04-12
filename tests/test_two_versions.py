@@ -671,8 +671,8 @@ class TwoVersionTestCase(TestCase):
         expected_output_chore_release = ActionOutputs(
             version='0.0.1-pre',
             version_name='v0.0.1-pre',
-            previous_version='',
-            previous_version_name='',
+            previous_version='0.0.1-pre',
+            previous_version_name='v0.0.1-pre',
             tag_created=False
         )
 
@@ -686,8 +686,8 @@ class TwoVersionTestCase(TestCase):
         expected_output_chore_beta = ActionOutputs(
             version='0.0.1-beta',
             version_name='v0.0.1-beta',
-            previous_version='',
-            previous_version_name='',
+            previous_version='0.0.1-beta',
+            previous_version_name='v0.0.1-beta',
             tag_created=False
         )
 
@@ -701,8 +701,8 @@ class TwoVersionTestCase(TestCase):
         expected_output_chore_prod = ActionOutputs(
             version='0.0.1',
             version_name='v0.0.1',
-            previous_version='',
-            previous_version_name='',
+            previous_version='0.0.1',
+            previous_version_name='v0.0.1',
             tag_created=False
         )
 
@@ -751,10 +751,10 @@ class TwoVersionTestCase(TestCase):
 
         # Chore
         self.assertEqual(expected_output_chore_release, actual_output_chore_release)
-        self.assertEqual(expected_output_fix_release.version_name, tag_chore_release)
+        self.assertEqual(expected_output_fix_prod.version_name, tag_chore_release)
 
         self.assertEqual(expected_output_chore_beta, actual_output_chore_beta)
-        self.assertEqual(expected_output_fix_beta.version_name, tag_chore_beta)
+        self.assertEqual(expected_output_fix_prod.version_name, tag_chore_beta)
 
         self.assertEqual(expected_output_chore_prod, actual_output_chore_prod)
         self.assertEqual(expected_output_fix_prod.version_name, tag_chore_prod)
@@ -871,6 +871,7 @@ class TwoVersionTestCase(TestCase):
         tag_fix1_prod = self.repo.get_latest_tag_name()
 
         # Fix 2
+        self.repo.checkout('main')
         self.repo.commit(CommitMessages.FIX)
 
         self.repo.merge('main', 'release')
@@ -1018,6 +1019,7 @@ class TwoVersionTestCase(TestCase):
         tag_fix_prod = self.repo.get_latest_tag_name()
 
         # Feature
+        self.repo.checkout('main')
         self.repo.commit(CommitMessages.FEATURE)
 
         self.repo.merge('main', 'release')
@@ -1165,6 +1167,7 @@ class TwoVersionTestCase(TestCase):
         tag_fix_prod = self.repo.get_latest_tag_name()
 
         # Breaking
+        self.repo.checkout('main')
         self.repo.commit(CommitMessages.BREAKING_FEATURE)
 
         self.repo.merge('main', 'release')
@@ -1260,8 +1263,8 @@ class TwoVersionTestCase(TestCase):
         expected_output_chore_release = ActionOutputs(
             version='0.1.0-pre',
             version_name='v0.1.0-pre',
-            previous_version='',
-            previous_version_name='',
+            previous_version='0.1.0-pre',
+            previous_version_name='v0.1.0-pre',
             tag_created=False
         )
 
@@ -1275,8 +1278,8 @@ class TwoVersionTestCase(TestCase):
         expected_output_chore_beta = ActionOutputs(
             version='0.1.0-beta',
             version_name='v0.1.0-beta',
-            previous_version='',
-            previous_version_name='',
+            previous_version='0.1.0-beta',
+            previous_version_name='v0.1.0-beta',
             tag_created=False
         )
 
@@ -1290,8 +1293,8 @@ class TwoVersionTestCase(TestCase):
         expected_output_chore_prod = ActionOutputs(
             version='0.1.0',
             version_name='v0.1.0',
-            previous_version='',
-            previous_version_name='',
+            previous_version='0.1.0',
+            previous_version_name='v0.1.0',
             tag_created=False
         )
 
@@ -1312,6 +1315,7 @@ class TwoVersionTestCase(TestCase):
         tag_feat_prod = self.repo.get_latest_tag_name()
 
         # Chore
+        self.repo.checkout('main')
         self.repo.commit(CommitMessages.CHORE)
 
         self.repo.merge('main', 'release')
@@ -1339,10 +1343,10 @@ class TwoVersionTestCase(TestCase):
 
         # Chore
         self.assertEqual(expected_output_chore_release, actual_output_chore_release)
-        self.assertEqual(expected_output_feat_release.version_name, tag_chore_release)
+        self.assertEqual(expected_output_feat_prod.version_name, tag_chore_release)
 
         self.assertEqual(expected_output_chore_beta, actual_output_chore_beta)
-        self.assertEqual(expected_output_feat_beta.version_name, tag_chore_beta)
+        self.assertEqual(expected_output_feat_prod.version_name, tag_chore_beta)
 
         self.assertEqual(expected_output_chore_prod, actual_output_chore_prod)
         self.assertEqual(expected_output_feat_prod.version_name, tag_chore_prod)
@@ -1459,6 +1463,7 @@ class TwoVersionTestCase(TestCase):
         tag_feat_prod = self.repo.get_latest_tag_name()
 
         # Fix
+        self.repo.checkout('main')
         self.repo.commit(CommitMessages.FIX)
 
         self.repo.merge('main', 'release')
@@ -1606,6 +1611,7 @@ class TwoVersionTestCase(TestCase):
         tag_feat1_prod = self.repo.get_latest_tag_name()
 
         # Feature 2
+        self.repo.checkout('main')
         self.repo.commit(CommitMessages.FEATURE)
 
         self.repo.merge('main', 'release')
@@ -1753,6 +1759,7 @@ class TwoVersionTestCase(TestCase):
         tag_feat_prod = self.repo.get_latest_tag_name()
 
         # Breaking
+        self.repo.checkout('main')
         self.repo.commit(CommitMessages.BREAKING_FEATURE)
 
         self.repo.merge('main', 'release')
@@ -1848,8 +1855,8 @@ class TwoVersionTestCase(TestCase):
         expected_output_chore_release = ActionOutputs(
             version='1.0.0-pre',
             version_name='v1.0.0-pre',
-            previous_version='',
-            previous_version_name='',
+            previous_version='1.0.0-pre',
+            previous_version_name='v1.0.0-pre',
             tag_created=False
         )
 
@@ -1863,8 +1870,8 @@ class TwoVersionTestCase(TestCase):
         expected_output_chore_beta = ActionOutputs(
             version='1.0.0-beta',
             version_name='v1.0.0-beta',
-            previous_version='',
-            previous_version_name='',
+            previous_version='1.0.0-beta',
+            previous_version_name='v1.0.0-beta',
             tag_created=False
         )
 
@@ -1878,8 +1885,8 @@ class TwoVersionTestCase(TestCase):
         expected_output_chore_prod = ActionOutputs(
             version='1.0.0',
             version_name='v1.0.0',
-            previous_version='',
-            previous_version_name='',
+            previous_version='1.0.0',
+            previous_version_name='v1.0.0',
             tag_created=False
         )
 
@@ -1900,6 +1907,7 @@ class TwoVersionTestCase(TestCase):
         tag_breaking_prod = self.repo.get_latest_tag_name()
 
         # Chore
+        self.repo.checkout('main')
         self.repo.commit(CommitMessages.CHORE)
 
         self.repo.merge('main', 'release')
@@ -1927,10 +1935,10 @@ class TwoVersionTestCase(TestCase):
 
         # Chore
         self.assertEqual(expected_output_chore_release, actual_output_chore_release)
-        self.assertEqual(expected_output_breaking_release.version_name, tag_chore_release)
+        self.assertEqual(expected_output_breaking_prod.version_name, tag_chore_release)
 
         self.assertEqual(expected_output_chore_beta, actual_output_chore_beta)
-        self.assertEqual(expected_output_breaking_beta.version_name, tag_chore_beta)
+        self.assertEqual(expected_output_breaking_prod.version_name, tag_chore_beta)
 
         self.assertEqual(expected_output_chore_prod, actual_output_chore_prod)
         self.assertEqual(expected_output_breaking_prod.version_name, tag_chore_prod)
@@ -2047,6 +2055,7 @@ class TwoVersionTestCase(TestCase):
         tag_breaking_prod = self.repo.get_latest_tag_name()
 
         # Fix
+        self.repo.checkout('main')
         self.repo.commit(CommitMessages.FIX)
 
         self.repo.merge('main', 'release')
@@ -2194,6 +2203,7 @@ class TwoVersionTestCase(TestCase):
         tag_breaking_prod = self.repo.get_latest_tag_name()
 
         # Feature
+        self.repo.checkout('main')
         self.repo.commit(CommitMessages.FEATURE)
 
         self.repo.merge('main', 'release')
@@ -2341,6 +2351,7 @@ class TwoVersionTestCase(TestCase):
         tag_breaking1_prod = self.repo.get_latest_tag_name()
 
         # Breaking 2
+        self.repo.checkout('main')
         self.repo.commit(CommitMessages.BREAKING_FEATURE)
 
         self.repo.merge('main', 'release')
