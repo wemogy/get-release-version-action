@@ -173,7 +173,7 @@ docker run get-release-version-action:local
 ```bash
 # with poetry shell
 # working directory: tests
-python3 -m unittest
+pytest tests
 ```
 
 The tests are isolated from the actual source code, because they are supposed to test the same interface that the action also uses.

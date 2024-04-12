@@ -1,10 +1,12 @@
 name: Test Action
 on:
-  workflow_dispatch:
+  pull_request:
+    branches:
+      - main
   push:
 
 jobs:
-  test:
+  test-action:
     runs-on: ubuntu-latest
     name: Test the action
     steps:
@@ -13,16 +15,39 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Run
+      - name: Run the action
         id: get-release-version
         uses: ./
         with:
           create-tag: "false"
 
-      - name: Show the next version
+      - name: Print the outputs
         run: |
           echo "version=${{ steps.get-release-version.outputs.version }}"
           echo "version-name=${{ steps.get-release-version.outputs.version-name }}"
           echo "previous-version=${{ steps.get-release-version.outputs.previous-version }}"
           echo "previous-version-name=${{ steps.get-release-version.outputs.previous-version-name }}"
           echo "has-changes=${{ steps.get-release-version.outputs.has-changes }}"
+
+  run-tests:
+    runs-on: ubuntu-latest
+    name: Run E2E Tests
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: .github/actions/setup-python
+
+      - name: Run pytest
+        run: poetry run pytest --junit-xml test-result.xml tests
+
+      - name: Upload test results
+        if: always()
+        uses: pmeier/pytest-results-action@v0.6.0
+        with:
+          path: test-result.xml
+          summary: true
+          display-options: fEX
+          fail-on-empty: true
+          title: E2E Test Results
