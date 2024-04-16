@@ -42,6 +42,7 @@ class TwoVersionTestCase(TestCase):
         args_chore1_beta = ActionInputs(
             prefix='v',
             suffix='beta',
+            only_bump_suffix=True,
             reference_version_suffix='pre',
             create_tag=True
         )
@@ -57,6 +58,7 @@ class TwoVersionTestCase(TestCase):
         args_chore1_prod = ActionInputs(
             prefix='v',
             suffix=None,
+            only_bump_suffix=True,
             reference_version_suffix='beta',
             create_tag=True
         )
@@ -88,6 +90,7 @@ class TwoVersionTestCase(TestCase):
         args_chore2_beta = ActionInputs(
             prefix='v',
             suffix='beta',
+            only_bump_suffix=True,
             reference_version_suffix='pre',
             create_tag=True
         )
@@ -103,6 +106,7 @@ class TwoVersionTestCase(TestCase):
         args_chore2_prod = ActionInputs(
             prefix='v',
             suffix=None,
+            only_bump_suffix=True,
             reference_version_suffix='beta',
             create_tag=True
         )
@@ -189,6 +193,7 @@ class TwoVersionTestCase(TestCase):
         args_chore_beta = ActionInputs(
             prefix='v',
             suffix='beta',
+            only_bump_suffix=True,
             reference_version_suffix='pre',
             create_tag=True
         )
@@ -204,6 +209,7 @@ class TwoVersionTestCase(TestCase):
         args_chore_prod = ActionInputs(
             prefix='v',
             suffix=None,
+            only_bump_suffix=True,
             reference_version_suffix='beta',
             create_tag=True
         )
@@ -235,6 +241,7 @@ class TwoVersionTestCase(TestCase):
         args_fix_beta = ActionInputs(
             prefix='v',
             suffix='beta',
+            only_bump_suffix=True,
             reference_version_suffix='pre',
             create_tag=True
         )
@@ -250,6 +257,7 @@ class TwoVersionTestCase(TestCase):
         args_fix_prod = ActionInputs(
             prefix='v',
             suffix=None,
+            only_bump_suffix=True,
             reference_version_suffix='beta',
             create_tag=True
         )
@@ -337,6 +345,7 @@ class TwoVersionTestCase(TestCase):
         args_chore_beta = ActionInputs(
             prefix='v',
             suffix='beta',
+            only_bump_suffix=True,
             reference_version_suffix='pre',
             create_tag=True
         )
@@ -352,6 +361,7 @@ class TwoVersionTestCase(TestCase):
         args_chore_prod = ActionInputs(
             prefix='v',
             suffix=None,
+            only_bump_suffix=True,
             reference_version_suffix='beta',
             create_tag=True
         )
@@ -383,6 +393,7 @@ class TwoVersionTestCase(TestCase):
         args_feat_beta = ActionInputs(
             prefix='v',
             suffix='beta',
+            only_bump_suffix=True,
             reference_version_suffix='pre',
             create_tag=True
         )
@@ -398,6 +409,7 @@ class TwoVersionTestCase(TestCase):
         args_feat_prod = ActionInputs(
             prefix='v',
             suffix=None,
+            only_bump_suffix=True,
             reference_version_suffix='beta',
             create_tag=True
         )
@@ -485,6 +497,7 @@ class TwoVersionTestCase(TestCase):
         args_chore_beta = ActionInputs(
             prefix='v',
             suffix='beta',
+            only_bump_suffix=True,
             reference_version_suffix='pre',
             create_tag=True
         )
@@ -500,6 +513,7 @@ class TwoVersionTestCase(TestCase):
         args_chore_prod = ActionInputs(
             prefix='v',
             suffix=None,
+            only_bump_suffix=True,
             reference_version_suffix='beta',
             create_tag=True
         )
@@ -531,6 +545,7 @@ class TwoVersionTestCase(TestCase):
         args_breaking_beta = ActionInputs(
             prefix='v',
             suffix='beta',
+            only_bump_suffix=True,
             reference_version_suffix='pre',
             create_tag=True
         )
@@ -546,6 +561,7 @@ class TwoVersionTestCase(TestCase):
         args_breaking_prod = ActionInputs(
             prefix='v',
             suffix=None,
+            only_bump_suffix=True,
             reference_version_suffix='beta',
             create_tag=True
         )
@@ -633,6 +649,7 @@ class TwoVersionTestCase(TestCase):
         args_fix_beta = ActionInputs(
             prefix='v',
             suffix='beta',
+            only_bump_suffix=True,
             reference_version_suffix='pre',
             create_tag=True
         )
@@ -648,6 +665,7 @@ class TwoVersionTestCase(TestCase):
         args_fix_prod = ActionInputs(
             prefix='v',
             suffix=None,
+            only_bump_suffix=True,
             reference_version_suffix='beta',
             create_tag=True
         )
@@ -679,6 +697,7 @@ class TwoVersionTestCase(TestCase):
         args_chore_beta = ActionInputs(
             prefix='v',
             suffix='beta',
+            only_bump_suffix=True,
             reference_version_suffix='pre',
             create_tag=True
         )
@@ -694,6 +713,7 @@ class TwoVersionTestCase(TestCase):
         args_chore_prod = ActionInputs(
             prefix='v',
             suffix=None,
+            only_bump_suffix=True,
             reference_version_suffix='beta',
             create_tag=True
         )
@@ -781,6 +801,7 @@ class TwoVersionTestCase(TestCase):
         args_fix1_beta = ActionInputs(
             prefix='v',
             suffix='beta',
+            only_bump_suffix=True,
             reference_version_suffix='pre',
             create_tag=True
         )
@@ -796,6 +817,7 @@ class TwoVersionTestCase(TestCase):
         args_fix1_prod = ActionInputs(
             prefix='v',
             suffix=None,
+            only_bump_suffix=True,
             reference_version_suffix='beta',
             create_tag=True
         )
@@ -827,6 +849,7 @@ class TwoVersionTestCase(TestCase):
         args_fix2_beta = ActionInputs(
             prefix='v',
             suffix='beta',
+            only_bump_suffix=True,
             reference_version_suffix='pre',
             create_tag=True
         )
@@ -842,6 +865,7 @@ class TwoVersionTestCase(TestCase):
         args_fix2_prod = ActionInputs(
             prefix='v',
             suffix=None,
+            only_bump_suffix=True,
             reference_version_suffix='beta',
             create_tag=True
         )
@@ -929,6 +953,7 @@ class TwoVersionTestCase(TestCase):
         args_fix_beta = ActionInputs(
             prefix='v',
             suffix='beta',
+            only_bump_suffix=True,
             reference_version_suffix='pre',
             create_tag=True
         )
@@ -944,6 +969,7 @@ class TwoVersionTestCase(TestCase):
         args_fix_prod = ActionInputs(
             prefix='v',
             suffix=None,
+            only_bump_suffix=True,
             reference_version_suffix='beta',
             create_tag=True
         )
@@ -975,6 +1001,7 @@ class TwoVersionTestCase(TestCase):
         args_feat_beta = ActionInputs(
             prefix='v',
             suffix='beta',
+            only_bump_suffix=True,
             reference_version_suffix='pre',
             create_tag=True
         )
@@ -990,6 +1017,7 @@ class TwoVersionTestCase(TestCase):
         args_feat_prod = ActionInputs(
             prefix='v',
             suffix=None,
+            only_bump_suffix=True,
             reference_version_suffix='beta',
             create_tag=True
         )
@@ -1077,6 +1105,7 @@ class TwoVersionTestCase(TestCase):
         args_fix_beta = ActionInputs(
             prefix='v',
             suffix='beta',
+            only_bump_suffix=True,
             reference_version_suffix='pre',
             create_tag=True
         )
@@ -1092,6 +1121,7 @@ class TwoVersionTestCase(TestCase):
         args_fix_prod = ActionInputs(
             prefix='v',
             suffix=None,
+            only_bump_suffix=True,
             reference_version_suffix='beta',
             create_tag=True
         )
@@ -1123,6 +1153,7 @@ class TwoVersionTestCase(TestCase):
         args_breaking_beta = ActionInputs(
             prefix='v',
             suffix='beta',
+            only_bump_suffix=True,
             reference_version_suffix='pre',
             create_tag=True
         )
@@ -1138,6 +1169,7 @@ class TwoVersionTestCase(TestCase):
         args_breaking_prod = ActionInputs(
             prefix='v',
             suffix=None,
+            only_bump_suffix=True,
             reference_version_suffix='beta',
             create_tag=True
         )
@@ -1225,6 +1257,7 @@ class TwoVersionTestCase(TestCase):
         args_feat_beta = ActionInputs(
             prefix='v',
             suffix='beta',
+            only_bump_suffix=True,
             reference_version_suffix='pre',
             create_tag=True
         )
@@ -1240,6 +1273,7 @@ class TwoVersionTestCase(TestCase):
         args_feat_prod = ActionInputs(
             prefix='v',
             suffix=None,
+            only_bump_suffix=True,
             reference_version_suffix='beta',
             create_tag=True
         )
@@ -1271,6 +1305,7 @@ class TwoVersionTestCase(TestCase):
         args_chore_beta = ActionInputs(
             prefix='v',
             suffix='beta',
+            only_bump_suffix=True,
             reference_version_suffix='pre',
             create_tag=True
         )
@@ -1286,6 +1321,7 @@ class TwoVersionTestCase(TestCase):
         args_chore_prod = ActionInputs(
             prefix='v',
             suffix=None,
+            only_bump_suffix=True,
             reference_version_suffix='beta',
             create_tag=True
         )
@@ -1373,6 +1409,7 @@ class TwoVersionTestCase(TestCase):
         args_feat_beta = ActionInputs(
             prefix='v',
             suffix='beta',
+            only_bump_suffix=True,
             reference_version_suffix='pre',
             create_tag=True
         )
@@ -1388,6 +1425,7 @@ class TwoVersionTestCase(TestCase):
         args_feat_prod = ActionInputs(
             prefix='v',
             suffix=None,
+            only_bump_suffix=True,
             reference_version_suffix='beta',
             create_tag=True
         )
@@ -1419,6 +1457,7 @@ class TwoVersionTestCase(TestCase):
         args_fix_beta = ActionInputs(
             prefix='v',
             suffix='beta',
+            only_bump_suffix=True,
             reference_version_suffix='pre',
             create_tag=True
         )
@@ -1434,6 +1473,7 @@ class TwoVersionTestCase(TestCase):
         args_fix_prod = ActionInputs(
             prefix='v',
             suffix=None,
+            only_bump_suffix=True,
             reference_version_suffix='beta',
             create_tag=True
         )
@@ -1521,6 +1561,7 @@ class TwoVersionTestCase(TestCase):
         args_feat1_beta = ActionInputs(
             prefix='v',
             suffix='beta',
+            only_bump_suffix=True,
             reference_version_suffix='pre',
             create_tag=True
         )
@@ -1536,6 +1577,7 @@ class TwoVersionTestCase(TestCase):
         args_feat1_prod = ActionInputs(
             prefix='v',
             suffix=None,
+            only_bump_suffix=True,
             reference_version_suffix='beta',
             create_tag=True
         )
@@ -1567,6 +1609,7 @@ class TwoVersionTestCase(TestCase):
         args_feat2_beta = ActionInputs(
             prefix='v',
             suffix='beta',
+            only_bump_suffix=True,
             reference_version_suffix='pre',
             create_tag=True
         )
@@ -1582,6 +1625,7 @@ class TwoVersionTestCase(TestCase):
         args_feat2_prod = ActionInputs(
             prefix='v',
             suffix=None,
+            only_bump_suffix=True,
             reference_version_suffix='beta',
             create_tag=True,
         )
@@ -1669,6 +1713,7 @@ class TwoVersionTestCase(TestCase):
         args_feat_beta = ActionInputs(
             prefix='v',
             suffix='beta',
+            only_bump_suffix=True,
             reference_version_suffix='pre',
             create_tag=True
         )
@@ -1684,6 +1729,7 @@ class TwoVersionTestCase(TestCase):
         args_feat_prod = ActionInputs(
             prefix='v',
             suffix=None,
+            only_bump_suffix=True,
             reference_version_suffix='beta',
             create_tag=True
         )
@@ -1715,6 +1761,7 @@ class TwoVersionTestCase(TestCase):
         args_breaking_beta = ActionInputs(
             prefix='v',
             suffix='beta',
+            only_bump_suffix=True,
             reference_version_suffix='pre',
             create_tag=True
         )
@@ -1730,6 +1777,7 @@ class TwoVersionTestCase(TestCase):
         args_breaking_prod = ActionInputs(
             prefix='v',
             suffix=None,
+            only_bump_suffix=True,
             reference_version_suffix='beta',
             create_tag=True
         )
@@ -1817,6 +1865,7 @@ class TwoVersionTestCase(TestCase):
         args_breaking_beta = ActionInputs(
             prefix='v',
             suffix='beta',
+            only_bump_suffix=True,
             reference_version_suffix='pre',
             create_tag=True
         )
@@ -1832,6 +1881,7 @@ class TwoVersionTestCase(TestCase):
         args_breaking_prod = ActionInputs(
             prefix='v',
             suffix=None,
+            only_bump_suffix=True,
             reference_version_suffix='beta',
             create_tag=True
         )
@@ -1863,6 +1913,7 @@ class TwoVersionTestCase(TestCase):
         args_chore_beta = ActionInputs(
             prefix='v',
             suffix='beta',
+            only_bump_suffix=True,
             reference_version_suffix='pre',
             create_tag=True
         )
@@ -1878,6 +1929,7 @@ class TwoVersionTestCase(TestCase):
         args_chore_prod = ActionInputs(
             prefix='v',
             suffix=None,
+            only_bump_suffix=True,
             reference_version_suffix='beta',
             create_tag=True
         )
@@ -1965,6 +2017,7 @@ class TwoVersionTestCase(TestCase):
         args_breaking_beta = ActionInputs(
             prefix='v',
             suffix='beta',
+            only_bump_suffix=True,
             reference_version_suffix='pre',
             create_tag=True
         )
@@ -1980,6 +2033,7 @@ class TwoVersionTestCase(TestCase):
         args_breaking_prod = ActionInputs(
             prefix='v',
             suffix=None,
+            only_bump_suffix=True,
             reference_version_suffix='beta',
             create_tag=True
         )
@@ -2011,6 +2065,7 @@ class TwoVersionTestCase(TestCase):
         args_fix_beta = ActionInputs(
             prefix='v',
             suffix='beta',
+            only_bump_suffix=True,
             reference_version_suffix='pre',
             create_tag=True
         )
@@ -2026,6 +2081,7 @@ class TwoVersionTestCase(TestCase):
         args_fix_prod = ActionInputs(
             prefix='v',
             suffix=None,
+            only_bump_suffix=True,
             reference_version_suffix='beta',
             create_tag=True
         )
@@ -2113,6 +2169,7 @@ class TwoVersionTestCase(TestCase):
         args_breaking_beta = ActionInputs(
             prefix='v',
             suffix='beta',
+            only_bump_suffix=True,
             reference_version_suffix='pre',
             create_tag=True
         )
@@ -2128,6 +2185,7 @@ class TwoVersionTestCase(TestCase):
         args_breaking_prod = ActionInputs(
             prefix='v',
             suffix=None,
+            only_bump_suffix=True,
             reference_version_suffix='beta',
             create_tag=True
         )
@@ -2159,6 +2217,7 @@ class TwoVersionTestCase(TestCase):
         args_feat_beta = ActionInputs(
             prefix='v',
             suffix='beta',
+            only_bump_suffix=True,
             reference_version_suffix='pre',
             create_tag=True
         )
@@ -2174,6 +2233,7 @@ class TwoVersionTestCase(TestCase):
         args_feat_prod = ActionInputs(
             prefix='v',
             suffix=None,
+            only_bump_suffix=True,
             reference_version_suffix='beta',
             create_tag=True
         )
@@ -2261,6 +2321,7 @@ class TwoVersionTestCase(TestCase):
         args_breaking1_beta = ActionInputs(
             prefix='v',
             suffix='beta',
+            only_bump_suffix=True,
             reference_version_suffix='pre',
             create_tag=True
         )
@@ -2276,6 +2337,7 @@ class TwoVersionTestCase(TestCase):
         args_breaking1_prod = ActionInputs(
             prefix='v',
             suffix=None,
+            only_bump_suffix=True,
             reference_version_suffix='beta',
             create_tag=True
         )
@@ -2307,6 +2369,7 @@ class TwoVersionTestCase(TestCase):
         args_breaking2_beta = ActionInputs(
             prefix='v',
             suffix='beta',
+            only_bump_suffix=True,
             reference_version_suffix='pre',
             create_tag=True
         )
@@ -2322,6 +2385,7 @@ class TwoVersionTestCase(TestCase):
         args_breaking2_prod = ActionInputs(
             prefix='v',
             suffix=None,
+            only_bump_suffix=True,
             reference_version_suffix='beta',
             create_tag=True
         )

@@ -42,6 +42,7 @@ class OneHotfixTestCase(TestCase):
         args_fix_beta = ActionInputs(
             prefix='v',
             suffix='beta',
+            only_bump_suffix=True,
             reference_version_suffix='pre',
             create_tag=True
         )
@@ -57,6 +58,7 @@ class OneHotfixTestCase(TestCase):
         args_fix_prod = ActionInputs(
             prefix='v',
             suffix=None,
+            only_bump_suffix=True,
             reference_version_suffix='beta',
             create_tag=True
         )
@@ -196,6 +198,7 @@ class OneHotfixTestCase(TestCase):
         args_feat_beta = ActionInputs(
             prefix='v',
             suffix='beta',
+            only_bump_suffix=True,
             reference_version_suffix='pre',
             create_tag=True
         )
@@ -211,6 +214,7 @@ class OneHotfixTestCase(TestCase):
         args_feat_prod = ActionInputs(
             prefix='v',
             suffix=None,
+            only_bump_suffix=True,
             reference_version_suffix='beta',
             create_tag=True
         )
@@ -350,6 +354,7 @@ class OneHotfixTestCase(TestCase):
         args_breaking_beta = ActionInputs(
             prefix='v',
             suffix='beta',
+            only_bump_suffix=True,
             reference_version_suffix='pre',
             create_tag=True
         )
@@ -365,6 +370,7 @@ class OneHotfixTestCase(TestCase):
         args_breaking_prod = ActionInputs(
             prefix='v',
             suffix=None,
+            only_bump_suffix=True,
             reference_version_suffix='beta',
             create_tag=True
         )

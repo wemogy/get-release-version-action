@@ -41,6 +41,7 @@ class OneCommitTestCase(TestCase):
         args_beta = ActionInputs(
             prefix='v',
             suffix='beta',
+            only_bump_suffix=True,
             reference_version_suffix='pre',
             create_tag=True
         )
@@ -56,6 +57,7 @@ class OneCommitTestCase(TestCase):
         args_prod = ActionInputs(
             prefix='v',
             suffix=None,
+            only_bump_suffix=True,
             reference_version_suffix='beta',
             create_tag=True
         )
@@ -112,6 +114,7 @@ class OneCommitTestCase(TestCase):
         args_beta = ActionInputs(
             prefix='v',
             suffix='beta',
+            only_bump_suffix=True,
             reference_version_suffix='pre',
             create_tag=True
         )
@@ -127,6 +130,7 @@ class OneCommitTestCase(TestCase):
         args_prod = ActionInputs(
             prefix='v',
             suffix=None,
+            only_bump_suffix=True,
             reference_version_suffix='beta',
             create_tag=True
         )
@@ -185,6 +189,7 @@ class OneCommitTestCase(TestCase):
         args_beta = ActionInputs(
             prefix='v',
             suffix='beta',
+            only_bump_suffix=True,
             reference_version_suffix='pre',
             create_tag=True
         )
@@ -200,6 +205,7 @@ class OneCommitTestCase(TestCase):
         args_prod = ActionInputs(
             prefix='v',
             suffix=None,
+            only_bump_suffix=True,
             reference_version_suffix='beta',
             create_tag=True
         )
@@ -258,6 +264,7 @@ class OneCommitTestCase(TestCase):
         args_beta = ActionInputs(
             prefix='v',
             suffix='beta',
+            only_bump_suffix=True,
             reference_version_suffix='pre',
             create_tag=True
         )
@@ -273,6 +280,7 @@ class OneCommitTestCase(TestCase):
         args_prod = ActionInputs(
             prefix='v',
             suffix=None,
+            only_bump_suffix=True,
             reference_version_suffix='beta',
             create_tag=True
         )
@@ -331,6 +339,7 @@ class OneCommitTestCase(TestCase):
         args_beta = ActionInputs(
             prefix='v',
             suffix='beta',
+            only_bump_suffix=True,
             reference_version_suffix='pre',
             create_tag=True
         )
@@ -346,6 +355,7 @@ class OneCommitTestCase(TestCase):
         args_prod = ActionInputs(
             prefix='v',
             suffix=None,
+            only_bump_suffix=True,
             reference_version_suffix='beta',
             create_tag=True
         )
