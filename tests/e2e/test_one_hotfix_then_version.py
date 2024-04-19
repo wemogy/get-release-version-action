@@ -204,6 +204,7 @@ class OneHotfixTestCase(TestCase):
         tag_hotfix_prod = self.repo.get_latest_tag_name()
 
         # Fix 2
+        self.repo.checkout('main')
         self.repo.commit(CommitMessages.FIX)
 
         self.repo.merge('main', 'release')
@@ -433,6 +434,7 @@ class OneHotfixTestCase(TestCase):
         tag_hotfix_prod = self.repo.get_latest_tag_name()
 
         # Feature
+        self.repo.checkout('main')
         self.repo.commit(CommitMessages.FEATURE)
 
         self.repo.merge('main', 'release')
@@ -662,6 +664,7 @@ class OneHotfixTestCase(TestCase):
         tag_hotfix_prod = self.repo.get_latest_tag_name()
 
         # Breaking
+        self.repo.checkout('main')
         self.repo.commit(CommitMessages.BREAKING_FEATURE)
 
         self.repo.merge('main', 'release')
