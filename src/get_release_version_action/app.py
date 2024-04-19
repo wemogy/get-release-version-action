@@ -5,9 +5,9 @@ for Conventional Commits with support for hotfix changes.
 import logging.config
 from argparse import ArgumentParser
 
-from get_release_version_action.algorithms import main
-from get_release_version_action.models import Inputs
-from get_release_version_action.utils import log_github_output, setup_logging, write_github_output
+from algorithms import main
+from models import Inputs
+from utils import log_github_output, setup_logging, write_github_output
 
 logger = logging.getLogger('wemogy.get-release-version-action')
 
