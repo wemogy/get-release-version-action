@@ -22,17 +22,17 @@ def log_command(
     """Log the command, environment and process result."""
     return_code = process.returncode
     command_str = ' '.join([f'"{x}"' if (' ' in str(x) or str(x) == '') else str(x) for x in command])
-    env_str = '; '.join([f'${k}="{v}"' for k, v in env.items()]) if env is not None else ''
+    env_str = ('\nEnvironment: ' + '; '.join([f'${k}="{v}"' for k, v in env.items()])) if env is not None else ''
     output = '\n' + process.stdout if process.stdout.strip() else ''
 
     if isinstance(process, subprocess.CalledProcessError):
         logger.error(
-            'Process exited unsuccessful with exit code %s:\nCommand: %s\nEnvironment: %s%s',
+            'Process exited unsuccessful with exit code %s:\nCommand: %s%s%s',
             return_code, command_str, env_str, output
         )
     else:
-        logger.info(
-            'Process exited successful with exit code %s:\nCommand: %s\nEnvironment: %s%s',
+        logger.debug(
+            'Process exited successful with exit code %s:\nCommand: %s%s%s',
             return_code, command_str, env_str, output
         )
 
