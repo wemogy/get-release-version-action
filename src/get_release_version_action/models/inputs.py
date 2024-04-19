@@ -4,12 +4,15 @@ from __future__ import annotations
 import argparse
 from dataclasses import dataclass
 from inspect import get_annotations
+import logging
 from types import NoneType, UnionType
 from typing import Any, get_args
 
 __all__ = [
     'Inputs'
 ]
+
+logger = logging.getLogger('wemogy.get-release-version-action')
 
 
 @dataclass(frozen=True, kw_only=True)
@@ -47,10 +50,7 @@ class Inputs:
             raw_value: Any = getattr(args, property_name)
             value: Any
 
-            if isinstance(raw_value, property_type):
-                value = raw_value
-
-            elif property_type is bool:
+            if property_type is bool:
                 if raw_value.lower() == 'true':
                     value = True
                 elif raw_value.lower() == 'false':
@@ -69,7 +69,7 @@ class Inputs:
             elif isinstance(property_type, UnionType) \
                     and str in get_args(property_type) \
                     and NoneType in get_args(property_type):
-                if raw_value.strip() == '' or raw_value == 'NONE':
+                if raw_value.strip() == '' or raw_value.strip() == 'NONE':
                     value = None
                 else:
                     value = raw_value
@@ -78,5 +78,6 @@ class Inputs:
                 value = property_type(raw_value)
 
             ctor_args[property_name] = value
+            logger.debug('Argument %s of type %s parsed to %s', property_name, property_type, value)
 
         return cls(**ctor_args)  # pylint: disable=missing-kwoa

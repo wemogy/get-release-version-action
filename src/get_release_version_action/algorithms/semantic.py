@@ -6,8 +6,8 @@ from semantic_release import LevelBump, ParseError
 from semantic_release.commit_parser import AngularCommitParser, AngularParserOptions
 from semver import Version
 
-from ..models import GetNextVersionOutput, Inputs
-from ..utils import get_sorted_tags
+from get_release_version_action.models import GetNextVersionOutput, Inputs
+from get_release_version_action.utils import get_sorted_tags
 
 logger = logging.getLogger('wemogy.get-release-version-action.semantic')
 

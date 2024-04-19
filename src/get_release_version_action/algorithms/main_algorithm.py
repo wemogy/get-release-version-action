@@ -4,8 +4,8 @@ import os
 
 import git
 
-from ..models import Inputs, Outputs
-from ..utils import create_git_tag
+from get_release_version_action.models import Inputs, Outputs
+from get_release_version_action.utils import create_git_tag
 from .hash_based import get_next_version as get_next_version_hash
 from .semantic import get_next_version as get_next_semantic_version
 
