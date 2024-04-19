@@ -8,10 +8,16 @@ from pathlib import Path
 from tempfile import TemporaryDirectory
 from typing import Any
 from uuid import uuid4
+from time import sleep
 
 from get_release_version_action.utils.git import tag_creation_history
 
 from git import Commit, Repo
+
+TESTING_TIMEOUT = 1
+"""
+Timeout in seconds for waiting for git operations to ensure that we don't have multiple operations for the same second.
+"""
 
 logger = logging.getLogger('wemogy.get-release-version-action.tests.repo')
 
@@ -104,6 +110,7 @@ class TestRepo:
         :raises GitBranchNotFoundError: If the branch was not found.
         """
         logger.info('Checking out branch %s', branch_name)
+        sleep(TESTING_TIMEOUT)
 
         try:
             self.repo.heads[branch_name].checkout()
@@ -118,6 +125,7 @@ class TestRepo:
         :param file_name: An optional file name. Defaults to ``file_{uuid4()}``.
         :returns: The created commit.
         """
+        sleep(TESTING_TIMEOUT)
         file_name = file_name or f'file_{uuid4()}'
         file_path = self.path / file_name
         file_path.write_text('test', encoding='utf-8')
