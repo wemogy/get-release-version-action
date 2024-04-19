@@ -411,7 +411,7 @@ class TwoHotfixesTestCase(TestCase):
 
         # Act
         # Feature
-        self.repo.commit(CommitMessages.FIX)
+        self.repo.commit(CommitMessages.FEATURE)
 
         self.repo.merge('main', 'release')
         actual_output_feat_release = run_action(args_feat_release)
@@ -645,7 +645,7 @@ class TwoHotfixesTestCase(TestCase):
 
         # Act
         # Breaking
-        self.repo.commit(CommitMessages.FIX)
+        self.repo.commit(CommitMessages.BREAKING_FIX)
 
         self.repo.merge('main', 'release')
         actual_output_breaking_release = run_action(args_breaking_release)
