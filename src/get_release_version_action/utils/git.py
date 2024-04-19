@@ -9,8 +9,11 @@ logger = logging.getLogger('wemogy.get-release-version-action')
 
 __all__ = [
     'create_git_tag',
-    'get_sorted_tags'
+    'get_sorted_tags',
+    'tag_creation_history'
 ]
+
+tag_creation_history: list[str] = []
 
 
 def create_git_tag(version: str) -> None:
@@ -19,6 +22,7 @@ def create_git_tag(version: str) -> None:
 
     # Create the tag
     run_command('git', 'tag', '--annotate', '--message', f'Release {version}', version)
+    tag_creation_history.append(version)
 
     git_remote = run_command('git', 'remote', 'show')
 

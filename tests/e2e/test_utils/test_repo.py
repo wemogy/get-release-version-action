@@ -3,12 +3,13 @@ from __future__ import annotations
 
 import logging
 import os
-import shutil
 from enum import StrEnum
 from pathlib import Path
-from tempfile import TemporaryDirectory, mkdtemp
+from tempfile import TemporaryDirectory
 from typing import Any
 from uuid import uuid4
+
+from get_release_version_action.utils.git import tag_creation_history
 
 from git import Commit, Repo
 
@@ -54,6 +55,9 @@ class TestRepo:
 
         logger.info('Creating git repository in directory %s', self.path)
         os.chdir(self.path)
+
+        # Clear tag creation history
+        tag_creation_history.clear()
 
         # Initialize repository and make initial commit.
         self.repo = Repo.init(self.path, initial_branch='main')
@@ -148,7 +152,9 @@ class TestRepo:
 
     def get_latest_tag_name(self) -> str | None:
         """Return the newest tag name or ``None``, if no tags exist."""
+        logger.info(tag_creation_history)
+
         try:
-            return sorted(self.repo.tags, key=lambda t: t.commit.committed_datetime, reverse=True)[0].name
+            return tag_creation_history[-1]
         except IndexError:
             return None
