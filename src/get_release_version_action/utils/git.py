@@ -18,7 +18,7 @@ def create_git_tag(version: str) -> None:
     logger.info('Creating tag %s', version)
 
     # Create the tag
-    run_command('git', 'tag', version)
+    run_command('git', 'tag', '--annotate', '--message', f'Release {version}', version)
 
     git_remote = run_command('git', 'remote', 'show')
 
