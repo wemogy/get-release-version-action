@@ -83,7 +83,7 @@ jobs:
       - name: Add pylint annotator
         uses: rbialon/flake8-annotations@v1.1
 
-      - name: Run pylint
+      - name: Run flake8
         run: poetry run flake8 tests
 
   tests-mypy:

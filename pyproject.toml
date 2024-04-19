@@ -44,6 +44,7 @@ max-line-length = 120
 disable-noqa = true
 per-file-ignores = [
     "__init__.py:F401",
+    "test_*.py:F401,F811"
 ]
 
 [tool.mypy]
