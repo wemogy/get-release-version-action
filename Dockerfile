@@ -27,6 +27,5 @@ RUN apt-get -yq update && \
     apt-get -yq install git && \
     rm -rf /var/lib/apt/lists/*
 
-WORKDIR /action/
-RUN chmod +x entrypoint.sh
-ENTRYPOINT ["poetry", "run", "./entrypoint.sh"]
+RUN chmod +x /action/entrypoint.sh
+ENTRYPOINT ["/action/entrypoint.sh"]
