@@ -6,7 +6,7 @@ import os
 import shutil
 from enum import StrEnum
 from pathlib import Path
-from tempfile import mkdtemp
+from tempfile import TemporaryDirectory, mkdtemp
 from typing import Any
 from uuid import uuid4
 
@@ -36,17 +36,22 @@ class CommitMessages(StrEnum):
 
 class TestRepo:
     """Wrapper around the ``git.Repo`` class that implements specific methods for unit testing."""
-    path: Path
+    tempdir: TemporaryDirectory
     repo: Repo
 
-    def __init__(self) -> None:
+    def __init__(self, *, keep_repository_dir: bool = False) -> None:
         """
         Wrapper around the ``git.Repo`` class that implements specific methods for unit testing.
 
         This creates a new git repo in a temporary directory, makes an initial README commit to the ``main`` branch
         and creates 3 branches called ``release``, ``release-beta`` and ``release-prod``.
         """
-        self.path = Path(mkdtemp(prefix='wemogy.get-release-version-action.tests'))
+        self.tempdir = TemporaryDirectory(
+            prefix='wemogy.get-release-version-action.tests',
+            ignore_cleanup_errors=True,
+            delete=not keep_repository_dir
+        )
+
         logger.info('Creating git repository in directory %s', self.path)
         os.chdir(self.path)
 
@@ -68,15 +73,14 @@ class TestRepo:
     def __exit__(self, exc_type: Any, exc_val: Any, exc_tb: Any) -> None:
         self.close()
 
-    def close(self, keep_repository_dir: bool = False) -> None:
-        """Close the ``git.Repo`` object and delete the temporary folder unless specified otherwise."""
-        self.repo.close()
+    @property
+    def path(self) -> Path:
+        """Get the path of the temporary directory."""
+        return Path(self.tempdir.name)
 
-        if not keep_repository_dir:
-            logger.info('Removing repository %s', self.path)
-            shutil.rmtree(self.path)
-        else:
-            logger.warning('Keeping repository %s', self.path)
+    def close(self) -> None:
+        """Close the ``git.Repo`` object."""
+        self.repo.close()
 
     def create_branch(self, name: str, base_name: str | None) -> None:
         """Create a branch named ``name`` that is based on the branch with ``base_name`` and check it out."""
