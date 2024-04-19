@@ -3,8 +3,8 @@ import logging
 
 import git
 
-from get_release_version_action.models import Inputs, GetNextVersionOutput
-from get_release_version_action.utils import get_sorted_tags
+from models import Inputs, GetNextVersionOutput
+from utils import get_sorted_tags
 
 logger = logging.getLogger('wemogy.get-release-version-action.hash-based')
 
