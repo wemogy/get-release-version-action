@@ -160,4 +160,4 @@ cython_debug/
 .idea/
 
 # Testing
-.working-directory/
+**/.working-directory/
