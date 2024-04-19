@@ -9,8 +9,8 @@ runs:
         python-version-file: pyproject.toml
         cache: "poetry"
 
-    - name: Setup poetry
-      uses: Gr1N/setup-poetry@v9
+    - name: Install poetry
+      uses: abatilo/actions-poetry@v3
 
     - name: Install dependencies
       run: poetry install --no-root --no-interaction --with dev
