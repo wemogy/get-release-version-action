@@ -67,7 +67,21 @@ def get_current_version(
             return tag
 
         # Check if the bumped version has the current suffix
-        if f'{suffix or ''}-{bumping_suffix}' in tag.name:
+        if suffix is None:
+            dash_count = tag.name.count('-')
+            if dash_count != 1:
+                continue
+
+            if f'-{bumping_suffix}' in tag.name:
+                logger.debug(
+                    'Found tag %s (%s) with prefix "%s" and suffix "%s"',
+                    tag.name, tag.commit.hexsha, prefix, suffix
+                )
+                return tag
+            
+            continue
+
+        if f'{suffix}-{bumping_suffix}' in tag.name:
             logger.debug(
                 'Found tag %s (%s) with prefix "%s" and suffix "%s"',
                 tag.name, tag.commit.hexsha, prefix, suffix
@@ -208,7 +222,8 @@ def get_next_version(inputs: Inputs, repo: git.Repo) -> GetNextVersionOutput:
 
         if inputs.reference_version_suffix is not None:
             reference_version = reference_version.replace(f'-{inputs.reference_version_suffix}', '', 1)
-        else:
+
+        if inputs.suffix is not None:
             reference_version = reference_version.replace(f'-{inputs.suffix}', '', 1)
 
     next_version, version_bumped = analyze_commits(repo, reference_version_tag, reference_version)
