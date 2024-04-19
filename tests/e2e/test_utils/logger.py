@@ -15,6 +15,7 @@ __all__ = [
 
 class IndentLoggingFormatter(logging.Formatter):
     """Logging formatter to indent multiline messages."""
+
     def __init__(self, fmt: str | None) -> None:
         super().__init__(fmt)
 

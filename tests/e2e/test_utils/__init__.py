@@ -1,8 +1,8 @@
 """Utilities."""
-from get_release_version_action import main as run_action, Inputs as ActionInputs, Outputs as ActionOutputs
-
+from get_release_version_action import Inputs as ActionInputs, Outputs as ActionOutputs, main as run_action
+from .logger import IndentLoggingFormatter, setup_logging
 from .test_repo import CommitMessages, GitBranchNotFoundError, TestRepo
-from .logger import setup_logging, IndentLoggingFormatter
+from .fixtures import repo, logging
 
 __all__ = [
     'ActionInputs',
@@ -12,5 +12,7 @@ __all__ = [
     'GitBranchNotFoundError',
     'TestRepo',
     'setup_logging',
-    'IndentLoggingFormatter'
+    'IndentLoggingFormatter',
+    'repo',
+    'fixtures'
 ]

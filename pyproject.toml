@@ -45,6 +45,10 @@ per-file-ignores = [
 mypy_path = ".mypy_stubs"
 strict = true
 
+[[tool.mypy.overrides]]
+module = "assertpy.*"
+ignore_missing_imports = true
+
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"

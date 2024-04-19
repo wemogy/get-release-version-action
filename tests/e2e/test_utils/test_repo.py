@@ -5,14 +5,13 @@ import logging
 import os
 from enum import StrEnum
 from pathlib import Path
-from tempfile import TemporaryDirectory
+from time import sleep
 from typing import Any
 from uuid import uuid4
-from time import sleep
-
-from get_release_version_action.utils.git import tag_creation_history
 
 from git import Commit, Repo
+
+from get_release_version_action.utils.git import tag_creation_history
 
 TESTING_TIMEOUT = 1
 """
@@ -43,22 +42,17 @@ class CommitMessages(StrEnum):
 
 class TestRepo:
     """Wrapper around the ``git.Repo`` class that implements specific methods for unit testing."""
-    tempdir: TemporaryDirectory
+    path: Path
     repo: Repo
 
-    def __init__(self, *, keep_repository_dir: bool = False) -> None:
+    def __init__(self, path: Path) -> None:
         """
         Wrapper around the ``git.Repo`` class that implements specific methods for unit testing.
 
-        This creates a new git repo in a temporary directory, makes an initial README commit to the ``main`` branch
+        This creates a new git repo in the given directory, makes an initial README commit to the ``main`` branch
         and creates 3 branches called ``release``, ``release-beta`` and ``release-prod``.
         """
-        self.tempdir = TemporaryDirectory(
-            prefix='wemogy.get-release-version-action.tests',
-            ignore_cleanup_errors=True,
-            delete=not keep_repository_dir,
-            dir=Path(os.getcwd()) / '.working-directory'
-        )
+        self.path = path
 
         logger.info('Creating git repository in directory %s', self.path)
         os.chdir(self.path)
@@ -83,11 +77,6 @@ class TestRepo:
 
     def __exit__(self, exc_type: Any, exc_val: Any, exc_tb: Any) -> None:
         self.close()
-
-    @property
-    def path(self) -> Path:
-        """Get the path of the temporary directory."""
-        return Path(self.tempdir.name)
 
     def close(self) -> None:
         """Close the ``git.Repo`` object."""
@@ -154,8 +143,10 @@ class TestRepo:
         :param dest_branch_name: The branch name to cherrypick onto.
         :raises GitBranchNotFoundError: If the branch was not found.
         """
-        logger.info('Cherrypicking commit %s (%s) into branch %s',
-                    commit.message, commit.hexsha, dest_branch_name)
+        logger.info(
+            'Cherrypicking commit %s (%s) into branch %s',
+            commit.message, commit.hexsha, dest_branch_name
+            )
         self.checkout(dest_branch_name)
         self.repo.git.cherry_pick(commit.hexsha)
 
