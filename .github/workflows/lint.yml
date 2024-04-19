@@ -68,7 +68,7 @@ jobs:
         uses: pr-annotators/pylint-pr-annotator@main
 
       - name: Run pylint
-        run: poetry run pylint tests
+        run: poetry run pylint tests/e2e/*
 
   tests-flake8:
     name: flake8 (Tests)

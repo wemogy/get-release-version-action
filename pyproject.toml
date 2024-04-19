@@ -34,6 +34,11 @@ pydevd-pycharm = ">=241.14494.241,<241.14495.0"
 [tool.pylint.format]
 max-line-length = 120
 
+[tool.pylint.message-control]
+disable = [
+    "too-many-return-statements"
+]
+
 [tool.flake8]
 max-line-length = 120
 disable-noqa = true

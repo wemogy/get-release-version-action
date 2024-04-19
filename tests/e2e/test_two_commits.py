@@ -1,5 +1,5 @@
 """Test all scenarios where two commits with a release at the end are made."""
-# pylint: disable=too-many-locals,too-many-lines,duplicate-code,too-many-statements,too-many-statements
+# pylint: disable=too-many-locals,too-many-lines,duplicate-code,too-many-statements,unused-import,redefined-outer-name
 
 from assertpy import assert_that
 

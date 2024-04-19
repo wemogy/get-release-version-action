@@ -14,5 +14,5 @@ __all__ = [
     'setup_logging',
     'IndentLoggingFormatter',
     'repo',
-    'fixtures'
+    'logging'
 ]

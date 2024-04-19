@@ -1,5 +1,5 @@
 """Test all scenarios where one or zero commits (beside the initial commit) are made."""
-# pylint: disable=too-many-locals,too-many-lines,duplicate-code,too-many-statements
+# pylint: disable=too-many-locals,too-many-lines,duplicate-code,too-many-statements,unused-import,redefined-outer-name
 from assertpy import assert_that
 
 from test_utils import ActionInputs, ActionOutputs, CommitMessages, logging, TestRepo, repo, run_action
