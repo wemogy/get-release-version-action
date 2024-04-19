@@ -1,0 +1,17 @@
+version: 1
+disable_existing_loggers: false
+formatters:
+  indent:
+    (): utils.IndentLoggingFormatter
+    fmt: '[%(asctime)s: %(levelname)s | %(name)s - %(funcName)s()] %(message)s'
+handlers:
+  stdout:
+    class: logging.StreamHandler
+    level: DEBUG
+    formatter: indent
+    stream: ext://sys.stdout
+loggers:
+  root:
+    level: DEBUG
+    handlers:
+      - stdout
