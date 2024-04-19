@@ -37,7 +37,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Setup Python
-        uses: .github/actions/setup-python
+        uses: ./.github/actions/setup-python
 
       - name: Run pytest
         run: poetry run pytest --junit-xml test-result.xml tests/e2e
