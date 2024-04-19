@@ -7,10 +7,10 @@ runs:
       uses: actions/setup-python@v5
       with:
         python-version-file: pyproject.toml
-        cache: 'poetry'
+        cache: "poetry"
 
     - name: Setup poetry
-      uses: Gr1N/setup-poetry@v9
+      uses: Gr1N/setup-poetry@v8
 
     - name: Install dependencies
       run: poetry install --no-root --no-interaction --with dev
