@@ -50,7 +50,8 @@ class TestRepo:
         self.tempdir = TemporaryDirectory(
             prefix='wemogy.get-release-version-action.tests',
             ignore_cleanup_errors=True,
-            delete=not keep_repository_dir
+            delete=not keep_repository_dir,
+            dir=Path(os.getcwd()) / '.working-directory'
         )
 
         logger.info('Creating git repository in directory %s', self.path)
