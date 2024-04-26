@@ -2,8 +2,8 @@
 A GitHub Action to determine the next version by checking the commit history
 for Conventional Commits with support for hotfix changes.
 """
+from .algorithms import cli_entrypoint, main_algorithm
 from .models import Inputs, Outputs
-from .algorithms import main_algorithm, cli_entrypoint
 
 __all__ = [
     'Inputs',
