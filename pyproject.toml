@@ -10,15 +10,11 @@ homepage = "https://github.com/wemogy/get-release-version-action"
 repository = "https://github.com/wemogy/get-release-version-action"
 documentation = "https://github.com/wemogy/get-release-version-action"
 
-[[tool.poetry.packages]]
-include = "get_release_version_action"
-from = "src"
-
 [tool.poetry.dependencies]
 python = "^3.12"
 PyYAML = "^6.0.1"
 semver = "^3.0.2"
-python-semantic-release = "^9.4.1"
+python-semantic-release = "^9.5.0"
 GitPython = "^3.1.43"
 
 [tool.poetry.group.dev.dependencies]
@@ -34,11 +30,17 @@ pydevd-pycharm = ">=241.14494.241,<241.14495.0"
 [tool.pylint.format]
 max-line-length = 120
 
+[tool.pylint.message-control]
+disable = [
+    "too-many-return-statements"
+]
+
 [tool.flake8]
 max-line-length = 120
 disable-noqa = true
 per-file-ignores = [
     "__init__.py:F401",
+    "test_*.py:F401,F811"
 ]
 
 [tool.mypy]

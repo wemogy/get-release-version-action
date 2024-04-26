@@ -1,9 +1,9 @@
 name: Test Action
 on:
+  workflow_dispatch:
   pull_request:
     branches:
       - main
-  push:
 
 jobs:
   test-action:
@@ -37,7 +37,12 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Setup Python
-        uses: .github/actions/setup-python
+        uses: ./.github/actions/setup-python
+
+      - name: Setup git
+        run: |
+          git config --global user.email "it@wemogy.com"
+          git config --global user.name "Wemogy IT"
 
       - name: Run pytest
         run: poetry run pytest --junit-xml test-result.xml tests/e2e

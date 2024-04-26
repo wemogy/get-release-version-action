@@ -33,8 +33,8 @@ for [Conventional Commits](https://www.conventionalcommits.org/) with support fo
 | Input                      | Required | Default    | Description                                                                                              |
 |----------------------------|----------|------------|----------------------------------------------------------------------------------------------------------|
 | `prefix`                   | `false`  | `v`        | The prefix that should be prepended to the version.                                                      |
-| `suffix`                   | `false`  | `''`       | The suffix that should be appended to the version (e.g. `beta`).                                         |
-| `reference-version-suffix` | `false`  | `''`       | The suffix that should be replaced with the value in `suffix` (e.g. `dev`).                              |
+| `suffix`                   | `false`  | `NONE`     | The suffix that should be appended to the version (e.g. `beta`). Use `NONE` for no suffix.               |
+| `reference-version-suffix` | `false`  | `NONE`     | The suffix that should be replaced with the value in `suffix` (e.g. `dev`). Use `NONE` for no suffix.    |
 | `bumping-suffix`           | `false`  | `hotfix`   | The suffix to append to the version (or increment if it already exists) if `only-bump-suffix` is `true`. |
 | `only-bump-suffix`         | `false`  | `false`    | Bump the `bumping-suffix` instead of the version if changes were detected.                               |
 | `create-tag`               | `false`  | `true`     | Create a git tag for the version and push it if a remote is configured.                                  |
@@ -59,8 +59,6 @@ If the version number stays the same, please check the following:
 - The GitHub workflow **must** use `actions/checkout@4` with `fetch-depth: 0`. This ensures that the commit and tag history is fetched, which is necessary for determining the change level and the last version.
 - At least one commit message **must** follow the [Conventional Commits](https://www.conventionalcommits.org/) specification and **must not** be of the level `chore`.
 - Remove all tags from the repository that do not have the `Verified` badge.
-
-[//]: # (TODO: Why?)
 
 ### Why did we implement sematic release by ourselves?
 
@@ -188,10 +186,11 @@ All tools are configured in the `pyproject.toml`.
 ```bash
 # with poetry shell
 # working directory: repository root
-pylint src
-flake8 src
-mypy src
-pylint tests
+pylint get_release_version_action
+flake8 get_release_version_action
+mypy get_release_version_action
+
+pylint tests/e2e
 flake8 tests
 mypy tests
 ```

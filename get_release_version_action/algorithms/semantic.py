@@ -1,11 +1,12 @@
 """Get the next version based on conventional commits and semantic versioning."""
 import logging
+
 import git
 from semantic_release import LevelBump, ParseError
 from semantic_release.commit_parser import AngularCommitParser, AngularParserOptions
 from semver import Version
 
-from ..models import Inputs, GetNextVersionOutput
+from ..models import GetNextVersionOutput, Inputs
 from ..utils import get_sorted_tags
 
 logger = logging.getLogger('wemogy.get-release-version-action.semantic')
@@ -78,7 +79,7 @@ def get_current_version(
                     tag.name, tag.commit.hexsha, prefix, suffix
                 )
                 return tag
-            
+
             continue
 
         if f'{suffix}-{bumping_suffix}' in tag.name:

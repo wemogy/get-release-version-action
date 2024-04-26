@@ -1,18 +1,19 @@
-"""
-A GitHub Action to determine the next version by checking the commit history
-for Conventional Commits with support for hotfix changes.
-"""
+"""The main entrypoint for the GitHub action."""
 import logging.config
 from argparse import ArgumentParser
 
-from .algorithms import main
-from .models import Inputs
-from .utils import log_github_output, setup_logging, write_github_output
+from .main_algorithm import main_algorithm
+from ..models import Inputs
+from ..utils import log_github_output, setup_logging, write_github_output
 
 logger = logging.getLogger('wemogy.get-release-version-action')
 
+__all__ = [
+    'cli_entrypoint'
+]
 
-def action() -> None:
+
+def cli_entrypoint() -> None:
     """The main entrypoint for the GitHub action."""
     parser = ArgumentParser(
         description='A GitHub Action to determine the next version by checking the commit history for Conventional '
@@ -87,12 +88,8 @@ def action() -> None:
     args = parser.parse_args()
     setup_logging(args.verbose)
 
-    outputs = main(Inputs.from_argparse(args))
+    outputs = main_algorithm(Inputs.from_argparse(args))
     write_github_output(outputs.to_github_output())
 
     if args.verbose:
         log_github_output()
-
-
-if __name__ == '__main__':
-    action()
