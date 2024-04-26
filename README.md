@@ -11,7 +11,7 @@ for [Conventional Commits](https://www.conventionalcommits.org/) with support fo
   with:
     fetch-depth: 0
 
-- uses: wemogy/get-release-version-action@v4.2.2
+- uses: wemogy/get-release-version-action@v4.3.0
   id: get-release-version
   with:
     prefix: "v"
