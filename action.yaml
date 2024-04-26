@@ -7,11 +7,11 @@ inputs:
     required: false
     default: "v"
   suffix:
-    description: "The suffix that should appended to the version."
+    description: "The suffix that should appended to the version.  Use `NONE` for no suffix."
     required: false
     default: "NONE"
   reference-version-suffix:
-    description: "The suffix that should be replaced with the value in `suffix`."
+    description: "The suffix that should be replaced with the value in `suffix`.  Use `NONE` for no suffix."
     required: false
     default: "NONE"
   bumping-suffix:
@@ -26,6 +26,14 @@ inputs:
     description: "Create a Git Tag for the version and push it if a remote is configured."
     required: false
     default: "true"
+  git-username:
+    description: "The username for creating the (annotated) git tag. Use `NONE` for no username."
+    required: false
+    default: "NONE"
+  git-email:
+    description: "The email address for creating the (annotated) git tag. Use `NONE` for no email address."
+    required: false
+    default: "NONE"
   mode:
     description: "The mode to use for determining the next version. Possible values: `semantic`, `hash-based`."
     required: false
@@ -43,7 +51,7 @@ outputs:
     description: "If any relevant changes got detected and a tag got created."
 runs:
   using: "docker"
-  image: "docker://ghcr.io/wemogy/get-release-version-action:4.2.2"
+  image: "docker://ghcr.io/wemogy/get-release-version-action:4.3.0"
   args:
     - --prefix
     - ${{ inputs.prefix }}
@@ -57,5 +65,9 @@ runs:
     - ${{ inputs.only-bump-suffix }}
     - --create-tag
     - ${{ inputs.create-tag }}
+    - --git-username
+    - ${{ inputs.git-username }}
+    - --git-email
+    - ${{ inputs.git-email }}
     - --mode
     - ${{ inputs.mode }}

@@ -77,6 +77,22 @@ def cli_entrypoint() -> None:
     )
 
     parser.add_argument(
+        '--git-username',
+        dest='git_username',
+        required=False,
+        default='NONE',
+        help='The username for creating the (annotated) git tag. Use `NONE` for no username.'
+    )
+
+    parser.add_argument(
+        '--git-email',
+        dest='git_email',
+        required=False,
+        default='NONE',
+        help='The email address for creating the (annotated) git tag. Use `NONE` for no email address.'
+    )
+
+    parser.add_argument(
         '--mode',
         dest='mode',
         required=False,
