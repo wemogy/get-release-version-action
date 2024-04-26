@@ -20,11 +20,12 @@ for [Conventional Commits](https://www.conventionalcommits.org/) with support fo
   id: get-release-version
   with:
     prefix: "v"
-    suffix: "beta"
-    reference-version-suffix: "dev"
+    suffix: "NONE"
+    reference-version-suffix: "NONE"
     bumping-suffix: "hotfix"
-    only-bump-suffix: "true"
+    only-bump-suffix: "false"
     create-tag: "true"
+    mode: "semantic"
 
 - run: echo ${{ steps.get-release-version.outputs.version }}
 - run: echo ${{ steps.get-release-version.outputs.version-name }}
