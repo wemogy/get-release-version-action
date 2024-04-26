@@ -16,20 +16,23 @@ jobs:
           token: ${{ secrets.CHECKOUT_TOKEN  }}
           fetch-depth: 0
           ref: ${{ github.event.pull_request.head.sha }}
-      # Determine Release Version
-      - name: Run
+
+      - name: Get version for next release
         id: get-release-version
-        uses: ./
+        uses: ./.github/actions/local-action
         with:
           create-tag: "true"
 
-      - name: Show the next version
-        run: |
-          echo "Version: ${{ steps.get-release-version.outputs.version }}"
-          echo "Version name: ${{ steps.get-release-version.outputs.version-name }}"
-          echo "Has changes: ${{ steps.get-release-version.outputs.tag-created }}"
+      - uses: actions/checkout@v2
+      - name: Build Containers
+        uses: ./.github/actions/containers
+        with:
+          container-registry-server: "ghcr.io"
+          container-registry-username: ${{ github.actor }}
+          container-registry-password: ${{ secrets.GITHUB_TOKEN }}
+          version: ${{ steps.get-release-version.outputs.version }}
+          push: true
 
-      # Create GitHub Release
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v1
         if: steps.get-release-version.outputs.tag-created == 'true'
