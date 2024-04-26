@@ -20,7 +20,7 @@ jobs:
         uses: pr-annotators/pylint-pr-annotator@v0.0.1
 
       - name: Run pylint
-        run: poetry run pylint src
+        run: poetry run pylint get_release_version_action
 
   app-flake8:
     name: flake8 (App)
@@ -36,7 +36,7 @@ jobs:
         uses: rbialon/flake8-annotations@v1.1
 
       - name: Run flake8
-        run: poetry run flake8 src
+        run: poetry run flake8 get_release_version_action
 
   app-mypy:
     name: mypy (App)
@@ -52,7 +52,7 @@ jobs:
         uses: pr-annotators/mypy-pr-annotator@v1.0.0
 
       - name: Run mypy
-        run: poetry run mypy src
+        run: poetry run mypy get_release_version_action
 
   tests-pylint:
     name: pylint (Tests)
@@ -68,7 +68,7 @@ jobs:
         uses: pr-annotators/pylint-pr-annotator@main
 
       - name: Run pylint
-        run: poetry run pylint tests/e2e/*
+        run: poetry run pylint tests/e2e
 
   tests-flake8:
     name: flake8 (Tests)
