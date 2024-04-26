@@ -46,6 +46,9 @@ def main_algorithm(inputs: Inputs) -> Outputs:
                           ('0.0.0' not in new_version_tag_name and previous_version_tag_name != new_version_tag_name))
 
         if inputs.create_tag and new_tag_needed:
+            if inputs.git_email is None or inputs.git_username is None:
+                raise ValueError('git email and username are required when a tag should be created!')
+
             create_git_tag(new_version_tag_name, inputs.git_username, inputs.git_email)
 
         output = Outputs(
