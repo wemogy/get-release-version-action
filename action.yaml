@@ -54,20 +54,20 @@ runs:
   image: "docker://ghcr.io/wemogy/get-release-version-action:4.3.0"
   args:
     - --prefix
-    - ${{ inputs.prefix }}
+    - '${{ inputs.prefix }}'
     - --suffix
-    - ${{ inputs.suffix }}
+    - "${{ inputs.suffix }}"
     - --reference-version-suffix
-    - ${{ inputs.reference-version-suffix }}
+    - "${{ inputs.reference-version-suffix }}"
     - --bumping-suffix
-    - ${{ inputs.bumping-suffix }}
+    - "${{ inputs.bumping-suffix }}"
     - --only-bump-suffix
-    - ${{ inputs.only-bump-suffix }}
+    - "${{ inputs.only-bump-suffix }}"
     - --create-tag
-    - ${{ inputs.create-tag }}
+    - "${{ inputs.create-tag }}"
     - --git-username
-    - ${{ inputs.git-username }}
+    - "${{ inputs.git-username }}"
     - --git-email
-    - ${{ inputs.git-email }}
+    - "${{ inputs.git-email }}"
     - --mode
-    - ${{ inputs.mode }}
+    - "${{ inputs.mode }}"
