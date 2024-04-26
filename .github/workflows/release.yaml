@@ -22,7 +22,7 @@ jobs:
         uses: ./
         with:
           create-tag: "true"
-          use-local-container: "true"
+          image: "Dockerfile"
 
       - uses: actions/checkout@v2
       - name: Build Containers

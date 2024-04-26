@@ -20,7 +20,7 @@ jobs:
         uses: ./
         with:
           create-tag: "false"
-          use-local-container: "true"
+          image: "Dockerfile"
 
       - name: Print the outputs
         run: |
