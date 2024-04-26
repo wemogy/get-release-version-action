@@ -15,6 +15,11 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Setup git
+        run: |
+          git config --global user.email "it@wemogy.com"
+          git config --global user.name "wemogy IT"
+
       - name: Get version for next release
         id: get-release-version
         uses: ./.github/actions/local-action

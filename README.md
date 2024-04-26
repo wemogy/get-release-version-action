@@ -11,6 +11,11 @@ for [Conventional Commits](https://www.conventionalcommits.org/) with support fo
   with:
     fetch-depth: 0
 
+- name: Setup git for annotated tags
+   run: |
+      git config --global user.email "your@email.com"
+      git config --global user.name "Your username"
+
 - uses: wemogy/get-release-version-action@v6.0.0
   id: get-release-version
   with:
@@ -31,7 +36,7 @@ for [Conventional Commits](https://www.conventionalcommits.org/) with support fo
 ### Inputs
 
 | Input                      | Required | Default    | Description                                                                                              |
-|----------------------------|----------|------------|----------------------------------------------------------------------------------------------------------|
+| -------------------------- | -------- | ---------- | -------------------------------------------------------------------------------------------------------- |
 | `prefix`                   | `false`  | `v`        | The prefix that should be prepended to the version.                                                      |
 | `suffix`                   | `false`  | `NONE`     | The suffix that should be appended to the version (e.g. `beta`). Use `NONE` for no suffix.               |
 | `reference-version-suffix` | `false`  | `NONE`     | The suffix that should be replaced with the value in `suffix` (e.g. `dev`). Use `NONE` for no suffix.    |
@@ -43,7 +48,7 @@ for [Conventional Commits](https://www.conventionalcommits.org/) with support fo
 ### Outputs
 
 | Output                  | Description                                                 |
-|-------------------------|-------------------------------------------------------------|
+| ----------------------- | ----------------------------------------------------------- |
 | `version`               | The next version, without the prefix.                       |
 | `version-name`          | The next version, with the prefix.                          |
 | `previous-version`      | The previous version, without the prefix.                   |
