@@ -16,7 +16,7 @@ __all__ = [
 logger = logging.getLogger('wemogy.get-release-version-action')
 
 
-def check_inputs(inputs: Inputs):
+def check_inputs(inputs: Inputs) -> None:
     """Check if the input is valid."""
     # If create_tag is true, a git email address and a username are required.
     if inputs.create_tag:
@@ -50,7 +50,7 @@ def main_algorithm(inputs: Inputs) -> Outputs:
                           ('0.0.0' not in new_version_tag_name and previous_version_tag_name != new_version_tag_name))
 
         if inputs.create_tag and new_tag_needed:
-            create_git_tag(new_version_tag_name)
+            create_git_tag(new_version_tag_name, inputs.git_username, inputs.git_email)
 
         output = Outputs(
             version=new_version,
