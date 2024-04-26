@@ -10,6 +10,8 @@ def test_chore_then_chore(repo: TestRepo) -> None:
     """Test Case: Run the action after a ``chore:`` and another ``chore:`` commit."""
     # Arrange
     args_release = ActionInputs(
+        git_username='wemogy IT',
+        git_email='it@wemogy.com',
         prefix='v',
         suffix='pre',
         reference_version_suffix=None,
@@ -25,6 +27,8 @@ def test_chore_then_chore(repo: TestRepo) -> None:
     )
 
     args_beta = ActionInputs(
+        git_username='wemogy IT',
+        git_email='it@wemogy.com',
         prefix='v',
         suffix='beta',
         only_bump_suffix=True,
@@ -41,6 +45,8 @@ def test_chore_then_chore(repo: TestRepo) -> None:
     )
 
     args_prod = ActionInputs(
+        git_username='wemogy IT',
+        git_email='it@wemogy.com',
         prefix='v',
         suffix=None,
         only_bump_suffix=True,
@@ -87,6 +93,8 @@ def test_chore_then_fix(repo: TestRepo) -> None:
     """Test Case: Run the action after a ``chore:`` and a ``fix:`` commit."""
     # Arrange
     args_release = ActionInputs(
+        git_username='wemogy IT',
+        git_email='it@wemogy.com',
         prefix='v',
         suffix='pre',
         reference_version_suffix=None,
@@ -102,6 +110,8 @@ def test_chore_then_fix(repo: TestRepo) -> None:
     )
 
     args_beta = ActionInputs(
+        git_username='wemogy IT',
+        git_email='it@wemogy.com',
         prefix='v',
         suffix='beta',
         only_bump_suffix=True,
@@ -118,6 +128,8 @@ def test_chore_then_fix(repo: TestRepo) -> None:
     )
 
     args_prod = ActionInputs(
+        git_username='wemogy IT',
+        git_email='it@wemogy.com',
         prefix='v',
         suffix=None,
         only_bump_suffix=True,
@@ -164,6 +176,8 @@ def test_chore_then_feat(repo: TestRepo) -> None:
     """Test Case: Run the action after a ``chore:`` and a ``feat:`` commit."""
     # Arrange
     args_release = ActionInputs(
+        git_username='wemogy IT',
+        git_email='it@wemogy.com',
         prefix='v',
         suffix='pre',
         reference_version_suffix=None,
@@ -179,6 +193,8 @@ def test_chore_then_feat(repo: TestRepo) -> None:
     )
 
     args_beta = ActionInputs(
+        git_username='wemogy IT',
+        git_email='it@wemogy.com',
         prefix='v',
         suffix='beta',
         only_bump_suffix=True,
@@ -195,6 +211,8 @@ def test_chore_then_feat(repo: TestRepo) -> None:
     )
 
     args_prod = ActionInputs(
+        git_username='wemogy IT',
+        git_email='it@wemogy.com',
         prefix='v',
         suffix=None,
         only_bump_suffix=True,
@@ -241,6 +259,8 @@ def test_chore_then_breaking(repo: TestRepo) -> None:
     """Test Case: Run the action after a ``chore:`` and a ``feat!:`` commit."""
     # Arrange
     args_release = ActionInputs(
+        git_username='wemogy IT',
+        git_email='it@wemogy.com',
         prefix='v',
         suffix='pre',
         reference_version_suffix=None,
@@ -256,6 +276,8 @@ def test_chore_then_breaking(repo: TestRepo) -> None:
     )
 
     args_beta = ActionInputs(
+        git_username='wemogy IT',
+        git_email='it@wemogy.com',
         prefix='v',
         suffix='beta',
         only_bump_suffix=True,
@@ -272,6 +294,8 @@ def test_chore_then_breaking(repo: TestRepo) -> None:
     )
 
     args_prod = ActionInputs(
+        git_username='wemogy IT',
+        git_email='it@wemogy.com',
         prefix='v',
         suffix=None,
         only_bump_suffix=True,
@@ -318,6 +342,8 @@ def test_fix_then_chore(repo: TestRepo) -> None:
     """Test Case: Run the action after a ``fix:`` and a ``chore:`` commit."""
     # Arrange
     args_release = ActionInputs(
+        git_username='wemogy IT',
+        git_email='it@wemogy.com',
         prefix='v',
         suffix='pre',
         reference_version_suffix=None,
@@ -333,6 +359,8 @@ def test_fix_then_chore(repo: TestRepo) -> None:
     )
 
     args_beta = ActionInputs(
+        git_username='wemogy IT',
+        git_email='it@wemogy.com',
         prefix='v',
         suffix='beta',
         only_bump_suffix=True,
@@ -349,6 +377,8 @@ def test_fix_then_chore(repo: TestRepo) -> None:
     )
 
     args_prod = ActionInputs(
+        git_username='wemogy IT',
+        git_email='it@wemogy.com',
         prefix='v',
         suffix=None,
         only_bump_suffix=True,
@@ -395,6 +425,8 @@ def test_fix_then_fix(repo: TestRepo) -> None:
     """Test Case: Run the action after a ``fix:`` and another ``fix:`` commit."""
     # Arrange
     args_release = ActionInputs(
+        git_username='wemogy IT',
+        git_email='it@wemogy.com',
         prefix='v',
         suffix='pre',
         reference_version_suffix=None,
@@ -410,6 +442,8 @@ def test_fix_then_fix(repo: TestRepo) -> None:
     )
 
     args_beta = ActionInputs(
+        git_username='wemogy IT',
+        git_email='it@wemogy.com',
         prefix='v',
         suffix='beta',
         only_bump_suffix=True,
@@ -426,6 +460,8 @@ def test_fix_then_fix(repo: TestRepo) -> None:
     )
 
     args_prod = ActionInputs(
+        git_username='wemogy IT',
+        git_email='it@wemogy.com',
         prefix='v',
         suffix=None,
         only_bump_suffix=True,
@@ -472,6 +508,8 @@ def test_fix_then_feat(repo: TestRepo) -> None:
     """Test Case: Run the action after a ``fix:`` and a ``feat:`` commit."""
     # Arrange
     args_release = ActionInputs(
+        git_username='wemogy IT',
+        git_email='it@wemogy.com',
         prefix='v',
         suffix='pre',
         reference_version_suffix=None,
@@ -486,6 +524,8 @@ def test_fix_then_feat(repo: TestRepo) -> None:
     )
 
     args_beta = ActionInputs(
+        git_username='wemogy IT',
+        git_email='it@wemogy.com',
         prefix='v',
         suffix='beta',
         only_bump_suffix=True,
@@ -502,6 +542,8 @@ def test_fix_then_feat(repo: TestRepo) -> None:
     )
 
     args_prod = ActionInputs(
+        git_username='wemogy IT',
+        git_email='it@wemogy.com',
         prefix='v',
         suffix=None,
         only_bump_suffix=True,
@@ -548,6 +590,8 @@ def test_fix_then_breaking(repo: TestRepo) -> None:
     """Test Case: Run the action after a ``fix:`` and a ``feat!:`` commit."""
     # Arrange
     args_release = ActionInputs(
+        git_username='wemogy IT',
+        git_email='it@wemogy.com',
         prefix='v',
         suffix='pre',
         reference_version_suffix=None,
@@ -563,6 +607,8 @@ def test_fix_then_breaking(repo: TestRepo) -> None:
     )
 
     args_beta = ActionInputs(
+        git_username='wemogy IT',
+        git_email='it@wemogy.com',
         prefix='v',
         suffix='beta',
         only_bump_suffix=True,
@@ -579,6 +625,8 @@ def test_fix_then_breaking(repo: TestRepo) -> None:
     )
 
     args_prod = ActionInputs(
+        git_username='wemogy IT',
+        git_email='it@wemogy.com',
         prefix='v',
         suffix=None,
         only_bump_suffix=True,
@@ -625,6 +673,8 @@ def test_feat_then_chore(repo: TestRepo) -> None:
     """Test Case: Run the action after a ``feat:`` and a ``chore:`` commit."""
     # Arrange
     args_release = ActionInputs(
+        git_username='wemogy IT',
+        git_email='it@wemogy.com',
         prefix='v',
         suffix='pre',
         reference_version_suffix=None,
@@ -640,6 +690,8 @@ def test_feat_then_chore(repo: TestRepo) -> None:
     )
 
     args_beta = ActionInputs(
+        git_username='wemogy IT',
+        git_email='it@wemogy.com',
         prefix='v',
         suffix='beta',
         only_bump_suffix=True,
@@ -656,6 +708,8 @@ def test_feat_then_chore(repo: TestRepo) -> None:
     )
 
     args_prod = ActionInputs(
+        git_username='wemogy IT',
+        git_email='it@wemogy.com',
         prefix='v',
         suffix=None,
         only_bump_suffix=True,
@@ -702,6 +756,8 @@ def test_feat_then_fix(repo: TestRepo) -> None:
     """Test Case: Run the action after a ``feat:`` and a ``fix:`` commit."""
     # Arrange
     args_release = ActionInputs(
+        git_username='wemogy IT',
+        git_email='it@wemogy.com',
         prefix='v',
         suffix='pre',
         reference_version_suffix=None,
@@ -717,6 +773,8 @@ def test_feat_then_fix(repo: TestRepo) -> None:
     )
 
     args_beta = ActionInputs(
+        git_username='wemogy IT',
+        git_email='it@wemogy.com',
         prefix='v',
         suffix='beta',
         only_bump_suffix=True,
@@ -733,6 +791,8 @@ def test_feat_then_fix(repo: TestRepo) -> None:
     )
 
     args_prod = ActionInputs(
+        git_username='wemogy IT',
+        git_email='it@wemogy.com',
         prefix='v',
         suffix=None,
         only_bump_suffix=True,
@@ -779,6 +839,8 @@ def test_feat_then_feat(repo: TestRepo) -> None:
     """Test Case: Run the action after a ``feat:`` and another ``feat:`` commit."""
     # Arrange
     args_release = ActionInputs(
+        git_username='wemogy IT',
+        git_email='it@wemogy.com',
         prefix='v',
         suffix='pre',
         reference_version_suffix=None,
@@ -793,6 +855,8 @@ def test_feat_then_feat(repo: TestRepo) -> None:
     )
 
     args_beta = ActionInputs(
+        git_username='wemogy IT',
+        git_email='it@wemogy.com',
         prefix='v',
         suffix='beta',
         only_bump_suffix=True,
@@ -809,6 +873,8 @@ def test_feat_then_feat(repo: TestRepo) -> None:
     )
 
     args_prod = ActionInputs(
+        git_username='wemogy IT',
+        git_email='it@wemogy.com',
         prefix='v',
         suffix=None,
         only_bump_suffix=True,
@@ -855,6 +921,8 @@ def test_feat_then_breaking(repo: TestRepo) -> None:
     """Test Case: Run the action after a ``feat:`` and a ``feat!:`` commit."""
     # Arrange
     args_release = ActionInputs(
+        git_username='wemogy IT',
+        git_email='it@wemogy.com',
         prefix='v',
         suffix='pre',
         reference_version_suffix=None,
@@ -870,6 +938,8 @@ def test_feat_then_breaking(repo: TestRepo) -> None:
     )
 
     args_beta = ActionInputs(
+        git_username='wemogy IT',
+        git_email='it@wemogy.com',
         prefix='v',
         suffix='beta',
         only_bump_suffix=True,
@@ -886,6 +956,8 @@ def test_feat_then_breaking(repo: TestRepo) -> None:
     )
 
     args_prod = ActionInputs(
+        git_username='wemogy IT',
+        git_email='it@wemogy.com',
         prefix='v',
         suffix=None,
         only_bump_suffix=True,
@@ -932,6 +1004,8 @@ def test_breaking_then_chore(repo: TestRepo) -> None:
     """Test Case: Run the action after a ``feat!:`` and a ``chore:`` commit."""
     # Arrange
     args_release = ActionInputs(
+        git_username='wemogy IT',
+        git_email='it@wemogy.com',
         prefix='v',
         suffix='pre',
         reference_version_suffix=None,
@@ -947,6 +1021,8 @@ def test_breaking_then_chore(repo: TestRepo) -> None:
     )
 
     args_beta = ActionInputs(
+        git_username='wemogy IT',
+        git_email='it@wemogy.com',
         prefix='v',
         suffix='beta',
         only_bump_suffix=True,
@@ -963,6 +1039,8 @@ def test_breaking_then_chore(repo: TestRepo) -> None:
     )
 
     args_prod = ActionInputs(
+        git_username='wemogy IT',
+        git_email='it@wemogy.com',
         prefix='v',
         suffix=None,
         only_bump_suffix=True,
@@ -1009,6 +1087,8 @@ def test_breaking_then_fix(repo: TestRepo) -> None:
     """Test Case: Run the action after a ``feat!:`` and a ``fix:`` commit."""
     # Arrange
     args_release = ActionInputs(
+        git_username='wemogy IT',
+        git_email='it@wemogy.com',
         prefix='v',
         suffix='pre',
         reference_version_suffix=None,
@@ -1024,6 +1104,8 @@ def test_breaking_then_fix(repo: TestRepo) -> None:
     )
 
     args_beta = ActionInputs(
+        git_username='wemogy IT',
+        git_email='it@wemogy.com',
         prefix='v',
         suffix='beta',
         only_bump_suffix=True,
@@ -1040,6 +1122,8 @@ def test_breaking_then_fix(repo: TestRepo) -> None:
     )
 
     args_prod = ActionInputs(
+        git_username='wemogy IT',
+        git_email='it@wemogy.com',
         prefix='v',
         suffix=None,
         only_bump_suffix=True,
@@ -1086,6 +1170,8 @@ def test_breaking_then_feat(repo: TestRepo) -> None:
     """Test Case: Run the action after a ``feat!:`` and another ``feat:`` commit."""
     # Arrange
     args_release = ActionInputs(
+        git_username='wemogy IT',
+        git_email='it@wemogy.com',
         prefix='v',
         suffix='pre',
         reference_version_suffix=None,
@@ -1100,6 +1186,8 @@ def test_breaking_then_feat(repo: TestRepo) -> None:
     )
 
     args_beta = ActionInputs(
+        git_username='wemogy IT',
+        git_email='it@wemogy.com',
         prefix='v',
         suffix='beta',
         only_bump_suffix=True,
@@ -1116,6 +1204,8 @@ def test_breaking_then_feat(repo: TestRepo) -> None:
     )
 
     args_prod = ActionInputs(
+        git_username='wemogy IT',
+        git_email='it@wemogy.com',
         prefix='v',
         suffix=None,
         only_bump_suffix=True,
@@ -1162,6 +1252,8 @@ def test_breaking_then_breaking(repo: TestRepo) -> None:
     """Test Case: Run the action after a ``feat!:`` and another ``feat!:`` commit."""
     # Arrange
     args_release = ActionInputs(
+        git_username='wemogy IT',
+        git_email='it@wemogy.com',
         prefix='v',
         suffix='pre',
         reference_version_suffix=None,
@@ -1177,6 +1269,8 @@ def test_breaking_then_breaking(repo: TestRepo) -> None:
     )
 
     args_beta = ActionInputs(
+        git_username='wemogy IT',
+        git_email='it@wemogy.com',
         prefix='v',
         suffix='beta',
         only_bump_suffix=True,
@@ -1193,6 +1287,8 @@ def test_breaking_then_breaking(repo: TestRepo) -> None:
     )
 
     args_prod = ActionInputs(
+        git_username='wemogy IT',
+        git_email='it@wemogy.com',
         prefix='v',
         suffix=None,
         only_bump_suffix=True,

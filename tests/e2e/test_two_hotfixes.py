@@ -10,6 +10,8 @@ def test_fix_then_hotfixes(repo: TestRepo) -> None:
     # Arrange
     # Fix
     args_fix_release = ActionInputs(
+        git_username='wemogy IT',
+        git_email='it@wemogy.com',
         prefix='v',
         suffix='pre',
         reference_version_suffix=None,
@@ -25,6 +27,8 @@ def test_fix_then_hotfixes(repo: TestRepo) -> None:
     )
 
     args_fix_beta = ActionInputs(
+        git_username='wemogy IT',
+        git_email='it@wemogy.com',
         prefix='v',
         suffix='beta',
         only_bump_suffix=True,
@@ -41,6 +45,8 @@ def test_fix_then_hotfixes(repo: TestRepo) -> None:
     )
 
     args_fix_prod = ActionInputs(
+        git_username='wemogy IT',
+        git_email='it@wemogy.com',
         prefix='v',
         suffix=None,
         only_bump_suffix=True,
@@ -58,6 +64,8 @@ def test_fix_then_hotfixes(repo: TestRepo) -> None:
 
     # Hotfix 1
     args_hotfix1_release = ActionInputs(
+        git_username='wemogy IT',
+        git_email='it@wemogy.com',
         prefix='v',
         suffix='pre',
         reference_version_suffix=None,
@@ -75,6 +83,8 @@ def test_fix_then_hotfixes(repo: TestRepo) -> None:
     )
 
     args_hotfix1_beta = ActionInputs(
+        git_username='wemogy IT',
+        git_email='it@wemogy.com',
         prefix='v',
         suffix='beta',
         reference_version_suffix='pre',
@@ -92,6 +102,8 @@ def test_fix_then_hotfixes(repo: TestRepo) -> None:
     )
 
     args_hotfix1_prod = ActionInputs(
+        git_username='wemogy IT',
+        git_email='it@wemogy.com',
         prefix='v',
         suffix=None,
         reference_version_suffix='beta',
@@ -110,6 +122,8 @@ def test_fix_then_hotfixes(repo: TestRepo) -> None:
 
     # Hotfix 2
     args_hotfix2_release = ActionInputs(
+        git_username='wemogy IT',
+        git_email='it@wemogy.com',
         prefix='v',
         suffix='pre',
         reference_version_suffix=None,
@@ -127,6 +141,8 @@ def test_fix_then_hotfixes(repo: TestRepo) -> None:
     )
 
     args_hotfix2_beta = ActionInputs(
+        git_username='wemogy IT',
+        git_email='it@wemogy.com',
         prefix='v',
         suffix='beta',
         reference_version_suffix='pre',
@@ -144,6 +160,8 @@ def test_fix_then_hotfixes(repo: TestRepo) -> None:
     )
 
     args_hotfix2_prod = ActionInputs(
+        git_username='wemogy IT',
+        git_email='it@wemogy.com',
         prefix='v',
         suffix=None,
         reference_version_suffix='beta',
@@ -245,6 +263,8 @@ def test_feat_then_hotfixes(repo: TestRepo) -> None:
     # Arrange
     # Feature
     args_feat_release = ActionInputs(
+        git_username='wemogy IT',
+        git_email='it@wemogy.com',
         prefix='v',
         suffix='pre',
         reference_version_suffix=None,
@@ -260,6 +280,8 @@ def test_feat_then_hotfixes(repo: TestRepo) -> None:
     )
 
     args_feat_beta = ActionInputs(
+        git_username='wemogy IT',
+        git_email='it@wemogy.com',
         prefix='v',
         suffix='beta',
         only_bump_suffix=True,
@@ -276,6 +298,8 @@ def test_feat_then_hotfixes(repo: TestRepo) -> None:
     )
 
     args_feat_prod = ActionInputs(
+        git_username='wemogy IT',
+        git_email='it@wemogy.com',
         prefix='v',
         suffix=None,
         only_bump_suffix=True,
@@ -293,6 +317,8 @@ def test_feat_then_hotfixes(repo: TestRepo) -> None:
 
     # Hotfix 1
     args_hotfix1_release = ActionInputs(
+        git_username='wemogy IT',
+        git_email='it@wemogy.com',
         prefix='v',
         suffix='pre',
         reference_version_suffix=None,
@@ -310,6 +336,8 @@ def test_feat_then_hotfixes(repo: TestRepo) -> None:
     )
 
     args_hotfix1_beta = ActionInputs(
+        git_username='wemogy IT',
+        git_email='it@wemogy.com',
         prefix='v',
         suffix='beta',
         reference_version_suffix='pre',
@@ -327,6 +355,8 @@ def test_feat_then_hotfixes(repo: TestRepo) -> None:
     )
 
     args_hotfix1_prod = ActionInputs(
+        git_username='wemogy IT',
+        git_email='it@wemogy.com',
         prefix='v',
         suffix=None,
         reference_version_suffix='beta',
@@ -345,6 +375,8 @@ def test_feat_then_hotfixes(repo: TestRepo) -> None:
 
     # Hotfix 2
     args_hotfix2_release = ActionInputs(
+        git_username='wemogy IT',
+        git_email='it@wemogy.com',
         prefix='v',
         suffix='pre',
         reference_version_suffix=None,
@@ -362,6 +394,8 @@ def test_feat_then_hotfixes(repo: TestRepo) -> None:
     )
 
     args_hotfix2_beta = ActionInputs(
+        git_username='wemogy IT',
+        git_email='it@wemogy.com',
         prefix='v',
         suffix='beta',
         reference_version_suffix='pre',
@@ -379,6 +413,8 @@ def test_feat_then_hotfixes(repo: TestRepo) -> None:
     )
 
     args_hotfix2_prod = ActionInputs(
+        git_username='wemogy IT',
+        git_email='it@wemogy.com',
         prefix='v',
         suffix=None,
         reference_version_suffix='beta',
@@ -480,6 +516,8 @@ def test_breaking_then_hotfixes(repo: TestRepo) -> None:
     # Arrange
     # Breaking
     args_breaking_release = ActionInputs(
+        git_username='wemogy IT',
+        git_email='it@wemogy.com',
         prefix='v',
         suffix='pre',
         reference_version_suffix=None,
@@ -495,6 +533,8 @@ def test_breaking_then_hotfixes(repo: TestRepo) -> None:
     )
 
     args_breaking_beta = ActionInputs(
+        git_username='wemogy IT',
+        git_email='it@wemogy.com',
         prefix='v',
         suffix='beta',
         only_bump_suffix=True,
@@ -511,6 +551,8 @@ def test_breaking_then_hotfixes(repo: TestRepo) -> None:
     )
 
     args_breaking_prod = ActionInputs(
+        git_username='wemogy IT',
+        git_email='it@wemogy.com',
         prefix='v',
         suffix=None,
         only_bump_suffix=True,
@@ -528,6 +570,8 @@ def test_breaking_then_hotfixes(repo: TestRepo) -> None:
 
     # Hotfix 1
     args_hotfix1_release = ActionInputs(
+        git_username='wemogy IT',
+        git_email='it@wemogy.com',
         prefix='v',
         suffix='pre',
         reference_version_suffix=None,
@@ -545,6 +589,8 @@ def test_breaking_then_hotfixes(repo: TestRepo) -> None:
     )
 
     args_hotfix1_beta = ActionInputs(
+        git_username='wemogy IT',
+        git_email='it@wemogy.com',
         prefix='v',
         suffix='beta',
         reference_version_suffix='pre',
@@ -562,6 +608,8 @@ def test_breaking_then_hotfixes(repo: TestRepo) -> None:
     )
 
     args_hotfix1_prod = ActionInputs(
+        git_username='wemogy IT',
+        git_email='it@wemogy.com',
         prefix='v',
         suffix=None,
         reference_version_suffix='beta',
@@ -580,6 +628,8 @@ def test_breaking_then_hotfixes(repo: TestRepo) -> None:
 
     # Hotfix 2
     args_hotfix2_release = ActionInputs(
+        git_username='wemogy IT',
+        git_email='it@wemogy.com',
         prefix='v',
         suffix='pre',
         reference_version_suffix=None,
@@ -597,6 +647,8 @@ def test_breaking_then_hotfixes(repo: TestRepo) -> None:
     )
 
     args_hotfix2_beta = ActionInputs(
+        git_username='wemogy IT',
+        git_email='it@wemogy.com',
         prefix='v',
         suffix='beta',
         reference_version_suffix='pre',
@@ -614,6 +666,8 @@ def test_breaking_then_hotfixes(repo: TestRepo) -> None:
     )
 
     args_hotfix2_prod = ActionInputs(
+        git_username='wemogy IT',
+        git_email='it@wemogy.com',
         prefix='v',
         suffix=None,
         reference_version_suffix='beta',
