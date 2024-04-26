@@ -13,8 +13,8 @@ for [Conventional Commits](https://www.conventionalcommits.org/) with support fo
 
 - name: Setup git for annotated tags
    run: |
-      git config --global user.email "your@email.com"
-      git config --global user.name "Your username"
+      git config user.email "your@email.com"
+      git config user.name "Your username"
 
 - uses: wemogy/get-release-version-action@v6.0.0
   id: get-release-version
