@@ -10,15 +10,11 @@ homepage = "https://github.com/wemogy/get-release-version-action"
 repository = "https://github.com/wemogy/get-release-version-action"
 documentation = "https://github.com/wemogy/get-release-version-action"
 
-[[tool.poetry.packages]]
-include = "get_release_version_action"
-from = "src"
-
 [tool.poetry.dependencies]
 python = "^3.12"
 PyYAML = "^6.0.1"
 semver = "^3.0.2"
-python-semantic-release = "^9.4.1"
+python-semantic-release = "^9.5.0"
 GitPython = "^3.1.43"
 
 [tool.poetry.group.dev.dependencies]
