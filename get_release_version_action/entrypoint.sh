@@ -3,7 +3,5 @@
 # Trust the home directory
 sh -c "git config --global --add safe.directory $PWD"
 
-printf " '%s'" "$@"
-
 # Run the python application and pass the arguments
-poetry run -C /action python /action/get_release_version_action/app.py $@
+poetry run -C /action python /action/get_release_version_action/app.py "$@"
