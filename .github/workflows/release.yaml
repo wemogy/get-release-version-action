@@ -19,10 +19,9 @@ jobs:
 
       - name: Get version for next release
         id: get-release-version
-        uses: ./
+        uses: ./.github/actions/local-action
         with:
           create-tag: "true"
-          image: "Dockerfile"
 
       - uses: actions/checkout@v2
       - name: Build Containers

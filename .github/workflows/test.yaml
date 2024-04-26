@@ -17,10 +17,9 @@ jobs:
 
       - name: Run the action
         id: get-release-version
-        uses: ./
+        uses: ./.github/actions/local-action
         with:
           create-tag: "false"
-          image: "Dockerfile"
 
       - name: Print the outputs
         run: |
