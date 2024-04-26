@@ -1,0 +1,7 @@
+{
+  "python.venvPath": "~/Library/Caches/pypoetry/virtualenvs",
+  "python.testing.pytestArgs": ["tests"],
+  "python.testing.unittestEnabled": false,
+  "python.testing.pytestEnabled": true,
+  "python.testing.pytestPath": "pytest"
+}

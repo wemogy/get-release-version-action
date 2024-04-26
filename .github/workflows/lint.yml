@@ -1,0 +1,103 @@
+name: Lint
+on:
+  workflow_dispatch:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  app-pylint:
+    name: pylint (App)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: ./.github/actions/setup-python
+
+      - name: Add pylint annotator
+        uses: pr-annotators/pylint-pr-annotator@v0.0.1
+
+      - name: Run pylint
+        run: poetry run pylint get_release_version_action
+
+  app-flake8:
+    name: flake8 (App)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: ./.github/actions/setup-python
+
+      - name: Add flake8 annotator
+        uses: rbialon/flake8-annotations@v1.1
+
+      - name: Run flake8
+        run: poetry run flake8 get_release_version_action
+
+  app-mypy:
+    name: mypy (App)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: ./.github/actions/setup-python
+
+      - name: Add mypy annotator
+        uses: pr-annotators/mypy-pr-annotator@v1.0.0
+
+      - name: Run mypy
+        run: poetry run mypy get_release_version_action
+
+  tests-pylint:
+    name: pylint (Tests)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: ./.github/actions/setup-python
+
+      - name: Add pylint annotator
+        uses: pr-annotators/pylint-pr-annotator@main
+
+      - name: Run pylint
+        run: poetry run pylint tests/e2e
+
+  tests-flake8:
+    name: flake8 (Tests)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: ./.github/actions/setup-python
+
+      - name: Add pylint annotator
+        uses: rbialon/flake8-annotations@v1.1
+
+      - name: Run flake8
+        run: poetry run flake8 tests
+
+  tests-mypy:
+    name: mypy (Tests)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: ./.github/actions/setup-python
+
+      - name: Add mypy annotator
+        uses: pr-annotators/mypy-pr-annotator@v1.0.0
+
+      - name: Run mypy
+        run: poetry run mypy tests

@@ -1,0 +1,14 @@
+name: Setup Python
+description: Setup python
+runs:
+  using: composite
+  steps:
+    - name: "Setup Python, Poetry and Dependencies"
+      uses: packetcoders/action-setup-cache-python-poetry@main
+      with:
+        python-version: 3.12
+        poetry-version: 1.8.2
+
+    - name: Install dependencies
+      run: poetry install --no-interaction --with dev
+      shell: bash
