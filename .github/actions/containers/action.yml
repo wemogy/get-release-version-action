@@ -38,4 +38,4 @@ runs:
           VERSION=${{ inputs.version }}
         file: Dockerfile
         push: ${{ inputs.push }}
-        tags: ${{ inputs.container-registry-server }}/get-release-version-action:${{ inputs.version }}
+        tags: ${{ inputs.container-registry-server }}/wemogy/get-release-version-action:${{ inputs.version }}
