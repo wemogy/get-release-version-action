@@ -16,9 +16,18 @@ __all__ = [
 logger = logging.getLogger('wemogy.get-release-version-action')
 
 
+def check_inputs(inputs: Inputs):
+    """Check if the input is valid."""
+    # If create_tag is true, a git email address and a username are required.
+    if inputs.create_tag:
+        if inputs.git_email is None or inputs.git_username is None:
+            raise ValueError('git email and username are required when a tag should be created!')
+
+
 def main_algorithm(inputs: Inputs) -> Outputs:
     """The main algorithm."""
     logger.debug('Inputs: %s', inputs)
+    check_inputs(inputs)
 
     with git.Repo(os.getcwd()) as repo:
         if inputs.mode == 'semantic':
