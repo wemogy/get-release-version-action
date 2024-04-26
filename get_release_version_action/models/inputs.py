@@ -37,6 +37,12 @@ class Inputs:
     create_tag: bool = True
     """Create a git tag for the version and push it if a remote is configured."""
 
+    git_username: str | None = None
+    """The username for creating the (annotated) git tag. Use `NONE` for no username."""
+
+    git_email: str | None = None
+    """The email address for creating the (annotated) git tag. Use `NONE` for no email address."""
+
     mode: str = 'semantic'
     """The mode to use for determining the next version. Possible values: `semantic`, `hash-based`."""
 

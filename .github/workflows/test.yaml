@@ -39,11 +39,6 @@ jobs:
       - name: Setup Python
         uses: ./.github/actions/setup-python
 
-      - name: Setup git
-        run: |
-          git config --global user.email "it@wemogy.com"
-          git config --global user.name "Wemogy IT"
-
       - name: Run pytest
         run: poetry run pytest --junit-xml test-result.xml tests/e2e
 

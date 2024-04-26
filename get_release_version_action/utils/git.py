@@ -16,8 +16,12 @@ __all__ = [
 tag_creation_history: list[str] = []
 
 
-def create_git_tag(version: str) -> None:
+def create_git_tag(version: str, username: str, email: str) -> None:
     """Create a new git tag for the given version and push it if a remote is configured."""
+    logger.info('Setting git username and email to %s <%s>', username, email)
+    run_command('git', 'config', 'user.email', email)
+    run_command('git', 'config', 'user.name', username)
+
     logger.info('Creating tag %s', version)
 
     # Create the tag

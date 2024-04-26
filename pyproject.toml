@@ -32,7 +32,8 @@ max-line-length = 120
 
 [tool.pylint.message-control]
 disable = [
-    "too-many-return-statements"
+    "too-many-return-statements",
+    "too-many-instance-attributes"
 ]
 
 [tool.flake8]

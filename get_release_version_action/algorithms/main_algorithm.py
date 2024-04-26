@@ -20,6 +20,11 @@ def main_algorithm(inputs: Inputs) -> Outputs:
     """The main algorithm."""
     logger.debug('Inputs: %s', inputs)
 
+    # If create_tag is true, a git email address and a username are required.
+    if inputs.create_tag:
+        if inputs.git_email is None or inputs.git_username is None:
+            raise ValueError('git email and username are required when a tag should be created!')
+
     with git.Repo(os.getcwd()) as repo:
         if inputs.mode == 'semantic':
             previous_version_tag_name, new_version, version_bumped = get_next_semantic_version(inputs, repo)
@@ -41,7 +46,10 @@ def main_algorithm(inputs: Inputs) -> Outputs:
                           ('0.0.0' not in new_version_tag_name and previous_version_tag_name != new_version_tag_name))
 
         if inputs.create_tag and new_tag_needed:
-            create_git_tag(new_version_tag_name)
+            if inputs.git_email is None or inputs.git_username is None:
+                raise ValueError('git email and username are required when a tag should be created!')
+
+            create_git_tag(new_version_tag_name, inputs.git_username, inputs.git_email)
 
         output = Outputs(
             version=new_version,

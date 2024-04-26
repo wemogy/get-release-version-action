@@ -11,20 +11,18 @@ for [Conventional Commits](https://www.conventionalcommits.org/) with support fo
   with:
     fetch-depth: 0
 
-- name: Setup git for annotated tags
-  run: |
-    git config user.email "your@email.com"
-    git config user.name "Your username"
-
 - uses: wemogy/get-release-version-action@v4.2.2
   id: get-release-version
   with:
     prefix: "v"
-    suffix: "beta"
-    reference-version-suffix: "dev"
+    suffix: "NONE"
+    reference-version-suffix: "NONE"
     bumping-suffix: "hotfix"
-    only-bump-suffix: "true"
+    only-bump-suffix: "false"
     create-tag: "true"
+    git-username: "Your User"
+    git-email: "you@example.com"
+    mode: "semantic"
 
 - run: echo ${{ steps.get-release-version.outputs.version }}
 - run: echo ${{ steps.get-release-version.outputs.version-name }}
@@ -35,20 +33,22 @@ for [Conventional Commits](https://www.conventionalcommits.org/) with support fo
 
 ### Inputs
 
-| Input                      | Required | Default    | Description                                                                                              |
-| -------------------------- | -------- | ---------- | -------------------------------------------------------------------------------------------------------- |
-| `prefix`                   | `false`  | `v`        | The prefix that should be prepended to the version.                                                      |
-| `suffix`                   | `false`  | `NONE`     | The suffix that should be appended to the version (e.g. `beta`). Use `NONE` for no suffix.               |
-| `reference-version-suffix` | `false`  | `NONE`     | The suffix that should be replaced with the value in `suffix` (e.g. `dev`). Use `NONE` for no suffix.    |
-| `bumping-suffix`           | `false`  | `hotfix`   | The suffix to append to the version (or increment if it already exists) if `only-bump-suffix` is `true`. |
-| `only-bump-suffix`         | `false`  | `false`    | Bump the `bumping-suffix` instead of the version if changes were detected.                               |
-| `create-tag`               | `false`  | `true`     | Create a git tag for the version and push it if a remote is configured.                                  |
-| `mode`                     | `false`  | `semantic` | The mode to use for determining the next version. Possible values: `semantic`, `hash-based`.             |
+| Input                      | Required                  | Default    | Description                                                                                              |
+|----------------------------|---------------------------|------------|----------------------------------------------------------------------------------------------------------|
+| `prefix`                   | `false`                   | `v`        | The prefix that should be prepended to the version.                                                      |
+| `suffix`                   | `false`                   | `NONE`     | The suffix that should be appended to the version (e.g. `beta`). Use `NONE` for no suffix.               |
+| `reference-version-suffix` | `false`                   | `NONE`     | The suffix that should be replaced with the value in `suffix` (e.g. `dev`). Use `NONE` for no suffix.    |
+| `bumping-suffix`           | `false`                   | `hotfix`   | The suffix to append to the version (or increment if it already exists) if `only-bump-suffix` is `true`. |
+| `only-bump-suffix`         | `false`                   | `false`    | Bump the `bumping-suffix` instead of the version if changes were detected.                               |
+| `create-tag`               | `false`                   | `true`     | Create a git tag for the version and push it if a remote is configured.                                  |
+| `git-username`             | If `create-tag` is `true` | `NONE`     | The username for creating the (annotated) git tag. Use `NONE` for no username.                           |
+| `git-email`                | If `create-tag` is `true` | `NONE`     | The email address for creating the (annotated) git tag. Use `NONE` for no email address.                 |
+| `mode`                     | `false`                   | `semantic` | The mode to use for determining the next version. Possible values: `semantic`, `hash-based`.             |
 
 ### Outputs
 
 | Output                  | Description                                                 |
-| ----------------------- | ----------------------------------------------------------- |
+|-------------------------|-------------------------------------------------------------|
 | `version`               | The next version, without the prefix.                       |
 | `version-name`          | The next version, with the prefix.                          |
 | `previous-version`      | The previous version, without the prefix.                   |
