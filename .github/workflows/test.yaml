@@ -20,6 +20,7 @@ jobs:
         uses: ./
         with:
           create-tag: "false"
+          use-local-container: "true"
 
       - name: Print the outputs
         run: |

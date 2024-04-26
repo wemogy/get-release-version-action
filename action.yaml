@@ -30,6 +30,10 @@ inputs:
     description: "The mode to use for determining the next version. Possible values: `semantic`, `hash-based`."
     required: false
     default: "semantic"
+  use-local-container:
+    description: "Whether to use the container released to GHCR or build the container from the current sources (for testing)."
+    required: false
+    default: "false"
 outputs:
   version:
     description: "The next version, without the prefix"
@@ -43,7 +47,7 @@ outputs:
     description: "If any relevant changes got detected and a tag got created."
 runs:
   using: "docker"
-  image: "Dockerfile"
+  image: ${{ inputs.use-local-container && 'Dockerfile' || 'docker://ghcr.io/wemogy/get-release-version-action:latest' }}
   args:
     - --prefix
     - ${{ inputs.prefix }}
