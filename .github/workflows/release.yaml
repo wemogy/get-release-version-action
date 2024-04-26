@@ -27,9 +27,9 @@ jobs:
       - name: Build Containers
         uses: ./.github/actions/containers
         with:
-          container-registry-server: ${{ secrets.CONTAINER_REGISTRY_LOGIN_SERVER }}
-          container-registry-username: ${{ secrets.CONTAINER_REGISTRY_USERNAME }}
-          container-registry-password: ${{ secrets.CONTAINER_REGISTRY_PASSWORD }}
+          container-registry-server: "ghcr.io"
+          container-registry-username: ${{ github.actor }}
+          container-registry-password: ${{ secrets.GITHUB_TOKEN }}
           version: ${{ steps.get-release-version.outputs.version }}
           push: true
 
