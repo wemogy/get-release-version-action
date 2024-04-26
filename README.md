@@ -186,10 +186,11 @@ All tools are configured in the `pyproject.toml`.
 ```bash
 # with poetry shell
 # working directory: repository root
-pylint src
-flake8 src
-mypy src
-pylint tests
+pylint get_release_version_action
+flake8 get_release_version_action
+mypy get_release_version_action
+
+pylint tests/e2e
 flake8 tests
 mypy tests
 ```

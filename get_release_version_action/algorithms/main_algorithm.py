@@ -4,19 +4,19 @@ import os
 
 import git
 
-from models import Inputs, Outputs
-from utils import create_git_tag
+from ..models import Inputs, Outputs
+from ..utils import create_git_tag
 from .hash_based import get_next_version as get_next_version_hash
 from .semantic import get_next_version as get_next_semantic_version
 
 __all__ = [
-  'main'
+    'main_algorithm'
 ]
 
 logger = logging.getLogger('wemogy.get-release-version-action')
 
 
-def main(inputs: Inputs) -> Outputs:
+def main_algorithm(inputs: Inputs) -> Outputs:
     """The main algorithm."""
     logger.debug('Inputs: %s', inputs)
 
