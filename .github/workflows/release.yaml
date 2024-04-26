@@ -15,16 +15,13 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Setup git
-        run: |
-          git config user.email "it@wemogy.com"
-          git config user.name "wemogy IT"
-
       - name: Get version for next release
         id: get-release-version
         uses: ./.github/actions/local-action
         with:
           create-tag: "true"
+          git-username: "wemogy IT"
+          git-email: "it@wemogy.com"
 
       - name: Build Containers
         uses: ./.github/actions/containers
