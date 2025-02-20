@@ -1,4 +1,5 @@
 """The main algorithm."""
+
 import logging
 import os
 
@@ -9,9 +10,7 @@ from ..utils import create_git_tag
 from .hash_based import get_next_version as get_next_version_hash
 from .semantic import get_next_version as get_next_semantic_version
 
-__all__ = [
-    'main_algorithm'
-]
+__all__ = ['main_algorithm']
 
 logger = logging.getLogger('wemogy.get-release-version-action')
 
@@ -42,8 +41,9 @@ def main_algorithm(inputs: Inputs) -> Outputs:
 
         new_version_tag_name = f'{inputs.prefix}{new_version}'
 
-        new_tag_needed = (version_bumped or
-                          ('0.0.0' not in new_version_tag_name and previous_version_tag_name != new_version_tag_name))
+        new_tag_needed = version_bumped or (
+            '0.0.0' not in new_version_tag_name and previous_version_tag_name != new_version_tag_name
+        )
 
         if inputs.create_tag and new_tag_needed:
             if inputs.git_email is None or inputs.git_username is None:
@@ -56,7 +56,7 @@ def main_algorithm(inputs: Inputs) -> Outputs:
             version_name=new_version_tag_name,
             previous_version=(previous_version_tag_name or '').removeprefix(inputs.prefix),
             previous_version_name=previous_version_tag_name or '',
-            tag_created=new_tag_needed
+            tag_created=new_tag_needed,
         )
 
         logger.info('Outputs: %s', output)

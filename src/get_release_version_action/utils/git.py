@@ -1,4 +1,5 @@
 """Utilities for working with git repositories."""
+
 import logging
 
 import git
@@ -7,11 +8,7 @@ from .commands import run_command
 
 logger = logging.getLogger('wemogy.get-release-version-action')
 
-__all__ = [
-    'create_git_tag',
-    'get_sorted_tags',
-    'tag_creation_history'
-]
+__all__ = ['create_git_tag', 'get_sorted_tags', 'tag_creation_history']
 
 tag_creation_history: list[str] = []
 

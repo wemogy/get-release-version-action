@@ -1,4 +1,5 @@
 """Utils for logging."""
+
 import logging
 import logging.config
 from pathlib import Path
@@ -7,10 +8,7 @@ from typing import override
 
 import yaml
 
-__all__ = [
-    'IndentLoggingFormatter',
-    'setup_logging'
-]
+__all__ = ['IndentLoggingFormatter', 'setup_logging']
 
 
 class IndentLoggingFormatter(logging.Formatter):

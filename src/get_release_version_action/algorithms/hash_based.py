@@ -1,16 +1,15 @@
 """Get the next version based on the hash of the latest commit."""
+
 import logging
 
 import git
 
-from ..models import Inputs, GetNextVersionOutput
+from ..models import GetNextVersionOutput, Inputs
 from ..utils import get_sorted_tags
 
 logger = logging.getLogger('wemogy.get-release-version-action.hash-based')
 
-__all__ = [
-    'get_next_version'
-]
+__all__ = ['get_next_version']
 
 
 def build_tag_name(prefix: str, commit: git.Commit, suffix: str | None) -> str:
@@ -44,11 +43,7 @@ def get_next_version(inputs: Inputs, repo: git.Repo) -> GetNextVersionOutput:
 
     :returns: A tuple of the current version name, the next version and if the version was bumped.
     """
-    current_version = get_current_version(
-        repo,
-        inputs.prefix,
-        inputs.reference_version_suffix
-    )
+    current_version = get_current_version(repo, inputs.prefix, inputs.reference_version_suffix)
 
     next_version = repo.head.commit.hexsha[:7]
     version_bumped = current_version != next_version
@@ -58,8 +53,4 @@ def get_next_version(inputs: Inputs, repo: git.Repo) -> GetNextVersionOutput:
     else:
         logger.info('Hash based version will be bumped.')
 
-    return (
-        current_version,
-        next_version,
-        version_bumped
-    )
+    return (current_version, next_version, version_bumped)

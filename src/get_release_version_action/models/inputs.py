@@ -1,16 +1,15 @@
 """Inputs of the get-release-version-action."""
+
 from __future__ import annotations
 
 import argparse
+import logging
 from dataclasses import dataclass
 from inspect import get_annotations
-import logging
 from types import NoneType, UnionType
 from typing import Any, get_args
 
-__all__ = [
-    'Inputs'
-]
+__all__ = ['Inputs']
 
 logger = logging.getLogger('wemogy.get-release-version-action')
 
@@ -63,18 +62,19 @@ class Inputs:
                     value = False
                 else:
                     raise TypeError(
-                        f'Expected boolean input "{property_name}"'
-                        f' to be either "true" or "false", but got "{raw_value}".'
-                        )
+                        f'Expected boolean input "{property_name}" to be either "true" or "false", but got "{raw_value}".'
+                    )
 
             elif property_type is str:
                 value = raw_value
 
             # Docker seems to have problems with passing empty strings as arguments.
             # Because of that, a string containing 'NONE' is considered empty / as None.
-            elif isinstance(property_type, UnionType) \
-                    and str in get_args(property_type) \
-                    and NoneType in get_args(property_type):
+            elif (
+                isinstance(property_type, UnionType)
+                and str in get_args(property_type)
+                and NoneType in get_args(property_type)
+            ):
                 if raw_value.strip() == '' or raw_value.strip() == 'NONE':
                     value = None
                 else:

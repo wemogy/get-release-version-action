@@ -1,4 +1,5 @@
 """Wrapper around the ``git.Repo`` class that implements specific methods for unit testing."""
+
 from __future__ import annotations
 
 import logging
@@ -20,11 +21,7 @@ Timeout in seconds for waiting for git operations to ensure that we don't have m
 
 logger = logging.getLogger('wemogy.get-release-version-action.tests.repo')
 
-__all__ = [
-    'GitBranchNotFoundError',
-    'CommitMessages',
-    'TestRepo'
-]
+__all__ = ['CommitMessages', 'GitBranchNotFoundError', 'TestRepo']
 
 
 class GitBranchNotFoundError(Exception):
@@ -33,6 +30,7 @@ class GitBranchNotFoundError(Exception):
 
 class CommitMessages(StrEnum):
     """Pre-made commit messages for conventional commits."""
+
     CHORE = 'chore: test'
     FIX = 'fix: test'
     FEATURE = 'feat: test'
@@ -42,6 +40,7 @@ class CommitMessages(StrEnum):
 
 class TestRepo:
     """Wrapper around the ``git.Repo`` class that implements specific methods for unit testing."""
+
     path: Path
     repo: Repo
 
@@ -143,10 +142,7 @@ class TestRepo:
         :param dest_branch_name: The branch name to cherrypick onto.
         :raises GitBranchNotFoundError: If the branch was not found.
         """
-        logger.info(
-            'Cherrypicking commit %s (%s) into branch %s',
-            commit.message, commit.hexsha, dest_branch_name
-            )
+        logger.info('Cherrypicking commit %s (%s) into branch %s', commit.message, commit.hexsha, dest_branch_name)
         self.checkout(dest_branch_name)
         self.repo.git.cherry_pick(commit.hexsha)
 

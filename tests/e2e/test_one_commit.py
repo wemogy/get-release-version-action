@@ -1,8 +1,8 @@
 """Test all scenarios where one or zero commits (beside the initial commit) are made."""
+
 # pylint: disable=too-many-locals,too-many-lines,duplicate-code,too-many-statements,unused-import,redefined-outer-name
 from assertpy import assert_that
-
-from test_utils import ActionInputs, ActionOutputs, CommitMessages, logging, TestRepo, repo, run_action
+from test_utils import ActionInputs, ActionOutputs, CommitMessages, TestRepo, run_action
 
 
 def test_initial(repo: TestRepo) -> None:
@@ -14,15 +14,11 @@ def test_initial(repo: TestRepo) -> None:
         prefix='v',
         suffix='pre',
         reference_version_suffix=None,
-        create_tag=True
+        create_tag=True,
     )
 
     expected_output_release = ActionOutputs(
-        version='0.0.0-pre',
-        version_name='v0.0.0-pre',
-        previous_version='',
-        previous_version_name='',
-        tag_created=False
+        version='0.0.0-pre', version_name='v0.0.0-pre', previous_version='', previous_version_name='', tag_created=False
     )
 
     args_beta = ActionInputs(
@@ -32,7 +28,7 @@ def test_initial(repo: TestRepo) -> None:
         suffix='beta',
         only_bump_suffix=True,
         reference_version_suffix='pre',
-        create_tag=True
+        create_tag=True,
     )
 
     expected_output_beta = ActionOutputs(
@@ -40,7 +36,7 @@ def test_initial(repo: TestRepo) -> None:
         version_name='v0.0.0-beta',
         previous_version='',
         previous_version_name='',
-        tag_created=False
+        tag_created=False,
     )
 
     args_prod = ActionInputs(
@@ -50,15 +46,11 @@ def test_initial(repo: TestRepo) -> None:
         suffix=None,
         only_bump_suffix=True,
         reference_version_suffix='beta',
-        create_tag=True
+        create_tag=True,
     )
 
     expected_output_prod = ActionOutputs(
-        version='0.0.0',
-        version_name='v0.0.0',
-        previous_version='',
-        previous_version_name='',
-        tag_created=False
+        version='0.0.0', version_name='v0.0.0', previous_version='', previous_version_name='', tag_created=False
     )
 
     # Act
@@ -94,15 +86,11 @@ def test_chore(repo: TestRepo) -> None:
         prefix='v',
         suffix='pre',
         reference_version_suffix=None,
-        create_tag=True
+        create_tag=True,
     )
 
     expected_output_release = ActionOutputs(
-        version='0.0.0-pre',
-        version_name='v0.0.0-pre',
-        previous_version='',
-        previous_version_name='',
-        tag_created=False
+        version='0.0.0-pre', version_name='v0.0.0-pre', previous_version='', previous_version_name='', tag_created=False
     )
 
     args_beta = ActionInputs(
@@ -112,7 +100,7 @@ def test_chore(repo: TestRepo) -> None:
         suffix='beta',
         only_bump_suffix=True,
         reference_version_suffix='pre',
-        create_tag=True
+        create_tag=True,
     )
 
     expected_output_beta = ActionOutputs(
@@ -120,7 +108,7 @@ def test_chore(repo: TestRepo) -> None:
         version_name='v0.0.0-beta',
         previous_version='',
         previous_version_name='',
-        tag_created=False
+        tag_created=False,
     )
 
     args_prod = ActionInputs(
@@ -130,15 +118,11 @@ def test_chore(repo: TestRepo) -> None:
         suffix=None,
         only_bump_suffix=True,
         reference_version_suffix='beta',
-        create_tag=True
+        create_tag=True,
     )
 
     expected_output_prod = ActionOutputs(
-        version='0.0.0',
-        version_name='v0.0.0',
-        previous_version='',
-        previous_version_name='',
-        tag_created=False
+        version='0.0.0', version_name='v0.0.0', previous_version='', previous_version_name='', tag_created=False
     )
 
     # Act
@@ -176,15 +160,11 @@ def test_fix(repo: TestRepo) -> None:
         prefix='v',
         suffix='pre',
         reference_version_suffix=None,
-        create_tag=True
+        create_tag=True,
     )
 
     expected_output_release = ActionOutputs(
-        version='0.0.1-pre',
-        version_name='v0.0.1-pre',
-        previous_version='',
-        previous_version_name='',
-        tag_created=True
+        version='0.0.1-pre', version_name='v0.0.1-pre', previous_version='', previous_version_name='', tag_created=True
     )
 
     args_beta = ActionInputs(
@@ -194,7 +174,7 @@ def test_fix(repo: TestRepo) -> None:
         suffix='beta',
         only_bump_suffix=True,
         reference_version_suffix='pre',
-        create_tag=True
+        create_tag=True,
     )
 
     expected_output_beta = ActionOutputs(
@@ -202,7 +182,7 @@ def test_fix(repo: TestRepo) -> None:
         version_name='v0.0.1-beta',
         previous_version='',
         previous_version_name='',
-        tag_created=True
+        tag_created=True,
     )
 
     args_prod = ActionInputs(
@@ -212,15 +192,11 @@ def test_fix(repo: TestRepo) -> None:
         suffix=None,
         only_bump_suffix=True,
         reference_version_suffix='beta',
-        create_tag=True
+        create_tag=True,
     )
 
     expected_output_prod = ActionOutputs(
-        version='0.0.1',
-        version_name='v0.0.1',
-        previous_version='',
-        previous_version_name='',
-        tag_created=True
+        version='0.0.1', version_name='v0.0.1', previous_version='', previous_version_name='', tag_created=True
     )
 
     # Act
@@ -258,15 +234,11 @@ def test_feat(repo: TestRepo) -> None:
         prefix='v',
         suffix='pre',
         reference_version_suffix=None,
-        create_tag=True
+        create_tag=True,
     )
 
     expected_output_release = ActionOutputs(
-        version='0.1.0-pre',
-        version_name='v0.1.0-pre',
-        previous_version='',
-        previous_version_name='',
-        tag_created=True
+        version='0.1.0-pre', version_name='v0.1.0-pre', previous_version='', previous_version_name='', tag_created=True
     )
 
     args_beta = ActionInputs(
@@ -276,7 +248,7 @@ def test_feat(repo: TestRepo) -> None:
         suffix='beta',
         only_bump_suffix=True,
         reference_version_suffix='pre',
-        create_tag=True
+        create_tag=True,
     )
 
     expected_output_beta = ActionOutputs(
@@ -284,7 +256,7 @@ def test_feat(repo: TestRepo) -> None:
         version_name='v0.1.0-beta',
         previous_version='',
         previous_version_name='',
-        tag_created=True
+        tag_created=True,
     )
 
     args_prod = ActionInputs(
@@ -294,15 +266,11 @@ def test_feat(repo: TestRepo) -> None:
         suffix=None,
         only_bump_suffix=True,
         reference_version_suffix='beta',
-        create_tag=True
+        create_tag=True,
     )
 
     expected_output_prod = ActionOutputs(
-        version='0.1.0',
-        version_name='v0.1.0',
-        previous_version='',
-        previous_version_name='',
-        tag_created=True
+        version='0.1.0', version_name='v0.1.0', previous_version='', previous_version_name='', tag_created=True
     )
 
     # Act
@@ -340,15 +308,11 @@ def test_breaking(repo: TestRepo) -> None:
         prefix='v',
         suffix='pre',
         reference_version_suffix=None,
-        create_tag=True
+        create_tag=True,
     )
 
     expected_output_release = ActionOutputs(
-        version='1.0.0-pre',
-        version_name='v1.0.0-pre',
-        previous_version='',
-        previous_version_name='',
-        tag_created=True
+        version='1.0.0-pre', version_name='v1.0.0-pre', previous_version='', previous_version_name='', tag_created=True
     )
 
     args_beta = ActionInputs(
@@ -358,7 +322,7 @@ def test_breaking(repo: TestRepo) -> None:
         suffix='beta',
         only_bump_suffix=True,
         reference_version_suffix='pre',
-        create_tag=True
+        create_tag=True,
     )
 
     expected_output_beta = ActionOutputs(
@@ -366,7 +330,7 @@ def test_breaking(repo: TestRepo) -> None:
         version_name='v1.0.0-beta',
         previous_version='',
         previous_version_name='',
-        tag_created=True
+        tag_created=True,
     )
 
     args_prod = ActionInputs(
@@ -376,15 +340,11 @@ def test_breaking(repo: TestRepo) -> None:
         suffix=None,
         only_bump_suffix=True,
         reference_version_suffix='beta',
-        create_tag=True
+        create_tag=True,
     )
 
     expected_output_prod = ActionOutputs(
-        version='1.0.0',
-        version_name='v1.0.0',
-        previous_version='',
-        previous_version_name='',
-        tag_created=True
+        version='1.0.0', version_name='v1.0.0', previous_version='', previous_version_name='', tag_created=True
     )
 
     # Act

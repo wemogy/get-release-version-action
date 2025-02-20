@@ -1,13 +1,11 @@
 """Utilities for working with the GitHub actions output."""
+
 import logging
 import os
 
 logger = logging.getLogger('wemogy.get-release-version-action')
 
-__all__ = [
-    'log_github_output',
-    'write_github_output'
-]
+__all__ = ['log_github_output', 'write_github_output']
 
 
 def log_github_output() -> None:
@@ -20,7 +18,7 @@ def log_github_output() -> None:
 
     # noinspection PyBroadException
     try:
-        with open(file_path, 'r', encoding='utf-8') as fh:
+        with open(file_path, encoding='utf-8') as fh:
             content = fh.read()
             logger.debug('Content of GITHUB_OUTPUT file "%s":\n%s', file_path, content)
     except Exception:  # pylint: disable=broad-exception-caught

@@ -1,4 +1,5 @@
 """Utilities for running commands."""
+
 import logging
 import os
 import subprocess
@@ -7,17 +8,15 @@ from typing import TypeAlias
 
 logger = logging.getLogger('wemogy.get-release-version-action')
 
-__all__ = [
-    'run_command'
-]
+__all__ = ['run_command']
 
 StringOrPath: TypeAlias = str | os.PathLike[str]
 
 
 def log_command(
-        command: Sequence[StringOrPath],
-        process: subprocess.CompletedProcess[str] | subprocess.CalledProcessError,
-        env: dict[str, StringOrPath] | None = None
+    command: Sequence[StringOrPath],
+    process: subprocess.CompletedProcess[str] | subprocess.CalledProcessError,
+    env: dict[str, StringOrPath] | None = None,
 ) -> None:
     """Log the command, environment and process result."""
     return_code = process.returncode
@@ -27,13 +26,11 @@ def log_command(
 
     if isinstance(process, subprocess.CalledProcessError):
         logger.error(
-            'Process exited unsuccessful with exit code %s:\nCommand: %s%s%s',
-            return_code, command_str, env_str, output
+            'Process exited unsuccessful with exit code %s:\nCommand: %s%s%s', return_code, command_str, env_str, output
         )
     else:
         logger.debug(
-            'Process exited successful with exit code %s:\nCommand: %s%s%s',
-            return_code, command_str, env_str, output
+            'Process exited successful with exit code %s:\nCommand: %s%s%s', return_code, command_str, env_str, output
         )
 
 
@@ -47,13 +44,7 @@ def run_command(*command: StringOrPath) -> str:
     :raises subprocess.CalledProcessError: If the command did not exit successful.
     """
     try:
-        process = subprocess.run(
-            command,
-            stdout=subprocess.PIPE,
-            stderr=subprocess.STDOUT,
-            check=True,
-            text=True
-        )
+        process = subprocess.run(command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, check=True, text=True)
     except subprocess.CalledProcessError as exc:
         log_command(command, exc)
         raise exc
