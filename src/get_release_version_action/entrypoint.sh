@@ -4,4 +4,4 @@
 sh -c "git config --global --add safe.directory $PWD"
 
 # Run the python application and pass the arguments
-python3 /action/src/get_release_version_action/app.py "$@"
+python3 /app/src/get_release_version_action/app.py "$@"
