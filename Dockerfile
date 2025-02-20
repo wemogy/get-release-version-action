@@ -31,5 +31,5 @@ COPY src/get_release_version_action/ src/get_release_version_action/
 RUN --mount=type=cache,target=/root/.cache/uv \
 	uv sync --no-dev
 
-RUN chmod +x /action/src/get_release_version_action/entrypoint.sh
-ENTRYPOINT ["/action/src/get_release_version_action/entrypoint.sh"]
+RUN chmod +x /app/src/get_release_version_action/entrypoint.sh
+ENTRYPOINT ["/app/src/get_release_version_action/entrypoint.sh"]
