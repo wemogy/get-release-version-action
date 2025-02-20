@@ -1,4 +1,3 @@
-# action.yaml
 name: "Get release version"
 description: "A GitHub Action to determine the next version by checking the commit history for Conventional Commits"
 inputs:

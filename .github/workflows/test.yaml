@@ -40,11 +40,11 @@ jobs:
         uses: ./.github/actions/setup-python
 
       - name: Run pytest
-        run: poetry run pytest --junit-xml test-result.xml tests/e2e
+        run: uv run pytest --junit-xml test-result.xml tests/e2e
 
       - name: Upload test results
         if: always()
-        uses: pmeier/pytest-results-action@v0.6.0
+        uses: pmeier/pytest-results-action@v0.7.1
         with:
           path: test-result.xml
           summary: true

@@ -1,4 +1,3 @@
-# action.yaml
 name: "Get release version"
 description: "A GitHub Action to determine the next version by checking the commit history for Conventional Commits"
 inputs:
@@ -51,7 +50,7 @@ outputs:
     description: "If any relevant changes got detected and a tag got created."
 runs:
   using: "docker"
-  image: "docker://ghcr.io/wemogy/get-release-version-action:4.3.2"
+  image: "docker://ghcr.io/wemogy/get-release-version-action:4.3.3"
   args:
     - --prefix
     - ${{ inputs.prefix }}
