@@ -17,7 +17,7 @@ jobs:
 
       - name: Run ruff format
         run: |
-          uv run ruff format --check --output-format=github
+          uv run ruff format --check
 
   lint:
     name: Linting
