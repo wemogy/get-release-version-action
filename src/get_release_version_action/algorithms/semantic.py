@@ -1,5 +1,7 @@
 """Get the next version based on conventional commits and semantic versioning."""
 
+__all__ = ['get_next_version']
+
 import logging
 
 import git
@@ -7,20 +9,19 @@ from semantic_release import LevelBump, ParseError
 from semantic_release.commit_parser import AngularCommitParser, AngularParserOptions
 from semver import Version
 
-from ..models import GetNextVersionOutput, Inputs
-from ..utils import get_sorted_tags
+from get_release_version_action.models import GetNextVersionOutput, Inputs
+from get_release_version_action.utils import get_sorted_tags
 
 logger = logging.getLogger('wemogy.get-release-version-action.semantic')
-
-__all__ = ['get_next_version']
 
 
 def get_current_version(
     repo: git.Repo, prefix: str, suffix: str | None, bumping_suffix: str, reference_version_suffix: str | None
 ) -> git.TagReference | None:
     """
-    GGet the current version (= the latest git tag that matches the versioning schema).
-    If there are no tags, return ``None``.
+    Get the current version (= the latest git tag that matches the versioning schema).
+
+    :returns: The current version, or ``None`` if there are no tags.
     """
     for tag in get_sorted_tags(repo):
         if not tag.name.startswith(prefix):

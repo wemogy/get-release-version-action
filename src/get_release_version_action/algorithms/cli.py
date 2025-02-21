@@ -1,19 +1,20 @@
 """The main entrypoint for the GitHub action."""
 
-import logging.config
+__all__ = ['cli_entrypoint']
+
+import logging
 from argparse import ArgumentParser
 
-from ..models import Inputs
-from ..utils import log_github_output, setup_logging, write_github_output
+from get_release_version_action.models import Inputs
+from get_release_version_action.utils import log_github_output, setup_logging, write_github_output
+
 from .main_algorithm import main_algorithm
 
 logger = logging.getLogger('wemogy.get-release-version-action')
 
-__all__ = ['cli_entrypoint']
-
 
 def cli_entrypoint() -> None:
-    """The main entrypoint for the GitHub action."""
+    """The main entrypoint for the GitHub action."""  # noqa: D401
     parser = ArgumentParser(
         description='A GitHub Action to determine the next version by checking the commit history for Conventional '
         'Commits with support for hotfix changes.',

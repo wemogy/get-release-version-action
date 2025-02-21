@@ -1,30 +1,30 @@
 """The main algorithm."""
 
+__all__ = ['main_algorithm']
+
 import logging
-import os
+from pathlib import Path
 
 import git
 
-from ..models import Inputs, Outputs
-from ..utils import create_git_tag
+from get_release_version_action.models import Inputs, Outputs
+from get_release_version_action.utils import create_git_tag
+
 from .hash_based import get_next_version as get_next_version_hash
 from .semantic import get_next_version as get_next_semantic_version
-
-__all__ = ['main_algorithm']
 
 logger = logging.getLogger('wemogy.get-release-version-action')
 
 
 def main_algorithm(inputs: Inputs) -> Outputs:
-    """The main algorithm."""
+    """Main algorithm."""  # noqa: D401
     logger.debug('Inputs: %s', inputs)
 
     # If create_tag is true, a git email address and a username are required.
-    if inputs.create_tag:
-        if inputs.git_email is None or inputs.git_username is None:
-            raise ValueError('git email and username are required when a tag should be created!')
+    if inputs.create_tag and (inputs.git_email is None or inputs.git_username is None):
+        raise ValueError('git email and username are required when a tag should be created!')
 
-    with git.Repo(os.getcwd()) as repo:
+    with git.Repo(Path.cwd()) as repo:
         if inputs.mode == 'semantic':
             previous_version_tag_name, new_version, version_bumped = get_next_semantic_version(inputs, repo)
         elif inputs.mode == 'hash-based':

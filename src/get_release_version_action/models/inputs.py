@@ -2,14 +2,16 @@
 
 from __future__ import annotations
 
-import argparse
+__all__ = ['Inputs']
+
 import logging
 from dataclasses import dataclass
 from inspect import get_annotations
 from types import NoneType, UnionType
-from typing import Any, get_args
+from typing import TYPE_CHECKING, Any, get_args
 
-__all__ = ['Inputs']
+if TYPE_CHECKING:
+    import argparse
 
 logger = logging.getLogger('wemogy.get-release-version-action')
 
@@ -75,11 +77,7 @@ class Inputs:
                 and str in get_args(property_type)
                 and NoneType in get_args(property_type)
             ):
-                if raw_value.strip() == '' or raw_value.strip() == 'NONE':
-                    value = None
-                else:
-                    value = raw_value
-
+                value = None if raw_value.strip() == '' or raw_value.strip() == 'NONE' else raw_value
             else:
                 value = property_type(raw_value)
 

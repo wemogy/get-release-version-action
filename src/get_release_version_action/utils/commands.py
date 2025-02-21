@@ -4,13 +4,12 @@ import logging
 import os
 import subprocess
 from collections.abc import Sequence
-from typing import TypeAlias
 
 logger = logging.getLogger('wemogy.get-release-version-action')
 
 __all__ = ['run_command']
 
-StringOrPath: TypeAlias = str | os.PathLike[str]
+type StringOrPath = str | os.PathLike[str]
 
 
 def log_command(
@@ -36,18 +35,17 @@ def log_command(
 
 def run_command(*command: StringOrPath) -> str:
     """
-    Run the given command and return the output if the command was successful,
-    else log the output and raise an exception.
+    Run a command and return the output if the command was successful, else log the output and raise an exception.
 
     :param command: The command to run.
     :returns: The command's output if the command exited successful.
     :raises subprocess.CalledProcessError: If the command did not exit successful.
     """
     try:
-        process = subprocess.run(command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, check=True, text=True)
+        process = subprocess.run(command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, check=True, text=True)  # noqa: S603
     except subprocess.CalledProcessError as exc:
         log_command(command, exc)
-        raise exc
+        raise
 
     log_command(command, process)
     return process.stdout

@@ -2,12 +2,12 @@
 
 from __future__ import annotations
 
+__all__ = ['GetNextVersionOutput', 'Outputs']
+
 import dataclasses
 from dataclasses import dataclass
 
-__all__ = ['GetNextVersionOutput', 'Outputs']
-
-GetNextVersionOutput = tuple[str | None, str, bool]
+type GetNextVersionOutput = tuple[str | None, str, bool]
 
 
 @dataclass(frozen=True, kw_only=True)
