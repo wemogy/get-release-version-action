@@ -3,6 +3,7 @@ import logging
 import os
 
 import git
+from semver import Version
 
 from ..models import Inputs, Outputs
 from ..utils import create_git_tag
@@ -16,6 +17,16 @@ __all__ = [
 logger = logging.getLogger('wemogy.get-release-version-action')
 
 
+def _apply_suffix(version: str, suffix: str | None) -> str:
+    """Insert ``suffix`` before the prerelease (if any), matching the action's legacy tag naming."""
+    if suffix is None:
+        return version
+    if '-' in version:
+        # The suffix goes before the bumping suffix, so replace the first dash.
+        return version.replace('-', f'-{suffix}-', 1)
+    return f'{version}-{suffix}'
+
+
 def main_algorithm(inputs: Inputs) -> Outputs:
     """The main algorithm."""
     logger.debug('Inputs: %s', inputs)
@@ -27,23 +38,31 @@ def main_algorithm(inputs: Inputs) -> Outputs:
 
     with git.Repo(os.getcwd()) as repo:
         if inputs.mode == 'semantic':
-            previous_version_tag_name, new_version, version_bumped = get_next_semantic_version(inputs, repo)
+            previous_version_tag_name, bare_version, version_bumped = get_next_semantic_version(inputs, repo)
         elif inputs.mode == 'hash-based':
-            previous_version_tag_name, new_version, version_bumped = get_next_version_hash(inputs, repo)
+            previous_version_tag_name, bare_version, version_bumped = get_next_version_hash(inputs, repo)
         else:
             raise ValueError(f'Expected input "mode" to be either "semantic" or "hash-based", but got "{inputs.mode}".')
 
-        if inputs.suffix is not None:
-            if '-' in new_version:
-                # The suffix should go before the bumping suffix, that's why the dash is replaced.
-                new_version = new_version.replace('-', f'-{inputs.suffix}-', 1)
-            else:
-                new_version += f'-{inputs.suffix}'
-
+        new_version = _apply_suffix(bare_version, inputs.suffix)
         new_version_tag_name = f'{inputs.prefix}{new_version}'
 
         new_tag_needed = (version_bumped or
                           ('0.0.0' not in new_version_tag_name and previous_version_tag_name != new_version_tag_name))
+
+        # Collision avoidance for suffix bumps: if the computed tag name already exists (e.g. left over from a
+        # reverted deploy), keep bumping the prerelease counter until the name is free. This is only safe for
+        # ``only_bump_suffix`` mode, where "bump further" just means incrementing the hotfix counter.
+        if (inputs.only_bump_suffix and inputs.mode == 'semantic' and new_tag_needed):
+            existing_tag_names = {tag.name for tag in repo.tags}
+            while new_version_tag_name in existing_tag_names:
+                logger.warning(
+                    'Tag %s already exists; bumping %s to avoid a collision',
+                    new_version_tag_name, inputs.bumping_suffix
+                )
+                bare_version = str(Version.parse(bare_version).bump_prerelease(inputs.bumping_suffix))
+                new_version = _apply_suffix(bare_version, inputs.suffix)
+                new_version_tag_name = f'{inputs.prefix}{new_version}'
 
         if inputs.create_tag and new_tag_needed:
             if inputs.git_email is None or inputs.git_username is None:
