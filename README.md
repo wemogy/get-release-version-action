@@ -37,7 +37,7 @@ for [Conventional Commits](https://www.conventionalcommits.org/) with support fo
 |----------------------------|---------------------------|------------|----------------------------------------------------------------------------------------------------------|
 | `prefix`                   | `false`                   | `v`        | The prefix that should be prepended to the version.                                                      |
 | `suffix`                   | `false`                   | `NONE`     | The suffix that should be appended to the version (e.g. `beta`). Use `NONE` for no suffix.               |
-| `reference-version-suffix` | `false`                   | `NONE`     | The suffix that should be replaced with the value in `suffix` (e.g. `dev`). Use `NONE` for no suffix.    |
+| `reference-version-suffix` | `false`                   | `NONE`     | The suffix that should be replaced with the value in `suffix` (e.g. `pre`). Use `NONE` for no suffix.    |
 | `bumping-suffix`           | `false`                   | `hotfix`   | The suffix to append to the version (or increment if it already exists) if `only-bump-suffix` is `true`. |
 | `only-bump-suffix`         | `false`                   | `false`    | Bump the `bumping-suffix` instead of the version if changes were detected.                               |
 | `create-tag`               | `false`                   | `true`     | Create a git tag for the version and push it if a remote is configured.                                  |
