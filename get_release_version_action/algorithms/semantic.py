@@ -96,61 +96,61 @@ def get_current_version(
     return None
 
 
-def get_new_commits(repo: git.Repo, tag: git.TagReference | None) -> list[git.Commit]:
-    """Get all commits newer than the specified tag."""
-    max_commits = 50
-    commit_offset = 0
-    reached_starting_tag = False
-    new_commits: list[git.Commit] = []
+def get_new_commits(
+        repo: git.Repo,
+        reference_tag: git.TagReference | None,
+        channel_tag: git.TagReference | None = None
+) -> list[git.Commit]:
+    """
+    Get all commits that are reachable from ``HEAD`` but not from the given tags.
 
-    while not reached_starting_tag:
-        try:
-            commits = repo.iter_commits(max_count=max_commits, skip=commit_offset)
-        except ValueError:
-            logger.warning('No commits found')
-            return []
+    The range is resolved by ancestry (``git rev-list HEAD ^<reference_tag> ^<channel_tag>``) instead of by
+    commit date. A branch that stays open across another release has commits that are older than the newer
+    tag, so a date-ordered walk reaches the tag first and never sees them (see issue #86).
 
-        i = 0
+    :param reference_tag: The version the next version is calculated from (may live on another channel).
+        Commits reachable from it are already released and are excluded.
+    :param channel_tag: The latest version on the current channel. Commits reachable from it are already
+        released on this channel (e.g. cherry-picked hotfixes) and must not be counted again, even though
+        they are not reachable from ``reference_tag``.
+    """
+    exclude = [
+        tag.commit.hexsha
+        for tag in (reference_tag, channel_tag)
+        if tag is not None
+    ]
+    rev_list_args = [repo.head.commit.hexsha, *(f'^{sha}' for sha in exclude)]
 
-        for commit in commits:
-            i += 1
+    try:
+        output = repo.git.rev_list(*rev_list_args)
+        new_commits = [repo.commit(sha) for sha in output.split()]
+    except (ValueError, git.GitCommandError) as exc:
+        logger.warning('No commits found: %s', exc)
+        return []
 
-            if tag is None:
-                logger.debug('Commit %s was found', commit.hexsha)
-                new_commits.append(commit)
-                continue
+    if not exclude:
+        logger.debug('No current version tag, analysing all %d commit(s) of the history', len(new_commits))
+    else:
+        logger.debug(
+            'Found %d commit(s) that are not reachable from already released tags (%s)',
+            len(new_commits), ', '.join(exclude)
+        )
 
-            if commit == tag.commit:
-                logger.debug(
-                    'Commit %s is current version %s (%s)',
-                    commit.hexsha, tag.name, tag.commit.hexsha
-                )
-                reached_starting_tag = True
-                break
-
-            logger.debug(
-                'Commit %s is newer than current version %s (%s)',
-                commit.hexsha, tag.name, tag.commit.hexsha
-            )
-            new_commits.append(commit)
-
-        commit_offset += max_commits
-
-        if i < max_commits:
-            logger.debug('Reached the end of the commit history')
-            break
+    for commit in new_commits:
+        logger.debug('Commit %s will be analysed', commit.hexsha)
 
     return new_commits
 
 
 def analyze_commits(
         repo: git.Repo,
-        current_version_tag: git.TagReference | None,
-        current_version: str | None
+        reference_version_tag: git.TagReference | None,
+        current_version: str | None,
+        channel_version_tag: git.TagReference | None = None
 ) -> tuple[str, bool]:
     """Determine the next version."""
-    # 1. Add all commits to a list until the commit with the current_version_tag is reached
-    new_commits = get_new_commits(repo, current_version_tag)
+    # 1. Collect all commits that are reachable from HEAD but not from an already released tag
+    new_commits = get_new_commits(repo, reference_version_tag, channel_version_tag)
 
     # 2. Apply conventional commits to the list
     commit_parser = AngularCommitParser(AngularParserOptions())
@@ -227,7 +227,9 @@ def get_next_version(inputs: Inputs, repo: git.Repo) -> GetNextVersionOutput:
         if inputs.suffix is not None:
             reference_version = reference_version.replace(f'-{inputs.suffix}', '', 1)
 
-    next_version, version_bumped = analyze_commits(repo, reference_version_tag, reference_version)
+    next_version, version_bumped = analyze_commits(
+        repo, reference_version_tag, reference_version, current_version_tag
+    )
 
     # No change that requires a semantic version increase
     if not version_bumped:
