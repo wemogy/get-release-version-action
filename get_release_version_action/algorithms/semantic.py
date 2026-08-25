@@ -119,14 +119,16 @@ def get_new_commits(
         for tag in (reference_tag, channel_tag)
         if tag is not None
     ]
-    rev_list_args = [repo.head.commit.hexsha, *(f'^{sha}' for sha in exclude)]
 
     try:
+        rev_list_args = [repo.head.commit.hexsha, *(f'^{sha}' for sha in exclude)]
         output = repo.git.rev_list(*rev_list_args)
-        new_commits = [repo.commit(sha) for sha in output.split()]
-    except (ValueError, git.GitCommandError) as exc:
+    except ValueError as exc:
+        # Raised by GitPython when HEAD has no commit (e.g. an empty repository).
         logger.warning('No commits found: %s', exc)
         return []
+
+    new_commits = [repo.commit(sha) for sha in output.split()]
 
     if not exclude:
         logger.debug('No current version tag, analysing all %d commit(s) of the history', len(new_commits))
