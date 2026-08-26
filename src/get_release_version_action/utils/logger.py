@@ -15,7 +15,7 @@ class IndentLoggingFormatter(logging.Formatter):
     """Logging formatter to indent multiline messages."""
 
     def __init__(self, fmt: str | None) -> None:
-        """Logging formatter to indent multiline messages."""
+        """Initialize the formatter with the given format string."""
         super().__init__(fmt)
 
     @override
@@ -24,7 +24,7 @@ class IndentLoggingFormatter(logging.Formatter):
         return indent(msg, '    ', predicate=lambda line: line != msg.splitlines(keepends=True)[0])
 
 
-def setup_logging(debug: bool) -> None:
+def setup_logging(*, debug: bool) -> None:
     """Set up logging."""
     config_file = Path(__file__).resolve().parent.parent / 'resources' / 'logging.config.yaml'
 

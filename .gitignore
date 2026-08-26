@@ -231,3 +231,7 @@ cython_debug/
 
 # Testing
 **/.working-directory/
+
+# AI assistant tooling
+.claude/
+.serena/

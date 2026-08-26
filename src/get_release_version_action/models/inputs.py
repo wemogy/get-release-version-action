@@ -63,9 +63,11 @@ class Inputs:
                 elif raw_value.lower() == 'false':
                     value = False
                 else:
-                    raise TypeError(
-                        f'Expected boolean input "{property_name}" to be either "true" or "false", but got "{raw_value}".'
+                    msg = (
+                        f'Expected boolean input "{property_name}" to be either "true" or "false", '
+                        f'but got "{raw_value}".'
                     )
+                    raise TypeError(msg)
 
             elif property_type is str:
                 value = raw_value

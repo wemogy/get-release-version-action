@@ -17,11 +17,11 @@ def log_github_output() -> None:
         logger.warning('GITHUB_OUTPUT not in environment, skipping GitHub actions output')
         return
 
-    file_path = Path(file_path)
+    path = Path(file_path)
 
-    with file_path.open('r', encoding='utf-8') as fh:
+    with path.open('r', encoding='utf-8') as fh:
         content = fh.read()
-        logger.debug('Content of GITHUB_OUTPUT file "%s":\n%s', file_path, content)
+        logger.debug('Content of GITHUB_OUTPUT file "%s":\n%s', path, content)
 
 
 def write_github_output(value: str) -> None:
@@ -36,7 +36,7 @@ def write_github_output(value: str) -> None:
         logger.warning('GITHUB_OUTPUT not in environment, skipping GitHub actions output')
         return
 
-    file_path = Path(file_path)
+    path = Path(file_path)
 
-    with file_path.open('w', encoding='utf-8') as fh:
+    with path.open('w', encoding='utf-8') as fh:
         fh.write(value)

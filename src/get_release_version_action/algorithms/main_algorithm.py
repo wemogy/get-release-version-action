@@ -22,7 +22,8 @@ def main_algorithm(inputs: Inputs) -> Outputs:
 
     # If create_tag is true, a git email address and a username are required.
     if inputs.create_tag and (inputs.git_email is None or inputs.git_username is None):
-        raise ValueError('git email and username are required when a tag should be created!')
+        msg = 'git email and username are required when a tag should be created!'
+        raise ValueError(msg)
 
     with git.Repo(Path.cwd()) as repo:
         if inputs.mode == 'semantic':
@@ -30,7 +31,8 @@ def main_algorithm(inputs: Inputs) -> Outputs:
         elif inputs.mode == 'hash-based':
             previous_version_tag_name, new_version, version_bumped = get_next_version_hash(inputs, repo)
         else:
-            raise ValueError(f'Expected input "mode" to be either "semantic" or "hash-based", but got "{inputs.mode}".')
+            msg = f'Expected input "mode" to be either "semantic" or "hash-based", but got "{inputs.mode}".'
+            raise ValueError(msg)
 
         if inputs.suffix is not None:
             if '-' in new_version:
@@ -47,7 +49,8 @@ def main_algorithm(inputs: Inputs) -> Outputs:
 
         if inputs.create_tag and new_tag_needed:
             if inputs.git_email is None or inputs.git_username is None:
-                raise ValueError('git email and username are required when a tag should be created!')
+                msg = 'git email and username are required when a tag should be created!'
+                raise ValueError(msg)
 
             create_git_tag(new_version_tag_name, inputs.git_username, inputs.git_email)
 

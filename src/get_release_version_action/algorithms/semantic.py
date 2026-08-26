@@ -14,8 +14,13 @@ from get_release_version_action.utils import get_sorted_tags
 
 logger = logging.getLogger('wemogy.get-release-version-action.semantic')
 
+# Local bump encoding used throughout this module: 0 = chore / unknown, 1 = patch, 2 = minor, 3 = major.
+_PATCH_BUMP = 1
+_MINOR_BUMP = 2
+_MAJOR_BUMP = 3
 
-def get_current_version(
+
+def get_current_version(  # noqa: C901, PLR0911
     repo: git.Repo, prefix: str, suffix: str | None, bumping_suffix: str, reference_version_suffix: str | None
 ) -> git.TagReference | None:
     """
@@ -171,11 +176,11 @@ def analyze_commits(
     # 4. Bump the version
     current_version_obj = Version.parse(current_version or '0.0.0')
 
-    if version_to_bump == 1:
+    if version_to_bump == _PATCH_BUMP:
         return str(current_version_obj.bump_patch()), True
-    if version_to_bump == 2:
+    if version_to_bump == _MINOR_BUMP:
         return str(current_version_obj.bump_minor()), True
-    if version_to_bump == 3:
+    if version_to_bump == _MAJOR_BUMP:
         return str(current_version_obj.bump_major()), True
 
     return current_version or '0.0.0', False

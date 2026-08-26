@@ -5,14 +5,17 @@ from __future__ import annotations
 import logging
 import os
 from enum import StrEnum
-from pathlib import Path
 from time import sleep
-from typing import Any
+from typing import TYPE_CHECKING, Self
 from uuid import uuid4
 
 from git import Commit, Repo
 
 from get_release_version_action.utils.git import tag_creation_history
+
+if TYPE_CHECKING:
+    from pathlib import Path
+    from types import TracebackType
 
 TESTING_TIMEOUT = 1
 """
@@ -46,7 +49,7 @@ class TestRepo:
 
     def __init__(self, path: Path) -> None:
         """
-        Wrapper around the ``git.Repo`` class that implements specific methods for unit testing.
+        Initialize the test git repository.
 
         This creates a new git repo in the given directory, makes an initial README commit to the ``main`` branch
         and creates 3 branches called ``release``, ``release-beta`` and ``release-prod``.
@@ -71,10 +74,17 @@ class TestRepo:
 
         logger.info('Initializing done')
 
-    def __enter__(self) -> TestRepo:
+    def __enter__(self) -> Self:
+        """Enter the context manager and return this repository."""
         return self
 
-    def __exit__(self, exc_type: Any, exc_val: Any, exc_tb: Any) -> None:
+    def __exit__(
+        self,
+        exc_type: type[BaseException] | None,
+        exc_val: BaseException | None,
+        exc_tb: TracebackType | None,
+    ) -> None:
+        """Exit the context manager and close the underlying repository."""
         self.close()
 
     def close(self) -> None:
@@ -103,7 +113,8 @@ class TestRepo:
         try:
             self.repo.heads[branch_name].checkout()
         except IndexError as exc:
-            raise GitBranchNotFoundError(f'Branch {branch_name} was not found') from exc
+            msg = f'Branch {branch_name} was not found'
+            raise GitBranchNotFoundError(msg) from exc
 
     def commit(self, message: CommitMessages | str, file_name: str | None = None) -> Commit:
         """

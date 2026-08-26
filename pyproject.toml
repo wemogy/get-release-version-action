@@ -47,6 +47,12 @@ ignore = [
 ]
 flake8-quotes.inline-quotes="single"
 
+[tool.ruff.lint.per-file-ignores]
+"tests/**" = [
+    "INP001",  # Test modules are not an importable package
+    "PLR0915", # Long, explicit test scenarios are fine
+]
+
 [tool.ruff.format]
 quote-style = "single"
 docstring-code-format = true

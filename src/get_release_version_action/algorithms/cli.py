@@ -103,7 +103,7 @@ def cli_entrypoint() -> None:
     )
 
     args = parser.parse_args()
-    setup_logging(args.verbose)
+    setup_logging(debug=args.verbose)
 
     outputs = main_algorithm(Inputs.from_argparse(args))
     write_github_output(outputs.to_github_output())
