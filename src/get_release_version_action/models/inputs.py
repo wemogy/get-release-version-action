@@ -1,16 +1,17 @@
 """Inputs of the get-release-version-action."""
+
 from __future__ import annotations
 
-import argparse
+__all__ = ['Inputs']
+
+import logging
 from dataclasses import dataclass
 from inspect import get_annotations
-import logging
 from types import NoneType, UnionType
-from typing import Any, get_args
+from typing import TYPE_CHECKING, Any, get_args
 
-__all__ = [
-    'Inputs'
-]
+if TYPE_CHECKING:
+    import argparse
 
 logger = logging.getLogger('wemogy.get-release-version-action')
 
@@ -62,24 +63,23 @@ class Inputs:
                 elif raw_value.lower() == 'false':
                     value = False
                 else:
-                    raise TypeError(
-                        f'Expected boolean input "{property_name}"'
-                        f' to be either "true" or "false", but got "{raw_value}".'
-                        )
+                    msg = (
+                        f'Expected boolean input "{property_name}" to be either "true" or "false", '
+                        f'but got "{raw_value}".'
+                    )
+                    raise TypeError(msg)
 
             elif property_type is str:
                 value = raw_value
 
             # Docker seems to have problems with passing empty strings as arguments.
             # Because of that, a string containing 'NONE' is considered empty / as None.
-            elif isinstance(property_type, UnionType) \
-                    and str in get_args(property_type) \
-                    and NoneType in get_args(property_type):
-                if raw_value.strip() == '' or raw_value.strip() == 'NONE':
-                    value = None
-                else:
-                    value = raw_value
-
+            elif (
+                isinstance(property_type, UnionType)
+                and str in get_args(property_type)
+                and NoneType in get_args(property_type)
+            ):
+                value = None if raw_value.strip() == '' or raw_value.strip() == 'NONE' else raw_value
             else:
                 value = property_type(raw_value)
 

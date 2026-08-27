@@ -1,4 +1,7 @@
 """Get the next version based on conventional commits and semantic versioning."""
+
+__all__ = ['get_next_version']
+
 import logging
 
 import git
@@ -6,26 +9,24 @@ from semantic_release import LevelBump, ParseError
 from semantic_release.commit_parser import AngularCommitParser, AngularParserOptions
 from semver import Version
 
-from ..models import GetNextVersionOutput, Inputs
-from ..utils import get_sorted_tags
+from get_release_version_action.models import GetNextVersionOutput, Inputs
+from get_release_version_action.utils import get_sorted_tags
 
 logger = logging.getLogger('wemogy.get-release-version-action.semantic')
 
-__all__ = [
-    'get_next_version'
-]
+# Local bump encoding used throughout this module: 0 = chore / unknown, 1 = patch, 2 = minor, 3 = major.
+_PATCH_BUMP = 1
+_MINOR_BUMP = 2
+_MAJOR_BUMP = 3
 
 
-def get_current_version(
-        repo: git.Repo,
-        prefix: str,
-        suffix: str | None,
-        bumping_suffix: str,
-        reference_version_suffix: str | None
+def get_current_version(  # noqa: C901, PLR0911
+    repo: git.Repo, prefix: str, suffix: str | None, bumping_suffix: str, reference_version_suffix: str | None
 ) -> git.TagReference | None:
     """
-    GGet the current version (= the latest git tag that matches the versioning schema).
-    If there are no tags, return ``None``.
+    Get the current version (= the latest git tag that matches the versioning schema).
+
+    :returns: The current version, or ``None`` if there are no tags.
     """
     for tag in get_sorted_tags(repo):
         if not tag.name.startswith(prefix):
@@ -38,22 +39,27 @@ def get_current_version(
                 if bumping_suffix in tag.name and dash_count == 1:
                     logger.debug(
                         'Found tag %s (%s) with prefix "%s" and suffix "%s"',
-                        tag.name, tag.commit.hexsha, prefix, suffix
+                        tag.name,
+                        tag.commit.hexsha,
+                        prefix,
+                        suffix,
                     )
                     return tag
 
                 if dash_count == 0:
                     logger.debug(
                         'Found tag %s (%s) with prefix "%s" and suffix "%s"',
-                        tag.name, tag.commit.hexsha, prefix, suffix
+                        tag.name,
+                        tag.commit.hexsha,
+                        prefix,
+                        suffix,
                     )
                     return tag
                 continue
 
             if suffix in tag.name:
                 logger.debug(
-                    'Found tag %s (%s) with prefix "%s" and suffix "%s"',
-                    tag.name, tag.commit.hexsha, prefix, suffix
+                    'Found tag %s (%s) with prefix "%s" and suffix "%s"', tag.name, tag.commit.hexsha, prefix, suffix
                 )
                 return tag
 
@@ -63,7 +69,10 @@ def get_current_version(
         if tag.name.endswith(reference_version_suffix):
             logger.debug(
                 'Found tag %s (%s) with prefix "%s" and suffix "%s"',
-                tag.name, tag.commit.hexsha, prefix, reference_version_suffix
+                tag.name,
+                tag.commit.hexsha,
+                prefix,
+                reference_version_suffix,
             )
             return tag
 
@@ -75,8 +84,7 @@ def get_current_version(
 
             if f'-{bumping_suffix}' in tag.name:
                 logger.debug(
-                    'Found tag %s (%s) with prefix "%s" and suffix "%s"',
-                    tag.name, tag.commit.hexsha, prefix, suffix
+                    'Found tag %s (%s) with prefix "%s" and suffix "%s"', tag.name, tag.commit.hexsha, prefix, suffix
                 )
                 return tag
 
@@ -84,22 +92,18 @@ def get_current_version(
 
         if f'{suffix}-{bumping_suffix}' in tag.name:
             logger.debug(
-                'Found tag %s (%s) with prefix "%s" and suffix "%s"',
-                tag.name, tag.commit.hexsha, prefix, suffix
+                'Found tag %s (%s) with prefix "%s" and suffix "%s"', tag.name, tag.commit.hexsha, prefix, suffix
             )
             return tag
 
     logger.debug(
-        'Found no tags that have the prefix "%s" and suffix "%s" / "%s"',
-        prefix, suffix, reference_version_suffix
+        'Found no tags that have the prefix "%s" and suffix "%s" / "%s"', prefix, suffix, reference_version_suffix
     )
     return None
 
 
 def get_new_commits(
-        repo: git.Repo,
-        reference_tag: git.TagReference | None,
-        channel_tag: git.TagReference | None = None
+    repo: git.Repo, reference_tag: git.TagReference | None, channel_tag: git.TagReference | None = None
 ) -> list[git.Commit]:
     """
     Get all commits that are reachable from ``HEAD`` but not from the given tags.
@@ -114,11 +118,7 @@ def get_new_commits(
         released on this channel (e.g. cherry-picked hotfixes) and must not be counted again, even though
         they are not reachable from ``reference_tag``.
     """
-    exclude = [
-        tag.commit.hexsha
-        for tag in (reference_tag, channel_tag)
-        if tag is not None
-    ]
+    exclude = [tag.commit.hexsha for tag in (reference_tag, channel_tag) if tag is not None]
 
     try:
         rev_list_args = [repo.head.commit.hexsha, *(f'^{sha}' for sha in exclude)]
@@ -135,7 +135,8 @@ def get_new_commits(
     else:
         logger.debug(
             'Found %d commit(s) that are not reachable from already released tags (%s)',
-            len(new_commits), ', '.join(exclude)
+            len(new_commits),
+            ', '.join(exclude),
         )
 
     for commit in new_commits:
@@ -145,10 +146,10 @@ def get_new_commits(
 
 
 def analyze_commits(
-        repo: git.Repo,
-        reference_version_tag: git.TagReference | None,
-        current_version: str | None,
-        channel_version_tag: git.TagReference | None = None
+    repo: git.Repo,
+    reference_version_tag: git.TagReference | None,
+    current_version: str | None,
+    channel_version_tag: git.TagReference | None = None,
 ) -> tuple[str, bool]:
     """Determine the next version."""
     # 1. Collect all commits that are reachable from HEAD but not from an already released tag
@@ -161,29 +162,30 @@ def analyze_commits(
     # 3. Check if the list contains major, minor or patch
     # Reduce the parsing results to an integer: 0 = chore / unknown, 1 = patch, 2 = minor, 3 = major
     commit_bumps = [
-        0 if isinstance(result, ParseError) else
-        3 if result.bump == LevelBump.MAJOR else
-        2 if result.bump == LevelBump.MINOR else
-        1 if result.bump == LevelBump.PATCH else
         0
+        if isinstance(result, ParseError)
+        else 3
+        if result.bump == LevelBump.MAJOR
+        else 2
+        if result.bump == LevelBump.MINOR
+        else 1
+        if result.bump == LevelBump.PATCH
+        else 0
         for result in parsing_results
     ]
 
     # The maximum of the numbers in commit_bumps is the version needed to be bumped
     version_to_bump = max(commit_bumps, default=0)
-    logger.debug(
-        'Version to bump is %s (0 = chore / unknown, 1 = patch, 2 = minor, 3 = major)',
-        version_to_bump
-    )
+    logger.debug('Version to bump is %s (0 = chore / unknown, 1 = patch, 2 = minor, 3 = major)', version_to_bump)
 
     # 4. Bump the version
     current_version_obj = Version.parse(current_version or '0.0.0')
 
-    if version_to_bump == 1:
+    if version_to_bump == _PATCH_BUMP:
         return str(current_version_obj.bump_patch()), True
-    if version_to_bump == 2:
+    if version_to_bump == _MINOR_BUMP:
         return str(current_version_obj.bump_minor()), True
-    if version_to_bump == 3:
+    if version_to_bump == _MAJOR_BUMP:
         return str(current_version_obj.bump_major()), True
 
     return current_version or '0.0.0', False
@@ -198,22 +200,12 @@ def get_next_version(inputs: Inputs, repo: git.Repo) -> GetNextVersionOutput:
     # The reference version is the latest version, possibly on another branch / channel.
     # It is used to get the next version.
     reference_version_tag = get_current_version(
-        repo,
-        inputs.prefix,
-        inputs.suffix,
-        inputs.bumping_suffix,
-        inputs.reference_version_suffix
+        repo, inputs.prefix, inputs.suffix, inputs.bumping_suffix, inputs.reference_version_suffix
     )
 
     # The current version is the latest version on this branch / channel.
     # It is the version in the previous-version action output.
-    current_version_tag = get_current_version(
-        repo,
-        inputs.prefix,
-        inputs.suffix,
-        inputs.bumping_suffix,
-        None
-    )
+    current_version_tag = get_current_version(repo, inputs.prefix, inputs.suffix, inputs.bumping_suffix, None)
 
     current_version_tag_name = current_version_tag.name if current_version_tag is not None else None
 
@@ -229,18 +221,12 @@ def get_next_version(inputs: Inputs, repo: git.Repo) -> GetNextVersionOutput:
         if inputs.suffix is not None:
             reference_version = reference_version.replace(f'-{inputs.suffix}', '', 1)
 
-    next_version, version_bumped = analyze_commits(
-        repo, reference_version_tag, reference_version, current_version_tag
-    )
+    next_version, version_bumped = analyze_commits(repo, reference_version_tag, reference_version, current_version_tag)
 
     # No change that requires a semantic version increase
     if not version_bumped:
         logger.info('No changes detected, version stays the same.')
-        return (
-            current_version_tag_name,
-            next_version,
-            version_bumped
-        )
+        return (current_version_tag_name, next_version, version_bumped)
 
     # Hotfix
     if inputs.only_bump_suffix:
@@ -248,13 +234,9 @@ def get_next_version(inputs: Inputs, repo: git.Repo) -> GetNextVersionOutput:
         return (
             current_version_tag_name,
             str(Version.parse(reference_version or '0.0.0').bump_prerelease(inputs.bumping_suffix)),
-            version_bumped
+            version_bumped,
         )
 
     # Example case: New Release
     logger.info('Semantic Version will be incremented.')
-    return (
-        current_version_tag_name,
-        next_version,
-        version_bumped
-    )
+    return (current_version_tag_name, next_version, version_bumped)

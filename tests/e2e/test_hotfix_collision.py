@@ -1,8 +1,8 @@
 """Test that an already-existing tag does not cause a ``git tag`` collision in suffix-bump mode."""
+
 # pylint: disable=too-many-locals,too-many-statements,duplicate-code,unused-import,redefined-outer-name
 from assertpy import assert_that
-
-from test_utils import ActionInputs, CommitMessages, logging, TestRepo, repo, run_action
+from test_utils import ActionInputs, CommitMessages, TestRepo, run_action
 
 
 def _fix_release_inputs() -> ActionInputs:
@@ -12,7 +12,7 @@ def _fix_release_inputs() -> ActionInputs:
         prefix='v',
         suffix='pre',
         reference_version_suffix=None,
-        create_tag=True
+        create_tag=True,
     )
 
 
@@ -24,7 +24,7 @@ def _fix_beta_inputs() -> ActionInputs:
         suffix='beta',
         only_bump_suffix=True,
         reference_version_suffix='pre',
-        create_tag=True
+        create_tag=True,
     )
 
 
@@ -36,7 +36,7 @@ def _fix_prod_inputs() -> ActionInputs:
         suffix=None,
         only_bump_suffix=True,
         reference_version_suffix='beta',
-        create_tag=True
+        create_tag=True,
     )
 
 
@@ -49,7 +49,7 @@ def _hotfix_release_inputs() -> ActionInputs:
         reference_version_suffix=None,
         bumping_suffix='hotfix',
         only_bump_suffix=True,
-        create_tag=True
+        create_tag=True,
     )
 
 
@@ -62,7 +62,7 @@ def _hotfix_beta_inputs() -> ActionInputs:
         reference_version_suffix='pre',
         bumping_suffix='hotfix',
         only_bump_suffix=True,
-        create_tag=True
+        create_tag=True,
     )
 
 
@@ -75,12 +75,14 @@ def _hotfix_prod_inputs() -> ActionInputs:
         reference_version_suffix='beta',
         bumping_suffix='hotfix',
         only_bump_suffix=True,
-        create_tag=True
+        create_tag=True,
     )
 
 
 def test_hotfix_skips_already_existing_tag(repo: TestRepo) -> None:
     """
+    Ensure a colliding tag is bumped past instead of failing.
+
     Regression: when the tag the action would produce already exists (e.g. left over from a reverted deploy),
     the action must bump further instead of failing with ``fatal: tag 'X' already exists``.
 

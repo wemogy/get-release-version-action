@@ -97,30 +97,24 @@ We had this issue, which finally led to the decision to implement the semantic r
 
 ## Development
 
-This project uses [poetry](https://python-poetry.org/docs/#installation) for dependency management.
+This project uses [uv](https://docs.astral.sh/uv/).
 
 ### Install dependencies
 
-For development:
-
 ```bash
 # working directory: repository root
-poetry install --with dev
+uv sync
 ```
 
-For production:
+This commands creates a virtual environment that can be used just like one created by the `venv` module.
+
+### Add, update and remove dependencies
 
 ```bash
 # working directory: repository root
-poetry install --without dev
-```
-
-### Add or update dependencies
-
-```bash
-# working directory: repository root
-poetry add <dependency>[@^<version>] [--group dev]
-poetry update [<dependency>[@^<version>]]
+uv add <dependency>[==<version>] [--dev]
+uv add "<dependency>==<version>" --upgrade-package <dependency> [--dev]
+uv remove <dependency> [--dev]
 ```
 
 Some dependencies are missing type definitions (stubs) for mypy.
@@ -140,19 +134,11 @@ Again, check those functions and classes after you run the command.
 stubgen -o .mypy_stubs -p semantic_release
 ```
 
-### Activate the poetry shell
-
-```bash
-# working directory: repository root
-poetry shell
-```
-
 ### Run the script
 
 ```bash
-# with poetry shell
-# working directory: src
-python3 app.py [...args]
+# working directory: repository root
+uv run src/get_release_version_action/app.py [...args]
 ```
 
 ### Run the Docker container
@@ -174,31 +160,6 @@ docker run get-release-version-action:local
 ### Run the tests
 
 ```bash
-# with poetry shell
 # working directory: tests
-pytest tests
+uv run pytest tests
 ```
-
-The tests are isolated from the actual source code, because they are supposed to test the same interface that the action also uses.
-This means that the tests **must not** import anything from the source code or vice versa.
-
-### Run linting and type checking
-
-This project uses pylint and flake8 for linting / code style checking and mypy for static type checking.
-
-All tools are configured in the `pyproject.toml`.
-
-```bash
-# with poetry shell
-# working directory: repository root
-pylint get_release_version_action
-flake8 get_release_version_action
-mypy get_release_version_action
-
-pylint tests/e2e
-flake8 tests
-mypy tests
-```
-
-> [!IMPORTANT]
-> Source code and tests are isolated from each other and also need to be checked isolated from each other to prevent false warnings.

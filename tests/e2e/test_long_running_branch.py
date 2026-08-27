@@ -1,8 +1,8 @@
 """Test that commits from a branch that stayed open across another release are still analysed."""
+
 # pylint: disable=too-many-locals,too-many-statements,duplicate-code,unused-import,redefined-outer-name
 from assertpy import assert_that
-
-from test_utils import ActionInputs, ActionOutputs, CommitMessages, logging, TestRepo, repo, run_action
+from test_utils import ActionInputs, ActionOutputs, CommitMessages, TestRepo, run_action
 
 
 def _release_inputs() -> ActionInputs:
@@ -12,7 +12,7 @@ def _release_inputs() -> ActionInputs:
         prefix='v',
         suffix='pre',
         reference_version_suffix=None,
-        create_tag=True
+        create_tag=True,
     )
 
 
@@ -24,7 +24,7 @@ def _beta_inputs() -> ActionInputs:
         suffix='beta',
         only_bump_suffix=True,
         reference_version_suffix='pre',
-        create_tag=True
+        create_tag=True,
     )
 
 
@@ -36,12 +36,14 @@ def _prod_inputs() -> ActionInputs:
         suffix=None,
         only_bump_suffix=True,
         reference_version_suffix='beta',
-        create_tag=True
+        create_tag=True,
     )
 
 
 def test_breaking_change_older_than_previous_tag(repo: TestRepo) -> None:
     """
+    Ensure commits from a long-running branch are analysed regardless of commit date.
+
     Regression: a ``feat!:`` commit made on a branch that stayed open across another release must still
     be analysed, even though its commit date is older than the tag of that other release.
 
@@ -89,29 +91,35 @@ def test_breaking_change_older_than_previous_tag(repo: TestRepo) -> None:
     # Assert: the breaking change is picked up, so the major version is bumped.
     # Without the ancestry-based commit range, the walk stops at the v0.0.1-pre commit and the
     # version stays at 0.0.1.
-    assert_that(actual_output_release).is_equal_to(ActionOutputs(
-        version='1.0.0-pre',
-        version_name='v1.0.0-pre',
-        previous_version='0.0.1-pre',
-        previous_version_name='v0.0.1-pre',
-        tag_created=True
-    ))
+    assert_that(actual_output_release).is_equal_to(
+        ActionOutputs(
+            version='1.0.0-pre',
+            version_name='v1.0.0-pre',
+            previous_version='0.0.1-pre',
+            previous_version_name='v0.0.1-pre',
+            tag_created=True,
+        )
+    )
     assert_that(tag_release).is_equal_to('v1.0.0-pre')
 
-    assert_that(actual_output_beta).is_equal_to(ActionOutputs(
-        version='1.0.0-beta',
-        version_name='v1.0.0-beta',
-        previous_version='0.0.1-beta',
-        previous_version_name='v0.0.1-beta',
-        tag_created=True
-    ))
+    assert_that(actual_output_beta).is_equal_to(
+        ActionOutputs(
+            version='1.0.0-beta',
+            version_name='v1.0.0-beta',
+            previous_version='0.0.1-beta',
+            previous_version_name='v0.0.1-beta',
+            tag_created=True,
+        )
+    )
     assert_that(tag_beta).is_equal_to('v1.0.0-beta')
 
-    assert_that(actual_output_prod).is_equal_to(ActionOutputs(
-        version='1.0.0',
-        version_name='v1.0.0',
-        previous_version='0.0.1',
-        previous_version_name='v0.0.1',
-        tag_created=True
-    ))
+    assert_that(actual_output_prod).is_equal_to(
+        ActionOutputs(
+            version='1.0.0',
+            version_name='v1.0.0',
+            previous_version='0.0.1',
+            previous_version_name='v0.0.1',
+            tag_created=True,
+        )
+    )
     assert_that(tag_prod).is_equal_to('v1.0.0')

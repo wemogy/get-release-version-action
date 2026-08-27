@@ -1,4 +1,5 @@
 """Utils for logging."""
+
 import logging
 import logging.config
 from pathlib import Path
@@ -7,16 +8,14 @@ from typing import override
 
 import yaml
 
-__all__ = [
-    'IndentLoggingFormatter',
-    'setup_logging'
-]
+__all__ = ['IndentLoggingFormatter', 'setup_logging']
 
 
 class IndentLoggingFormatter(logging.Formatter):
     """Logging formatter to indent multiline messages."""
 
     def __init__(self, fmt: str | None) -> None:
+        """Initialize the formatter with the given format string."""
         super().__init__(fmt)
 
     @override
@@ -26,7 +25,7 @@ class IndentLoggingFormatter(logging.Formatter):
 
 
 def setup_logging() -> None:
-    """Setup logging."""
+    """Set up logging."""
     config_file = Path(__file__).resolve().parent.parent / 'resources' / 'logging.config.yaml'
 
     with config_file.open('r') as config_stream:

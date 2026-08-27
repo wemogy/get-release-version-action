@@ -1,8 +1,8 @@
 """Test all scenarios where one hotfix / cherrypick is made."""
+
 # pylint: disable=too-many-locals,too-many-lines,duplicate-code,too-many-statements,unused-import,redefined-outer-name
 from assertpy import assert_that
-
-from test_utils import ActionInputs, ActionOutputs, CommitMessages, logging, TestRepo, repo, run_action
+from test_utils import ActionInputs, ActionOutputs, CommitMessages, TestRepo, run_action
 
 
 def test_fix_then_hotfix(repo: TestRepo) -> None:
@@ -15,15 +15,11 @@ def test_fix_then_hotfix(repo: TestRepo) -> None:
         prefix='v',
         suffix='pre',
         reference_version_suffix=None,
-        create_tag=True
+        create_tag=True,
     )
 
     expected_output_fix_release = ActionOutputs(
-        version='0.0.1-pre',
-        version_name='v0.0.1-pre',
-        previous_version='',
-        previous_version_name='',
-        tag_created=True
+        version='0.0.1-pre', version_name='v0.0.1-pre', previous_version='', previous_version_name='', tag_created=True
     )
 
     args_fix_beta = ActionInputs(
@@ -33,7 +29,7 @@ def test_fix_then_hotfix(repo: TestRepo) -> None:
         suffix='beta',
         only_bump_suffix=True,
         reference_version_suffix='pre',
-        create_tag=True
+        create_tag=True,
     )
 
     expected_output_fix_beta = ActionOutputs(
@@ -41,7 +37,7 @@ def test_fix_then_hotfix(repo: TestRepo) -> None:
         version_name='v0.0.1-beta',
         previous_version='',
         previous_version_name='',
-        tag_created=True
+        tag_created=True,
     )
 
     args_fix_prod = ActionInputs(
@@ -51,15 +47,11 @@ def test_fix_then_hotfix(repo: TestRepo) -> None:
         suffix=None,
         only_bump_suffix=True,
         reference_version_suffix='beta',
-        create_tag=True
+        create_tag=True,
     )
 
     expected_output_fix_prod = ActionOutputs(
-        version='0.0.1',
-        version_name='v0.0.1',
-        previous_version='',
-        previous_version_name='',
-        tag_created=True
+        version='0.0.1', version_name='v0.0.1', previous_version='', previous_version_name='', tag_created=True
     )
 
     # Hotfix
@@ -71,7 +63,7 @@ def test_fix_then_hotfix(repo: TestRepo) -> None:
         reference_version_suffix=None,
         bumping_suffix='hotfix',
         only_bump_suffix=True,
-        create_tag=True
+        create_tag=True,
     )
 
     expected_output_hotfix_release = ActionOutputs(
@@ -79,7 +71,7 @@ def test_fix_then_hotfix(repo: TestRepo) -> None:
         version_name='v0.0.1-pre-hotfix.1',
         previous_version='0.0.1-pre',
         previous_version_name='v0.0.1-pre',
-        tag_created=True
+        tag_created=True,
     )
 
     args_hotfix_beta = ActionInputs(
@@ -90,7 +82,7 @@ def test_fix_then_hotfix(repo: TestRepo) -> None:
         reference_version_suffix='pre',
         bumping_suffix='hotfix',
         only_bump_suffix=True,
-        create_tag=True
+        create_tag=True,
     )
 
     expected_output_hotfix_beta = ActionOutputs(
@@ -98,7 +90,7 @@ def test_fix_then_hotfix(repo: TestRepo) -> None:
         version_name='v0.0.1-beta-hotfix.1',
         previous_version='0.0.1-beta',
         previous_version_name='v0.0.1-beta',
-        tag_created=True
+        tag_created=True,
     )
 
     args_hotfix_prod = ActionInputs(
@@ -109,7 +101,7 @@ def test_fix_then_hotfix(repo: TestRepo) -> None:
         reference_version_suffix='beta',
         bumping_suffix='hotfix',
         only_bump_suffix=True,
-        create_tag=True
+        create_tag=True,
     )
 
     expected_output_hotfix_prod = ActionOutputs(
@@ -117,7 +109,7 @@ def test_fix_then_hotfix(repo: TestRepo) -> None:
         version_name='v0.0.1-hotfix.1',
         previous_version='0.0.1',
         previous_version_name='v0.0.1',
-        tag_created=True
+        tag_created=True,
     )
 
     # Act
@@ -184,15 +176,11 @@ def test_feature_then_hotfix(repo: TestRepo) -> None:
         prefix='v',
         suffix='pre',
         reference_version_suffix=None,
-        create_tag=True
+        create_tag=True,
     )
 
     expected_output_feat_release = ActionOutputs(
-        version='0.1.0-pre',
-        version_name='v0.1.0-pre',
-        previous_version='',
-        previous_version_name='',
-        tag_created=True
+        version='0.1.0-pre', version_name='v0.1.0-pre', previous_version='', previous_version_name='', tag_created=True
     )
 
     args_feat_beta = ActionInputs(
@@ -202,7 +190,7 @@ def test_feature_then_hotfix(repo: TestRepo) -> None:
         suffix='beta',
         only_bump_suffix=True,
         reference_version_suffix='pre',
-        create_tag=True
+        create_tag=True,
     )
 
     expected_output_feat_beta = ActionOutputs(
@@ -210,7 +198,7 @@ def test_feature_then_hotfix(repo: TestRepo) -> None:
         version_name='v0.1.0-beta',
         previous_version='',
         previous_version_name='',
-        tag_created=True
+        tag_created=True,
     )
 
     args_feat_prod = ActionInputs(
@@ -220,15 +208,11 @@ def test_feature_then_hotfix(repo: TestRepo) -> None:
         suffix=None,
         only_bump_suffix=True,
         reference_version_suffix='beta',
-        create_tag=True
+        create_tag=True,
     )
 
     expected_output_feat_prod = ActionOutputs(
-        version='0.1.0',
-        version_name='v0.1.0',
-        previous_version='',
-        previous_version_name='',
-        tag_created=True
+        version='0.1.0', version_name='v0.1.0', previous_version='', previous_version_name='', tag_created=True
     )
 
     # Hotfix
@@ -240,7 +224,7 @@ def test_feature_then_hotfix(repo: TestRepo) -> None:
         reference_version_suffix=None,
         bumping_suffix='hotfix',
         only_bump_suffix=True,
-        create_tag=True
+        create_tag=True,
     )
 
     expected_output_hotfix_release = ActionOutputs(
@@ -248,7 +232,7 @@ def test_feature_then_hotfix(repo: TestRepo) -> None:
         version_name='v0.1.0-pre-hotfix.1',
         previous_version='0.1.0-pre',
         previous_version_name='v0.1.0-pre',
-        tag_created=True
+        tag_created=True,
     )
 
     args_hotfix_beta = ActionInputs(
@@ -259,7 +243,7 @@ def test_feature_then_hotfix(repo: TestRepo) -> None:
         reference_version_suffix='pre',
         bumping_suffix='hotfix',
         only_bump_suffix=True,
-        create_tag=True
+        create_tag=True,
     )
 
     expected_output_hotfix_beta = ActionOutputs(
@@ -267,7 +251,7 @@ def test_feature_then_hotfix(repo: TestRepo) -> None:
         version_name='v0.1.0-beta-hotfix.1',
         previous_version='0.1.0-beta',
         previous_version_name='v0.1.0-beta',
-        tag_created=True
+        tag_created=True,
     )
 
     args_hotfix_prod = ActionInputs(
@@ -278,7 +262,7 @@ def test_feature_then_hotfix(repo: TestRepo) -> None:
         reference_version_suffix='beta',
         bumping_suffix='hotfix',
         only_bump_suffix=True,
-        create_tag=True
+        create_tag=True,
     )
 
     expected_output_hotfix_prod = ActionOutputs(
@@ -286,7 +270,7 @@ def test_feature_then_hotfix(repo: TestRepo) -> None:
         version_name='v0.1.0-hotfix.1',
         previous_version='0.1.0',
         previous_version_name='v0.1.0',
-        tag_created=True
+        tag_created=True,
     )
 
     # Act
@@ -353,15 +337,11 @@ def test_breaking_then_hotfix(repo: TestRepo) -> None:
         prefix='v',
         suffix='pre',
         reference_version_suffix=None,
-        create_tag=True
+        create_tag=True,
     )
 
     expected_output_breaking_release = ActionOutputs(
-        version='1.0.0-pre',
-        version_name='v1.0.0-pre',
-        previous_version='',
-        previous_version_name='',
-        tag_created=True
+        version='1.0.0-pre', version_name='v1.0.0-pre', previous_version='', previous_version_name='', tag_created=True
     )
 
     args_breaking_beta = ActionInputs(
@@ -371,7 +351,7 @@ def test_breaking_then_hotfix(repo: TestRepo) -> None:
         suffix='beta',
         only_bump_suffix=True,
         reference_version_suffix='pre',
-        create_tag=True
+        create_tag=True,
     )
 
     expected_output_breaking_beta = ActionOutputs(
@@ -379,7 +359,7 @@ def test_breaking_then_hotfix(repo: TestRepo) -> None:
         version_name='v1.0.0-beta',
         previous_version='',
         previous_version_name='',
-        tag_created=True
+        tag_created=True,
     )
 
     args_breaking_prod = ActionInputs(
@@ -389,15 +369,11 @@ def test_breaking_then_hotfix(repo: TestRepo) -> None:
         suffix=None,
         only_bump_suffix=True,
         reference_version_suffix='beta',
-        create_tag=True
+        create_tag=True,
     )
 
     expected_output_breaking_prod = ActionOutputs(
-        version='1.0.0',
-        version_name='v1.0.0',
-        previous_version='',
-        previous_version_name='',
-        tag_created=True
+        version='1.0.0', version_name='v1.0.0', previous_version='', previous_version_name='', tag_created=True
     )
 
     # Hotfix
@@ -409,7 +385,7 @@ def test_breaking_then_hotfix(repo: TestRepo) -> None:
         reference_version_suffix=None,
         bumping_suffix='hotfix',
         only_bump_suffix=True,
-        create_tag=True
+        create_tag=True,
     )
 
     expected_output_hotfix_release = ActionOutputs(
@@ -417,7 +393,7 @@ def test_breaking_then_hotfix(repo: TestRepo) -> None:
         version_name='v1.0.0-pre-hotfix.1',
         previous_version='1.0.0-pre',
         previous_version_name='v1.0.0-pre',
-        tag_created=True
+        tag_created=True,
     )
 
     args_hotfix_beta = ActionInputs(
@@ -428,7 +404,7 @@ def test_breaking_then_hotfix(repo: TestRepo) -> None:
         reference_version_suffix='pre',
         bumping_suffix='hotfix',
         only_bump_suffix=True,
-        create_tag=True
+        create_tag=True,
     )
 
     expected_output_hotfix_beta = ActionOutputs(
@@ -436,7 +412,7 @@ def test_breaking_then_hotfix(repo: TestRepo) -> None:
         version_name='v1.0.0-beta-hotfix.1',
         previous_version='1.0.0-beta',
         previous_version_name='v1.0.0-beta',
-        tag_created=True
+        tag_created=True,
     )
 
     args_hotfix_prod = ActionInputs(
@@ -447,7 +423,7 @@ def test_breaking_then_hotfix(repo: TestRepo) -> None:
         reference_version_suffix='beta',
         bumping_suffix='hotfix',
         only_bump_suffix=True,
-        create_tag=True
+        create_tag=True,
     )
 
     expected_output_hotfix_prod = ActionOutputs(
@@ -455,7 +431,7 @@ def test_breaking_then_hotfix(repo: TestRepo) -> None:
         version_name='v1.0.0-hotfix.1',
         previous_version='1.0.0',
         previous_version_name='v1.0.0',
-        tag_created=True
+        tag_created=True,
     )
 
     # Act

@@ -1,36 +1,35 @@
-FROM python:3.12-slim
-
-# Install poetry
-# Thanks to Soof Golan and jjmerelo from StackOverflow: https://stackoverflow.com/a/72465422
-ARG POETRY_VERSION=1.8.2
-ENV POETRY_VENV=/opt/poetry-venv
-ENV POETRY_CACHE_DIR=/opt/.cache
-
-# Create a venv and install Poetry there
-RUN /usr/local/bin/python3.12 -m venv $POETRY_VENV
-RUN $POETRY_VENV/bin/python -m pip install -U pip setuptools
-RUN $POETRY_VENV/bin/python -m pip install poetry==${POETRY_VERSION}
-
-# Add Poetry to the PATH
-ENV PATH="${PATH}:${POETRY_VENV}/bin"
-
-# Print which git
-RUN echo "which git: $(which git)"
+FROM python:3.13-slim
 
 # Install git
-RUN apt-get -yq update && \
-    apt-get -yq install git && \
+ARG DEBIAN_FRONTEND=noninteractive
+RUN apt update && \
+    apt install -y git && \
+    apt clean -y && \
     rm -rf /var/lib/apt/lists/*
 
-# Copy the action
-COPY ["poetry.lock", "pyproject.toml", "/action/"]
-COPY ["get_release_version_action/", "/action/get_release_version_action/"]
+# Install uv
+COPY --from=ghcr.io/astral-sh/uv:0.6.2 /uv /bin/
+
+# Do not update the lock file
+ARG UV_FROZEN=1
+# Copy cached packages instead of linking them
+ARG UV_LINK_MODE=copy
+# Compile Python bytecode on build time to improve startup times
+ARG UV_COMPILE_BYTECODE=1
 
 # Install dependencies
-RUN poetry -C /action install --no-interaction --no-cache --without dev
-RUN poetry -C /action install --no-interaction --no-cache --only-root
+WORKDIR /app
+COPY .python-version pyproject.toml uv.lock ./
+RUN --mount=type=cache,target=/root/.cache/uv \
+	uv sync --no-install-project --no-dev
 
-ENV PYTHONPATH="/action"
+# Add virtual environment to PATH
+ENV PATH="/app/.venv/bin:$PATH"
 
-RUN chmod +x /action/get_release_version_action/entrypoint.sh
-ENTRYPOINT ["/action/get_release_version_action/entrypoint.sh"]
+# Copy and install source code
+COPY src/get_release_version_action/ src/get_release_version_action/
+RUN --mount=type=cache,target=/root/.cache/uv \
+	uv sync --no-dev
+
+RUN chmod +x /app/src/get_release_version_action/entrypoint.sh
+ENTRYPOINT ["/app/src/get_release_version_action/entrypoint.sh"]

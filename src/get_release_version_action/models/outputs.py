@@ -1,20 +1,19 @@
 """Outputs of the get-release-version-action."""
+
 from __future__ import annotations
+
+__all__ = ['GetNextVersionOutput', 'Outputs']
 
 import dataclasses
 from dataclasses import dataclass
 
-__all__ = [
-    'Outputs',
-    'GetNextVersionOutput'
-]
-
-GetNextVersionOutput = tuple[str | None, str, bool]
+type GetNextVersionOutput = tuple[str | None, str, bool]
 
 
 @dataclass(frozen=True, kw_only=True)
 class Outputs:
     """Outputs of the get-release-version-action."""
+
     version: str
     """The next version, without the prefix."""
 
@@ -35,7 +34,7 @@ class Outputs:
         output = ''
 
         for name, value in dataclasses.asdict(self).items():
-            output += f'{name.replace('_', '-')}='
+            output += f'{name.replace("_", "-")}='
 
             if isinstance(value, bool):
                 output += f'{str(value).lower()}\n'
