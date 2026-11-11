@@ -48,7 +48,7 @@ outputs:
   previous-version-name:
     description: "The previous version, with the prefix"
   tag-created:
-    description: "If any relevant changes got detected and a tag got created."
+    description: "If any relevant changes got detected and a tag got created (or an already existing tag for the version got reused)."
 runs:
   using: "docker"
   image: "../../../Dockerfile"

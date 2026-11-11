@@ -53,7 +53,7 @@ for [Conventional Commits](https://www.conventionalcommits.org/) with support fo
 | `version-name`          | The next version, with the prefix.                          |
 | `previous-version`      | The previous version, without the prefix.                   |
 | `previous-version-name` | The previous version, with the prefix.                      |
-| `tag-created`           | If any relevant changes got detected and a tag got created. |
+| `tag-created`           | If any relevant changes got detected and a tag got created (or an already existing tag for the version got reused). |
 
 ## FAQ
 
@@ -64,6 +64,16 @@ If the version number stays the same, please check the following:
 - The GitHub workflow **must** use `actions/checkout@4` with `fetch-depth: 0`. This ensures that the commit and tag history is fetched, which is necessary for determining the change level and the last version.
 - At least one commit message **must** follow the [Conventional Commits](https://www.conventionalcommits.org/) specification and **must not** be of the level `chore`.
 - Remove all tags from the repository that do not have the `Verified` badge.
+
+### The action failed with `fatal: tag 'vX.Y.Z' already exists` — what's wrong?
+
+Older versions of the action failed when the tag for the computed version already existed. This happens when a
+previous run already created the tag but the workflow failed afterwards and got re-run, or when the current
+version got resolved to an older tag (the lookup is based on commit dates, not on versions).
+
+The action now reuses the existing tag instead: it logs a warning, leaves the tag untouched and reports the
+version with `tag-created` set to `true`, so the rest of the workflow can continue with the same tag.
+Update to the latest version of the action if you still see this error.
 
 ### Why did we implement sematic release by ourselves?
 
