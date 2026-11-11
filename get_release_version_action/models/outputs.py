@@ -28,7 +28,7 @@ class Outputs:
     """The previous version, with the prefix."""
 
     tag_created: bool
-    """If any relevant changes got detected."""
+    """If any relevant changes got detected and a tag got created (or an already existing tag got reused)."""
 
     def to_github_output(self) -> str:
         """Convert the outputs into the GitHub actions output format."""

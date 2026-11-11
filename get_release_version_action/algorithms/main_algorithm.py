@@ -27,6 +27,31 @@ def _apply_suffix(version: str, suffix: str | None) -> str:
     return f'{version}-{suffix}'
 
 
+def _create_tag_if_missing(repo: git.Repo, tag_name: str, username: str, email: str) -> None:
+    """
+    Create the tag ``tag_name`` on ``HEAD`` unless a tag with that name already exists.
+
+    An already existing tag is reused instead of failing with ``fatal: tag 'X' already exists``. This happens
+    when a previous run of the pipeline already tagged the version but failed afterwards and got re-run, or when
+    the current version got resolved to an older tag (the lookup is based on commit dates, not on versions).
+    """
+    existing_tag = next((tag for tag in repo.tags if tag.name == tag_name), None)
+
+    if existing_tag is None:
+        create_git_tag(tag_name, username, email)
+        return
+
+    head_sha = repo.head.commit.hexsha
+
+    if existing_tag.commit.hexsha == head_sha:
+        logger.warning('Tag %s already exists and points to HEAD (%s), reusing it.', tag_name, head_sha)
+    else:
+        logger.warning(
+            'Tag %s already exists but points to %s instead of HEAD (%s), reusing it instead of failing.',
+            tag_name, existing_tag.commit.hexsha, head_sha
+        )
+
+
 def main_algorithm(inputs: Inputs) -> Outputs:
     """The main algorithm."""
     logger.debug('Inputs: %s', inputs)
@@ -68,7 +93,7 @@ def main_algorithm(inputs: Inputs) -> Outputs:
             if inputs.git_email is None or inputs.git_username is None:
                 raise ValueError('git email and username are required when a tag should be created!')
 
-            create_git_tag(new_version_tag_name, inputs.git_username, inputs.git_email)
+            _create_tag_if_missing(repo, new_version_tag_name, inputs.git_username, inputs.git_email)
 
         output = Outputs(
             version=new_version,
