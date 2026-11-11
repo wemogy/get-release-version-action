@@ -51,7 +51,7 @@ outputs:
     description: "If any relevant changes got detected and a tag got created (or an already existing tag for the version got reused)."
 runs:
   using: "docker"
-  image: "docker://ghcr.io/wemogy/get-release-version-action:4.3.5"
+  image: "docker://ghcr.io/wemogy/get-release-version-action:4.3.7"
   args:
     - --prefix
     - ${{ inputs.prefix }}
